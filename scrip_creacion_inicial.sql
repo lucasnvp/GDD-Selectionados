@@ -6,7 +6,7 @@ GO
 
 -- Creamos la nueva Tabla de Afiliados
 CREATE TABLE [SELECTIONADOS].[Afiliados](
-  [Id_afiliado] INT PRIMARY KEY,
+  [Id_afiliado] INT PRIMARY KEY IDENTITY(1,1),
   [numero_afiliado] INT,
   [nombre] VARCHAR(255),
   [apellido] VARCHAR(255),
@@ -17,7 +17,7 @@ CREATE TABLE [SELECTIONADOS].[Afiliados](
   [mail] VARCHAR(255),
   [fecha_nac] DATETIME,
   [sexo] CHAR,
-  [id_estado_civil] INT,
+  [id_estado_civil] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Estado_Civil](Id_Estado_Civil),
   [id_plan] INT,
   [nro_consulta] INT,
   [activo] BIT
