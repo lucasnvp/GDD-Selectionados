@@ -5,21 +5,22 @@ CREATE SCHEMA [SELECTIONADOS]
 GO
 
 -- Creamos la nueva Tabla de Afiliados
-create table [SELECTIONADOS].[Afiliados](
-  Nro_Afiliado INT PRIMARY KEY,
-  Nombre VARCHAR(255),
-  Apellido VARCHAR(255),
-  Nro_Doc INT,
-  Direccion VARCHAR(255),
-  Telefono NUMERIC(18),
-  Mail VARCHAR(255),
-  Fecha_Nac DATETIME,
-  Sexo CHAR (1),
-  Estado_civil INT,
-  Nro_Plan INT,
-  Activo BIT,
-  Padre INT,
-  Conyuge INT
+CREATE TABLE [SELECTIONADOS].[Afiliados](
+  [Id_afiliado] INT PRIMARY KEY,
+  [numero_afiliado] INT,
+  [nombre] VARCHAR(255),
+  [apellido] VARCHAR(255),
+  [tipo_dni] VARCHAR(4),
+  [nro_doc] NUMERIC(18),
+  [direccion] VARCHAR(255),
+  [telefono] NUMERIC(18),
+  [mail] VARCHAR(255),
+  [fecha_nac] DATETIME,
+  [sexo] CHAR,
+  [id_estado_civil] INT,
+  [id_plan] INT,
+  [nro_consulta] INT,
+  [activo] BIT
 )GO
 
 -- Creamos la nueva Tabla de Estados Civiles
@@ -32,13 +33,6 @@ create table [SELECTIONADOS].[Estado_Civil](
 CREATE TABLE [SELECTIONADOS].[Planes](
   Id_Plan INT PRIMARY KEY IDENTITY(1,1),
   Descripcion VARCHAR(255),
-)GO
-
---Creamos la tabla de Cuotas
-CREATE TABLE [SELECTIONADOS].[Cuotas](
-  Id_Cuota INT PRIMARY KEY IDENTITY(1,1),
-  Nro_Afiliado INT,
-  monto money,
 )GO
 
 -- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
@@ -108,7 +102,7 @@ CREATE TABLE [SELECTIONADOS].[Profesional] (
 
 --Tabla de disponibilidad profesional
 CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
-  [matricula] INT PK FK,
+  [matricula] INT PRIMARY KEY FK,
   [dia] INT PK FK,
   [hora_desde] DATETIME,
   [hora_hasta] DATETIME,
@@ -117,13 +111,13 @@ CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
 
 --Tabla de especializacion
 CREATE TABLE [SELECTIONADOS].[Profesional_Especializacion] (
-  [id_especialidad] INT PK,
+  [id_especialidad] INT PRIMARY KEY ,
   [matricula] INT FK
 )GO
 
 --Tabla de especialidad
 CREATE TABLE [SELECTIONADOS].[Especialidad] (
-  [id_especialidad] INT PK,
+  [id_especialidad] INT PRIMARY KEY,
   [descripcion] VARCHAR(255),
   [id_tipo_especialidad] INT FK
 )GO
@@ -136,7 +130,7 @@ CREATE TABLE [SELECTIONADOS].[Tipo_especialidad] (
 
 --Tabla de turno
 CREATE TABLE [SELECTIONADOS].[Turno] (
-  [id_turno] INT PK,
+  [id_turno] INT PRIMARY KEY,
   [id_horario] DATETIME,
   [nro_afiliado] INT PK FK,
   [id_especialidad] INT PK FK,
@@ -152,3 +146,15 @@ INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Viudo')
 INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Viuda')
 INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiado')
 INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiada')
+
+-- SP de migracion de datos
+CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
+BEGIN
+  INSERT INTO [SELECTIONADOS].[Afiliados](Nombre)
+    SELECT [Paciente_Nombre]
+    FROM [gd_esquema].[Maestra]
+    WHERE [Paciente_Nombre] IS NOT NULL
+END
+
+EXECUTE [SELECTIONADOS].[migracionDeDatos]
+GO
