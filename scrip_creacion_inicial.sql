@@ -1,8 +1,6 @@
 USE [GD2C2016]
-GO
 
 CREATE SCHEMA [SELECTIONADOS]
-GO
 
 -- Creamos la nueva Tabla de Afiliados
 CREATE TABLE [SELECTIONADOS].[Afiliados](
@@ -17,11 +15,11 @@ CREATE TABLE [SELECTIONADOS].[Afiliados](
   [mail] VARCHAR(255),
   [fecha_nac] DATETIME,
   [sexo] CHAR,
-  [id_estado_civil] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Estado_Civil](Id_Estado_Civil),
+  [id_estado_civil] INT,
   [id_plan] INT,
   [nro_consulta] INT,
   [activo] BIT
-)GO
+)
 
 -- Creamos la nueva Tabla de Estados Civiles
 create table [SELECTIONADOS].[Estado_Civil](
@@ -80,15 +78,15 @@ create table [SELECTIONADOS].[Rol_X_Funcionalidad](
 
 -- Tabla de logs de modificacion
 CREATE TABLE [SELECTIONADOS].[Modificación] (
-  [id_modificacion] INT NOT NULL PRIMARY KEY,
-  [numero_afiliado] INT FOREIGN KEY,
+  [id_modificacion] INT PRIMARY KEY,
+  [numero_afiliado] INT,
   [fecha_modificacion] DATETIME,
   [motivo] VARCHAR(255)
 )GO
 
 --Tabla de Profesionales
 CREATE TABLE [SELECTIONADOS].[Profesional] (
-  [matricula] INT NOT NULL PRIMARY KEY,
+  [matricula] INT PRIMARY KEY,
   [nombre] VARCHAR(255),
   [apellido] VARCHAR(255),
   [tipo_doc] VARCHAR(255),
@@ -102,8 +100,8 @@ CREATE TABLE [SELECTIONADOS].[Profesional] (
 
 --Tabla de disponibilidad profesional
 CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
-  [matricula] INT PRIMARY KEY FK,
-  [dia] INT PK FK,
+  [matricula] INT PRIMARY KEY,
+  [dia] INT,
   [hora_desde] DATETIME,
   [hora_hasta] DATETIME,
   [especialidad] INT
@@ -112,14 +110,14 @@ CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
 --Tabla de especializacion
 CREATE TABLE [SELECTIONADOS].[Profesional_Especializacion] (
   [id_especialidad] INT PRIMARY KEY ,
-  [matricula] INT FK
+  [matricula] INT
 )GO
 
 --Tabla de especialidad
 CREATE TABLE [SELECTIONADOS].[Especialidad] (
   [id_especialidad] INT PRIMARY KEY,
   [descripcion] VARCHAR(255),
-  [id_tipo_especialidad] INT FK
+  [id_tipo_especialidad] INT
 )GO
 
 --Tabla de tipo de especialidad
@@ -132,9 +130,9 @@ CREATE TABLE [SELECTIONADOS].[Tipo_especialidad] (
 CREATE TABLE [SELECTIONADOS].[Turno] (
   [id_turno] INT PRIMARY KEY,
   [id_horario] DATETIME,
-  [nro_afiliado] INT PK FK,
-  [id_especialidad] INT PK FK,
-  [matricula] INT PK FK
+  [nro_afiliado] INT,
+  [id_especialidad] INT,
+  [matricula] INT
 )GO
 
 -- Se empiezan a insertar los valosres por defecto en las tablas
@@ -149,12 +147,17 @@ INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiada')
 
 -- SP de migracion de datos
 CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
-BEGIN
-  INSERT INTO [SELECTIONADOS].[Afiliados](Nombre)
-    SELECT [Paciente_Nombre]
-    FROM [gd_esquema].[Maestra]
-    WHERE [Paciente_Nombre] IS NOT NULL
-END
+  BEGIN
+    INSERT INTO [SELECTIONADOS].[Afiliados](nombre,apellido,nro_doc,direccion,telefono,mail,fecha_nac)
+      SELECT DISTINCT Paciente_Nombre,Paciente_Apellido,Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
+      FROM gd_esquema.Maestra
+      WHERE Paciente_Nombre IS NOT NULL AND Paciente_Apellido IS NOT NULL
+    UPDATE SELECTIONADOS.Afiliados SET numero_afiliado = Id_afiliado * 100
+  END
+GO
 
 EXECUTE [SELECTIONADOS].[migracionDeDatos]
 GO
+
+--Creo las FK
+ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([id_estado_civil]) REFERENCES [SELECTIONADOS].[Estado_Civil](Id_Estado_Civil)
