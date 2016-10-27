@@ -44,3 +44,29 @@ SELECT Maestra.[Especialidad_Codigo], Maestra.[Especialidad_Descripcion], Tipo_e
 SELECT Tipo_Especialidad_Codigo, Tipo_Especialidad_Descripcion
   FROM gd_esquema.Maestra
   GROUP BY Tipo_Especialidad_Codigo, Tipo_Especialidad_Descripcion
+
+-- Profesional especializacion
+SELECT SELECTIONADOS.Profesional.Id_Profesional, SELECTIONADOS.Especialidad.id_tipo_especialidad
+FROM SELECTIONADOS.Profesional
+  INNER JOIN gd_esquema.Maestra
+  on Maestra.Medico_Dni = SELECTIONADOS.Profesional.nro_doc AND Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.cod_especialidad
+GROUP BY SELECTIONADOS.Profesional.Id_Profesional, SELECTIONADOS.Especialidad.id_tipo_especialidad
+
+SELECT Maestra.Medico_Nombre, Maestra.Medico_Dni, Maestra.Especialidad_Codigo, Maestra.Especialidad_Descripcion
+FROM gd_esquema.Maestra
+GROUP BY Maestra.Medico_Nombre, Maestra.Medico_Dni, Maestra.Especialidad_Codigo, Maestra.Especialidad_Descripcion
+
+SELECT Maestra.Medico_Nombre, Maestra.Medico_Dni,Profesional.Id_Profesional, Maestra.Especialidad_Codigo, Maestra.Especialidad_Descripcion, Especialidad.id_especialidad
+FROM gd_esquema.Maestra
+  INNER JOIN SELECTIONADOS.Profesional
+  ON Maestra.Medico_Dni = SELECTIONADOS.Profesional.nro_doc
+  INNER JOIN SELECTIONADOS.Especialidad
+  ON Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.cod_especialidad
+
+SELECT Profesional.Id_Profesional, Especialidad.id_especialidad
+FROM gd_esquema.Maestra
+  INNER JOIN SELECTIONADOS.Profesional
+  ON Maestra.Medico_Dni = SELECTIONADOS.Profesional.nro_doc
+  INNER JOIN SELECTIONADOS.Especialidad
+  ON Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.cod_especialidad
+GROUP BY Profesional.Id_Profesional, Especialidad.id_especialidad

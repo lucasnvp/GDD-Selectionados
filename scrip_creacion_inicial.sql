@@ -27,6 +27,16 @@ create table [SELECTIONADOS].[Estado_Civil](
   Descripcion VARCHAR(255),
 )GO
 
+-- Se insertar los valosres por defecto en la talba de Estado Civil
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Casado')
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Casada')
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Soltero')
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Soltera')
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Viudo')
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Viuda')
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiado')
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiada')
+
 -- Creamos la nueva Tabla de Planes Medicos
 CREATE TABLE [SELECTIONADOS].[Planes](
   [Id_Plan] INT PRIMARY KEY IDENTITY(1,1),
@@ -113,9 +123,9 @@ CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
 )GO
 
 --Tabla de especializacion
-CREATE TABLE [SELECTIONADOS].[Profesional_Especializacion] (
-  [id_especialidad] INT PRIMARY KEY ,
-  [matricula] INT
+CREATE TABLE [SELECTIONADOS].[Profesional_Especialidad] (
+  [ID_Profesional] INT,
+  [ID_Especialidad] INT
 )GO
 
 --Tabla de especialidad
@@ -141,16 +151,6 @@ CREATE TABLE [SELECTIONADOS].[Turno] (
   [id_especialidad] INT,
   [matricula] INT
 )GO
-
--- Se empiezan a insertar los valosres por defecto en las tablas
-INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Casado')
-INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Casada')
-INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Soltero')
-INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Soltera')
-INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Viudo')
-INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Viuda')
-INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiado')
-INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiada')
 
 -- SP de migracion de datos
 CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
@@ -179,11 +179,20 @@ CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
       GROUP BY Tipo_Especialidad_Codigo, Tipo_Especialidad_Descripcion
 
     INSERT INTO [SELECTIONADOS].[Especialidad](cod_especialidad, descripcion, id_tipo_especialidad)
-      SELECT Maestra.[Especialidad_Codigo], Maestra.[Especialidad_Descripcion], Tipo_especialidad.[id_tipo_especialidad]
-      FROM gd_esquema.[Maestra]
-        INNER JOIN SELECTIONADOS.Tipo_especialidad
-        ON Tipo_especialidad.cod_tipo_especialidad = Maestra.Tipo_Especialidad_Codigo
-      GROUP BY Especialidad_Codigo, Especialidad_Descripcion, Tipo_especialidad.[id_tipo_especialidad]
+    SELECT Maestra.[Especialidad_Codigo], Maestra.[Especialidad_Descripcion], Tipo_especialidad.[id_tipo_especialidad]
+    FROM gd_esquema.[Maestra]
+      INNER JOIN SELECTIONADOS.Tipo_especialidad
+      ON Tipo_especialidad.cod_tipo_especialidad = Maestra.Tipo_Especialidad_Codigo
+    GROUP BY Especialidad_Codigo, Especialidad_Descripcion, Tipo_especialidad.[id_tipo_especialidad]
+
+    INSERT INTO [SELECTIONADOS].[Profesional_Especialidad](ID_Profesional, ID_Especialidad)
+    SELECT Profesional.Id_Profesional, Especialidad.id_especialidad
+    FROM gd_esquema.Maestra
+      INNER JOIN SELECTIONADOS.Profesional
+      ON Maestra.Medico_Dni = SELECTIONADOS.Profesional.nro_doc
+      INNER JOIN SELECTIONADOS.Especialidad
+      ON Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.cod_especialidad
+    GROUP BY Profesional.Id_Profesional, Especialidad.id_especialidad
 
   END
 GO
@@ -195,3 +204,6 @@ GO
 ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([id_estado_civil]) REFERENCES [SELECTIONADOS].[Estado_Civil](Id_Estado_Civil)
 ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([id_plan]) REFERENCES [SELECTIONADOS].[Planes](Id_Plan)
 ALTER TABLE [SELECTIONADOS].[Especialidad] ADD FOREIGN KEY ([id_tipo_especialidad]) REFERENCES [SELECTIONADOS].[Tipo_especialidad](id_tipo_especialidad)
+ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional_Especialidad](ID_Profesional)
+ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
+
