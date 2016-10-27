@@ -19,7 +19,7 @@ CREATE TABLE [SELECTIONADOS].[Afiliados](
   [id_plan] INT,
   [nro_consulta] INT,
   [activo] BIT
-)
+)GO
 
 -- Creamos la nueva Tabla de Estados Civiles
 create table [SELECTIONADOS].[Estado_Civil](
@@ -29,8 +29,12 @@ create table [SELECTIONADOS].[Estado_Civil](
 
 -- Creamos la nueva Tabla de Planes Medicos
 CREATE TABLE [SELECTIONADOS].[Planes](
-  Id_Plan INT PRIMARY KEY IDENTITY(1,1),
-  Descripcion VARCHAR(255),
+  [Id_Plan] INT PRIMARY KEY IDENTITY(1,1),
+  [Cod_Plan] NUMERIC(18),
+  [Descripcion] VARCHAR(255),
+  [Precio_Plan] NUMERIC(18),
+  [Precio_Bono_Consulta] NUMERIC(18),
+  [Precio_Bono_Farmacia] NUMERIC(18)
 )GO
 
 -- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
@@ -86,16 +90,17 @@ CREATE TABLE [SELECTIONADOS].[Modificación] (
 
 --Tabla de Profesionales
 CREATE TABLE [SELECTIONADOS].[Profesional] (
-  [matricula] INT PRIMARY KEY,
+  [Id_Profesional]INT PRIMARY KEY IDENTITY(1,1),
+  [matricula] INT,
   [nombre] VARCHAR(255),
   [apellido] VARCHAR(255),
-  [tipo_doc] VARCHAR(255),
-  [nro_doc] INT,
+  [tipo_doc] VARCHAR(4),
+  [nro_doc] NUMERIC(18),
   [direccion] VARCHAR(255),
-  [telefono] INT,
+  [telefono] NUMERIC(18),
   [mail] VARCHAR(255),
   [fecha_nac] DATETIME,
-  [sexo] VARCHAR(255)
+  [sexo] CHAR
 )GO
 
 --Tabla de disponibilidad profesional
@@ -115,14 +120,16 @@ CREATE TABLE [SELECTIONADOS].[Profesional_Especializacion] (
 
 --Tabla de especialidad
 CREATE TABLE [SELECTIONADOS].[Especialidad] (
-  [id_especialidad] INT PRIMARY KEY,
+  [id_especialidad] INT PRIMARY KEY IDENTITY(1,1),
+  [cod_especialidad] INT,
   [descripcion] VARCHAR(255),
   [id_tipo_especialidad] INT
 )GO
 
 --Tabla de tipo de especialidad
 CREATE TABLE [SELECTIONADOS].[Tipo_especialidad] (
-  [id_tipo_especialidad] INT,
+  [id_tipo_especialidad] INT PRIMARY KEY IDENTITY(1,1),
+  [cod_tipo_especialidad] NUMERIC(18),
   [descripcion] VARCHAR(255)
 )GO
 
@@ -149,10 +156,35 @@ INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiada')
 CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
   BEGIN
     INSERT INTO [SELECTIONADOS].[Afiliados](nombre,apellido,nro_doc,direccion,telefono,mail,fecha_nac)
-      SELECT DISTINCT Paciente_Nombre,Paciente_Apellido,Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
+      SELECT Paciente_Nombre,Paciente_Apellido,Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
       FROM gd_esquema.Maestra
       WHERE Paciente_Nombre IS NOT NULL AND Paciente_Apellido IS NOT NULL
+      GROUP BY Paciente_Nombre,Paciente_Apellido,Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
     UPDATE SELECTIONADOS.Afiliados SET numero_afiliado = Id_afiliado * 100
+
+    INSERT INTO [SELECTIONADOS].[Planes] (Cod_Plan, Descripcion, Precio_Plan, Precio_Bono_Consulta, Precio_Bono_Farmacia)
+      SELECT Plan_Med_Codigo, Plan_Med_Descripcion,0, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
+      FROM gd_esquema.Maestra
+      GROUP BY Plan_Med_Codigo, Plan_Med_Descripcion, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
+
+    INSERT INTO [SELECTIONADOS].[Profesional] (nombre, apellido, nro_doc, direccion, telefono, mail, fecha_nac)
+      SELECT Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
+      FROM gd_esquema.Maestra
+      WHERE Medico_Nombre IS NOT NULL
+      GROUP BY Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
+
+    INSERT INTO [SELECTIONADOS].[Tipo_especialidad](id_tipo_especialidad, descripcion)
+      SELECT Tipo_Especialidad_Codigo, Tipo_Especialidad_Descripcion
+      FROM gd_esquema.Maestra
+      GROUP BY Tipo_Especialidad_Codigo, Tipo_Especialidad_Descripcion
+
+    INSERT INTO [SELECTIONADOS].[Especialidad](cod_especialidad, descripcion, id_tipo_especialidad)
+      SELECT Maestra.[Especialidad_Codigo], Maestra.[Especialidad_Descripcion], Tipo_especialidad.[id_tipo_especialidad]
+      FROM gd_esquema.[Maestra]
+        INNER JOIN SELECTIONADOS.Tipo_especialidad
+        ON Tipo_especialidad.cod_tipo_especialidad = Maestra.Tipo_Especialidad_Codigo
+      GROUP BY Especialidad_Codigo, Especialidad_Descripcion, Tipo_especialidad.[id_tipo_especialidad]
+
   END
 GO
 
@@ -161,3 +193,5 @@ GO
 
 --Creo las FK
 ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([id_estado_civil]) REFERENCES [SELECTIONADOS].[Estado_Civil](Id_Estado_Civil)
+ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([id_plan]) REFERENCES [SELECTIONADOS].[Planes](Id_Plan)
+ALTER TABLE [SELECTIONADOS].[Especialidad] ADD FOREIGN KEY ([id_tipo_especialidad]) REFERENCES [SELECTIONADOS].[Tipo_especialidad](id_tipo_especialidad)
