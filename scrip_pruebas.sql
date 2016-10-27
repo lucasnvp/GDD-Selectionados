@@ -70,3 +70,32 @@ FROM gd_esquema.Maestra
   INNER JOIN SELECTIONADOS.Especialidad
   ON Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.cod_especialidad
 GROUP BY Profesional.Id_Profesional, Especialidad.id_especialidad
+
+-- Bonos
+SELECT Maestra.Compra_Bono_Fecha, Maestra.Bono_Consulta_Fecha_Impresion, Maestra.Bono_Consulta_Numero
+FROM gd_esquema.Maestra
+WHERE Maestra.Bono_Consulta_Fecha_Impresion IS NOT NULL
+ORDER BY Maestra.Bono_Consulta_Numero DESC
+
+SELECT Maestra.Bono_Consulta_Fecha_Impresion
+FROM gd_esquema.Maestra
+WHERE Bono_Consulta_Fecha_Impresion IS NOT NULL
+
+SELECT Maestra.Compra_Bono_Fecha
+FROM gd_esquema.Maestra
+WHERE Compra_Bono_Fecha IS NOT NULL
+
+-- Turnos
+SELECT Maestra.Turno_Fecha, Maestra.Turno_Numero
+FROM gd_esquema.Maestra
+WHERE Maestra.Turno_Numero IS NOT NULL
+
+SELECT Maestra.Turno_Numero, Afiliados.Id_afiliado, Profesional.Id_Profesional, Especialidad.id_especialidad, Maestra.Turno_Fecha
+FROM gd_esquema.Maestra
+  INNER JOIN SELECTIONADOS.Afiliados
+  ON SELECTIONADOS.Afiliados.nro_doc = Maestra.Paciente_Dni
+  INNER JOIN SELECTIONADOS.Profesional
+  ON SELECTIONADOS.Profesional.nro_doc = Maestra.Medico_Dni
+  INNER JOIN SELECTIONADOS.Especialidad
+  ON SELECTIONADOS.Especialidad.cod_especialidad = Maestra.Especialidad_Codigo
+WHERE Maestra.Turno_Numero IS NOT NULL

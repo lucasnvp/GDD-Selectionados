@@ -1,5 +1,7 @@
+-- Base a la cual vamos a usar
 USE [GD2C2016]
 
+-- Creo el schema que vamos a utilizar
 CREATE SCHEMA [SELECTIONADOS]
 
 -- Creamos la nueva Tabla de Afiliados
@@ -145,12 +147,19 @@ CREATE TABLE [SELECTIONADOS].[Tipo_especialidad] (
 
 --Tabla de turno
 CREATE TABLE [SELECTIONADOS].[Turno] (
-  [id_turno] INT PRIMARY KEY,
-  [id_horario] DATETIME,
-  [nro_afiliado] INT,
-  [id_especialidad] INT,
-  [matricula] INT
+  [Nro_Turno] NUMERIC(18) UNIQUE ,
+  [Nro_Afiliado] INT,
+  [ID_Profesional] INT,
+  [ID_Especialidad] INT,
+  [Fecha_Turno] DATE
 )GO
+
+--Tabla de bonos
+CREATE TABLE [SELECTIONADOS].[Bono] (
+  [ID_Bono] INT PRIMARY KEY IDENTITY(1,1),
+  [Fecha_Impresion] DATETIME,
+)GO
+
 
 -- SP de migracion de datos
 CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
@@ -194,6 +203,17 @@ CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
       ON Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.cod_especialidad
     GROUP BY Profesional.Id_Profesional, Especialidad.id_especialidad
 
+    INSERT INTO [SELECTIONADOS].[Turno](Nro_Turno, Nro_Afiliado, ID_Profesional, ID_Especialidad, Fecha_Turno)
+    SELECT Maestra.Turno_Numero, Afiliados.Id_afiliado, Profesional.Id_Profesional, Especialidad.id_especialidad, Maestra.Turno_Fecha
+    FROM gd_esquema.Maestra
+      INNER JOIN SELECTIONADOS.Afiliados
+      ON SELECTIONADOS.Afiliados.nro_doc = Maestra.Paciente_Dni
+      INNER JOIN SELECTIONADOS.Profesional
+      ON SELECTIONADOS.Profesional.nro_doc = Maestra.Medico_Dni
+      INNER JOIN SELECTIONADOS.Especialidad
+      ON SELECTIONADOS.Especialidad.cod_especialidad = Maestra.Especialidad_Codigo
+    WHERE Maestra.Turno_Numero IS NOT NULL
+
   END
 GO
 
@@ -206,4 +226,7 @@ ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([id_plan]) REFERENCES [
 ALTER TABLE [SELECTIONADOS].[Especialidad] ADD FOREIGN KEY ([id_tipo_especialidad]) REFERENCES [SELECTIONADOS].[Tipo_especialidad](id_tipo_especialidad)
 ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional_Especialidad](ID_Profesional)
 ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
+ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([Nro_Afiliado]) REFERENCES [SELECTIONADOS].[Afiliados](numero_afiliado)
+ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional)
+ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
 
