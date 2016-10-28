@@ -112,10 +112,41 @@ CREATE TABLE [SELECTIONADOS].[Consulta] (
   [ID_Bono] INT
 )GO
 
+-- Tabla de Roles de Usuario
+CREATE TABLE [SELECTIONADOS].[Rol](
+  ID_Rol INT PRIMARY KEY IDENTITY(1,1),
+  Nombre VARCHAR(255),
+  Activo BIT NOT NULL DEFAULT 1 -- 1 Activo 0 Desactivo
+)GO
 
+-- Tabla de Funcionalidades
+CREATE TABLE [SELECTIONADOS].[Funcionalidades](
+  ID_Funcionalidad INT PRIMARY KEY IDENTITY(1,1),
+  Descripcion VARCHAR(255)
+)GO
 
-/*
-                        Lo que me falta ver
+-- Tabla de Rol por funcionalidad. Un rol puedo tener varias funcionalidades.
+CREATE TABLE [SELECTIONADOS].[Rol_X_Funcionalidad](
+  ID_Funcionalidad INT FOREIGN KEY REFERENCES SELECTIONADOS.Funcionalidades(ID_Funcionalidad),
+  ID_Rol INT FOREIGN KEY REFERENCES SELECTIONADOS.Rol(ID_Rol)
+)GO
+
+-- Tabla de usuarios.
+CREATE TABLE [SELECTIONADOS].[Usuarios](
+  ID_Usuario INT PRIMARY KEY IDENTITY(1,1),
+  Username VARCHAR(255) UNIQUE NOT NULL,
+  Password VARCHAR(255) NOT NULL ,
+  Fecha_Creacion DATETIME NOT NULL,
+  Activo BIT NOT NULL DEFAULT 1 -- 1 Activo 0 Desactivo
+)GO
+
+-- Tabla de Asignaciones de Roles y Usuarios cada usuario puede tener mas de un rol
+CREATE TABLE [SELECTIONADOS].[Asignacion_Rol](
+  ID_Rol INT,
+  ID_Usuario INT,
+)GO /* Idea: Usar el mismo ID de usuario para los afiliados y los medicos*/
+
+/*            Lo que me falta ver
 
 -- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
 create table [SELECTIONADOS].[Baja](
@@ -125,40 +156,6 @@ create table [SELECTIONADOS].[Baja](
   Motivo VARCHAR(255),
 )GO
 -- Crear triger para que cuando se inserte en esta tabla se tenga que dar de baja en la de afiliados
-
--- Tabla de usuarios.
-create table [SELECTIONADOS].[Usuarios](
-  Id_Usuario INT PRIMARY KEY IDENTITY(1,1),
-  Username VARCHAR(255),
-  Password VARCHAR(255),
-)GO
-
--- Tabla de Asignaciones de Roles y Usuarios cada usuario puede tener mas de un rol
-create table [SELECTIONADOS].[Asignacion_Rol](
-  Id_Rol INT,
-  Id_Usuario INT,
-  PRIMARY KEY (Id_Rol,Id_Usuario)
-)GO
-
--- Tabla de Roles de Usuario
-create table [SELECTIONADOS].[Rol](
-  Id_Rol INT PRIMARY KEY IDENTITY(1,1),
-  Nombre VARCHAR(255),
-  Activo BIT,
-)GO
-
--- Tabla de Funcionalidades
-create table [SELECTIONADOS].[Funcionalidades](
-  Id_Funcionalidad INT PRIMARY KEY IDENTITY(1,1),
-  Descripcion VARCHAR(255),
-)GO
-
--- Creamos la tabla de roles por funcionalidad, cada rol puede tener muchas funcionalidades y una funcionalidad puede estar presente en varios roles.
-create table [SELECTIONADOS].[Rol_X_Funcionalidad](
-  Id_Funcionalidad INT,
-  Id_Rol INT,
-  PRIMARY KEY (Id_Funcionalidad,Id_Rol)
-)GO
 
 -- Tabla de logs de modificacion
 CREATE TABLE [SELECTIONADOS].[Modificación] (
