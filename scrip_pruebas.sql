@@ -110,3 +110,9 @@ FROM gd_esquema.Maestra
   INNER JOIN SELECTIONADOS.Turno
   ON SELECTIONADOS.Turno.Nro_Turno = Maestra.Turno_Numero
 WHERE Maestra.Bono_Consulta_Fecha_Impresion IS NOT NULL
+
+
+SELECT Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
+    FROM gd_esquema.Maestra
+    WHERE Medico_Nombre IS NOT NULL
+    GROUP BY Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac

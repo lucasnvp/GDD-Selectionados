@@ -6,21 +6,21 @@ CREATE SCHEMA [SELECTIONADOS]
 
 -- Creamos la nueva Tabla de Afiliados
 CREATE TABLE [SELECTIONADOS].[Afiliados](
-  [Id_afiliado] INT PRIMARY KEY IDENTITY(1,1),
-  [numero_afiliado] INT,
-  [nombre] VARCHAR(255),
-  [apellido] VARCHAR(255),
-  [tipo_dni] VARCHAR(4),
-  [nro_doc] NUMERIC(18),
-  [direccion] VARCHAR(255),
-  [telefono] NUMERIC(18),
-  [mail] VARCHAR(255),
-  [fecha_nac] DATETIME,
-  [sexo] CHAR,
-  [id_estado_civil] INT,
-  [id_plan] INT,
-  [nro_consulta] INT,
-  [activo] BIT
+  [ID_Afiliado] INT PRIMARY KEY IDENTITY(1,1),
+  [Nro_Afiliado] INT,
+  [Nombre] VARCHAR(255),
+  [Apellido] VARCHAR(255),
+  [Tipo_Dni] VARCHAR(4),
+  [Nro_Doc] NUMERIC(18),
+  [Direccion] VARCHAR(255),
+  [Telefono] NUMERIC(18),
+  [Mail] VARCHAR(255),
+  [Fecha_Nac] DATETIME,
+  [Sexo] CHAR,
+  [ID_Estado_Civil] INT,
+  [ID_Plan] INT,
+  [Nro_Consultas] INT,
+  [Activo] BIT -- 1 Activo 0 Desactivo
 )GO
 
 -- Creamos la nueva Tabla de Estados Civiles
@@ -48,6 +48,74 @@ CREATE TABLE [SELECTIONADOS].[Planes](
   [Precio_Bono_Consulta] NUMERIC(18),
   [Precio_Bono_Farmacia] NUMERIC(18)
 )GO
+
+--Tabla de Profesionales
+CREATE TABLE [SELECTIONADOS].[Profesional] (
+  [Id_Profesional]INT PRIMARY KEY IDENTITY(1,1),
+  [Matricula] INT,
+  [Nombre] VARCHAR(255),
+  [Apellido] VARCHAR(255),
+  [Tipo_Doc] VARCHAR(4),
+  [Nro_Doc] NUMERIC(18),
+  [Direccion] VARCHAR(255),
+  [Telefono] NUMERIC(18),
+  [Mail] VARCHAR(255),
+  [Fecha_Nac] DATETIME,
+  [Sexo] CHAR
+)GO
+
+--Tabla de tipo de especialidad
+CREATE TABLE [SELECTIONADOS].[Tipo_Especialidad] (
+  [ID_Tipo_Especialidad] INT PRIMARY KEY IDENTITY(1,1),
+  [Cod_Tipo_Especialidad] NUMERIC(18),
+  [Descripcion] VARCHAR(255)
+)GO
+
+--Tabla de especialidad
+CREATE TABLE [SELECTIONADOS].[Especialidad] (
+  [ID_Especialidad] INT PRIMARY KEY IDENTITY(1,1),
+  [Cod_Especialidad] INT,
+  [Descripcion] VARCHAR(255),
+  [ID_Tipo_Especialidad] INT
+)GO
+
+--Tabla de especializacion
+CREATE TABLE [SELECTIONADOS].[Profesional_Especialidad] (
+  [ID_Profesional] INT,
+  [ID_Especialidad] INT
+)GO
+
+--Tabla de turno
+CREATE TABLE [SELECTIONADOS].[Turno] (
+  [Nro_Turno] NUMERIC(18) UNIQUE NOT NULL,
+  [Nro_Afiliado] INT,
+  [ID_Profesional] INT,
+  [ID_Especialidad] INT,
+  [Fecha_Turno] DATE
+)GO
+
+--Tabla de bonos
+CREATE TABLE [SELECTIONADOS].[Compra_Bono] (
+  [ID_Bono] INT PRIMARY KEY IDENTITY(1,1),
+  [Nro_Afiliado] INT,
+  [Fecha_Impresion] DATETIME,
+)GO
+
+-- Tabla de consultas
+CREATE TABLE [SELECTIONADOS].[Consulta] (
+  [Nro_Consulta] NUMERIC(18) UNIQUE NOT NULL,
+  [Nro_Turno] NUMERIC(18),
+  [Enfermedades] VARCHAR(255),
+  [Sintomas] VARCHAR(255),
+  [Fecha_Consulta] DATETIME,
+  [Fecha_Llegada] DATETIME,
+  [ID_Bono] INT
+)GO
+
+
+
+/*
+                        Lo que me falta ver
 
 -- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
 create table [SELECTIONADOS].[Baja](
@@ -100,21 +168,6 @@ CREATE TABLE [SELECTIONADOS].[Modificación] (
   [motivo] VARCHAR(255)
 )GO
 
---Tabla de Profesionales
-CREATE TABLE [SELECTIONADOS].[Profesional] (
-  [Id_Profesional]INT PRIMARY KEY IDENTITY(1,1),
-  [matricula] INT,
-  [nombre] VARCHAR(255),
-  [apellido] VARCHAR(255),
-  [tipo_doc] VARCHAR(4),
-  [nro_doc] NUMERIC(18),
-  [direccion] VARCHAR(255),
-  [telefono] NUMERIC(18),
-  [mail] VARCHAR(255),
-  [fecha_nac] DATETIME,
-  [sexo] CHAR
-)GO
-
 --Tabla de disponibilidad profesional
 CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
   [matricula] INT PRIMARY KEY,
@@ -124,105 +177,59 @@ CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
   [especialidad] INT
 )GO
 
---Tabla de especializacion
-CREATE TABLE [SELECTIONADOS].[Profesional_Especialidad] (
-  [ID_Profesional] INT,
-  [ID_Especialidad] INT
-)GO
-
---Tabla de especialidad
-CREATE TABLE [SELECTIONADOS].[Especialidad] (
-  [id_especialidad] INT PRIMARY KEY IDENTITY(1,1),
-  [cod_especialidad] INT,
-  [descripcion] VARCHAR(255),
-  [id_tipo_especialidad] INT
-)GO
-
---Tabla de tipo de especialidad
-CREATE TABLE [SELECTIONADOS].[Tipo_especialidad] (
-  [id_tipo_especialidad] INT PRIMARY KEY IDENTITY(1,1),
-  [cod_tipo_especialidad] NUMERIC(18),
-  [descripcion] VARCHAR(255)
-)GO
-
---Tabla de turno
-CREATE TABLE [SELECTIONADOS].[Turno] (
-  [Nro_Turno] NUMERIC(18) UNIQUE NOT NULL,
-  [Nro_Afiliado] INT,
-  [ID_Profesional] INT,
-  [ID_Especialidad] INT,
-  [Fecha_Turno] DATE
-)GO
-
---Tabla de bonos
-CREATE TABLE [SELECTIONADOS].[Compra_Bono] (
-  [ID_Bono] INT PRIMARY KEY IDENTITY(1,1),
-  [Nro_Afiliado] INT,
-  [Fecha_Impresion] DATETIME,
-)GO
-
--- Tabla de consultas
-CREATE TABLE [SELECTIONADOS].[Consulta] (
-  [Nro_Consulta] NUMERIC(18) UNIQUE NOT NULL,
-  [Nro_Turno] NUMERIC(18),
-  [Enfermedades] VARCHAR(255),
-  [Sintomas] VARCHAR(255),
-  [Fecha_Consulta] DATETIME,
-  [Fecha_Llegada] DATETIME,
-  [ID_Bono] INT
-)GO
+*/
 
 -- SP de migracion de datos
-CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
+CREATE PROCEDURE [SELECTIONADOS].[MigracionDeDatos] AS
   BEGIN
-    INSERT INTO [SELECTIONADOS].[Afiliados](nombre,apellido,nro_doc,direccion,telefono,mail,fecha_nac)
-      SELECT Paciente_Nombre,Paciente_Apellido,Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
-      FROM gd_esquema.Maestra
-      WHERE Paciente_Nombre IS NOT NULL AND Paciente_Apellido IS NOT NULL
-      GROUP BY Paciente_Nombre,Paciente_Apellido,Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
-    UPDATE SELECTIONADOS.Afiliados SET numero_afiliado = Id_afiliado * 100
+    INSERT INTO [SELECTIONADOS].[Afiliados](Nombre,Apellido,Nro_Doc,Direccion,Telefono,Mail,Fecha_Nac)
+    SELECT [Paciente_Nombre], [Paciente_Apellido], Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
+    FROM gd_esquema.Maestra
+    WHERE Paciente_Nombre IS NOT NULL AND Paciente_Apellido IS NOT NULL
+    GROUP BY [Paciente_Nombre], [Paciente_Apellido], Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
+    UPDATE SELECTIONADOS.Afiliados SET [Nro_Afiliado] = [ID_Afiliado] * 100
 
     INSERT INTO [SELECTIONADOS].[Planes] (Cod_Plan, Descripcion, Precio_Plan, Precio_Bono_Consulta, Precio_Bono_Farmacia)
-      SELECT Plan_Med_Codigo, Plan_Med_Descripcion,0, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
-      FROM gd_esquema.Maestra
-      GROUP BY Plan_Med_Codigo, Plan_Med_Descripcion, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
+    SELECT Plan_Med_Codigo, Plan_Med_Descripcion,0, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
+    FROM gd_esquema.Maestra
+    GROUP BY Plan_Med_Codigo, Plan_Med_Descripcion, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
 
-    INSERT INTO [SELECTIONADOS].[Profesional] (nombre, apellido, nro_doc, direccion, telefono, mail, fecha_nac)
-      SELECT Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
-      FROM gd_esquema.Maestra
-      WHERE Medico_Nombre IS NOT NULL
-      GROUP BY Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
+    INSERT INTO [SELECTIONADOS].[Profesional] (Nombre, Apellido, Nro_Doc, Direccion, Telefono, Mail, Fecha_Nac)
+    SELECT Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
+    FROM gd_esquema.Maestra
+    WHERE Medico_Nombre IS NOT NULL
+    GROUP BY Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
 
-    INSERT INTO [SELECTIONADOS].[Tipo_especialidad](id_tipo_especialidad, descripcion)
-      SELECT Tipo_Especialidad_Codigo, Tipo_Especialidad_Descripcion
-      FROM gd_esquema.Maestra
-      GROUP BY Tipo_Especialidad_Codigo, Tipo_Especialidad_Descripcion
+    INSERT INTO [SELECTIONADOS].[Tipo_Especialidad](Cod_Tipo_Especialidad, Descripcion)
+    SELECT Maestra.[Tipo_Especialidad_Codigo], Maestra.[Tipo_Especialidad_Descripcion]
+    FROM gd_esquema.Maestra
+    GROUP BY Maestra.[Tipo_Especialidad_Codigo], Maestra.[Tipo_Especialidad_Descripcion]
 
-    INSERT INTO [SELECTIONADOS].[Especialidad](cod_especialidad, descripcion, id_tipo_especialidad)
-    SELECT Maestra.[Especialidad_Codigo], Maestra.[Especialidad_Descripcion], Tipo_especialidad.[id_tipo_especialidad]
+    INSERT INTO [SELECTIONADOS].[Especialidad](Cod_Especialidad, Descripcion, ID_Tipo_Especialidad)
+    SELECT Maestra.[Especialidad_Codigo], Maestra.[Especialidad_Descripcion], Tipo_especialidad.[ID_Tipo_Especialidad]
     FROM gd_esquema.[Maestra]
       INNER JOIN SELECTIONADOS.Tipo_especialidad
-      ON Tipo_especialidad.cod_tipo_especialidad = Maestra.Tipo_Especialidad_Codigo
-    GROUP BY Especialidad_Codigo, Especialidad_Descripcion, Tipo_especialidad.[id_tipo_especialidad]
+      ON Tipo_especialidad.Cod_Tipo_Especialidad = Maestra.Tipo_Especialidad_Codigo
+    GROUP BY Maestra.[Especialidad_Codigo], Maestra.[Especialidad_Descripcion], Tipo_especialidad.[ID_Tipo_Especialidad], Maestra.[Especialidad_Descripcion], Maestra.[Especialidad_Codigo]
 
     INSERT INTO [SELECTIONADOS].[Profesional_Especialidad](ID_Profesional, ID_Especialidad)
-    SELECT Profesional.Id_Profesional, Especialidad.id_especialidad
+    SELECT Profesional.Id_Profesional, Especialidad.ID_Especialidad
     FROM gd_esquema.Maestra
       INNER JOIN SELECTIONADOS.Profesional
-      ON Maestra.Medico_Dni = SELECTIONADOS.Profesional.nro_doc
+      ON Maestra.Medico_Dni = SELECTIONADOS.Profesional.Nro_Doc
       INNER JOIN SELECTIONADOS.Especialidad
-      ON Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.cod_especialidad
-    GROUP BY Profesional.Id_Profesional, Especialidad.id_especialidad
+      ON Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.Cod_Especialidad
+    GROUP BY Profesional.Id_Profesional, Especialidad.ID_Especialidad
 
     INSERT INTO [SELECTIONADOS].[Turno](Nro_Turno, Nro_Afiliado, ID_Profesional, ID_Especialidad, Fecha_Turno)
-    SELECT Maestra.Turno_Numero, Afiliados.Id_afiliado, Profesional.Id_Profesional, Especialidad.id_especialidad, Maestra.Turno_Fecha
+    SELECT Maestra.Turno_Numero, Afiliados.ID_Afiliado, Profesional.Id_Profesional, Especialidad.ID_Especialidad, Maestra.Turno_Fecha
     FROM gd_esquema.Maestra
       INNER JOIN SELECTIONADOS.Afiliados
-      ON SELECTIONADOS.Afiliados.nro_doc = Maestra.Paciente_Dni
+      ON SELECTIONADOS.Afiliados.Nro_Doc = Maestra.Paciente_Dni
       INNER JOIN SELECTIONADOS.Profesional
-      ON SELECTIONADOS.Profesional.nro_doc = Maestra.Medico_Dni
+      ON SELECTIONADOS.Profesional.Nro_Doc = Maestra.Medico_Dni
       INNER JOIN SELECTIONADOS.Especialidad
-      ON SELECTIONADOS.Especialidad.cod_especialidad = Maestra.Especialidad_Codigo
+      ON SELECTIONADOS.Especialidad.Cod_Especialidad = Maestra.Especialidad_Codigo
     WHERE Maestra.Turno_Numero IS NOT NULL
 
     INSERT INTO [SELECTIONADOS].[Consulta](Nro_Consulta, Nro_Turno, Enfermedades, Sintomas, Fecha_Consulta, Fecha_Llegada, ID_Bono)
@@ -235,19 +242,21 @@ CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
   END
 GO
 
-EXECUTE [SELECTIONADOS].[migracionDeDatos]
+EXECUTE [SELECTIONADOS].[MigracionDeDatos]
 GO
 
 --Creo las FK
-ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([id_estado_civil]) REFERENCES [SELECTIONADOS].[Estado_Civil](Id_Estado_Civil)
-ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([id_plan]) REFERENCES [SELECTIONADOS].[Planes](Id_Plan)
-ALTER TABLE [SELECTIONADOS].[Especialidad] ADD FOREIGN KEY ([id_tipo_especialidad]) REFERENCES [SELECTIONADOS].[Tipo_especialidad](id_tipo_especialidad)
+ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([ID_Estado_Civil]) REFERENCES [SELECTIONADOS].[Estado_Civil](Id_Estado_Civil)
+ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([ID_Plan]) REFERENCES [SELECTIONADOS].[Planes](ID_Plan)
+ALTER TABLE [SELECTIONADOS].[Especialidad] ADD FOREIGN KEY ([ID_Tipo_Especialidad]) REFERENCES [SELECTIONADOS].[Tipo_especialidad](ID_Tipo_Especialidad)
 ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional_Especialidad](ID_Profesional)
 ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
-ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([Nro_Afiliado]) REFERENCES [SELECTIONADOS].[Afiliados](numero_afiliado)
+ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([Nro_Afiliado]) REFERENCES [SELECTIONADOS].[Afiliados](Nro_Afiliado)
 ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional)
 ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
 ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([Nro_Turno]) REFERENCES [SELECTIONADOS].[Turno](Nro_Turno)
 ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([ID_Bono]) REFERENCES [SELECTIONADOS].[Compra_Bono](ID_Bono)
 
-
+-- Triggers
+-- Creacion de los Nros de turnos
+-- Creacion de los Nros de consultas
