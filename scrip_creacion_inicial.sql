@@ -147,7 +147,7 @@ CREATE TABLE [SELECTIONADOS].[Tipo_especialidad] (
 
 --Tabla de turno
 CREATE TABLE [SELECTIONADOS].[Turno] (
-  [Nro_Turno] NUMERIC(18) UNIQUE ,
+  [Nro_Turno] NUMERIC(18) UNIQUE NOT NULL,
   [Nro_Afiliado] INT,
   [ID_Profesional] INT,
   [ID_Especialidad] INT,
@@ -155,11 +155,22 @@ CREATE TABLE [SELECTIONADOS].[Turno] (
 )GO
 
 --Tabla de bonos
-CREATE TABLE [SELECTIONADOS].[Bono] (
+CREATE TABLE [SELECTIONADOS].[Compra_Bono] (
   [ID_Bono] INT PRIMARY KEY IDENTITY(1,1),
+  [Nro_Afiliado] INT,
   [Fecha_Impresion] DATETIME,
 )GO
 
+-- Tabla de consultas
+CREATE TABLE [SELECTIONADOS].[Consulta] (
+  [Nro_Consulta] NUMERIC(18) UNIQUE NOT NULL,
+  [Nro_Turno] NUMERIC(18),
+  [Enfermedades] VARCHAR(255),
+  [Sintomas] VARCHAR(255),
+  [Fecha_Consulta] DATETIME,
+  [Fecha_Llegada] DATETIME,
+  [ID_Bono] INT
+)GO
 
 -- SP de migracion de datos
 CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
@@ -214,6 +225,13 @@ CREATE PROCEDURE [SELECTIONADOS].[migracionDeDatos] AS
       ON SELECTIONADOS.Especialidad.cod_especialidad = Maestra.Especialidad_Codigo
     WHERE Maestra.Turno_Numero IS NOT NULL
 
+    INSERT INTO [SELECTIONADOS].[Consulta](Nro_Consulta, Nro_Turno, Enfermedades, Sintomas, Fecha_Consulta, Fecha_Llegada, ID_Bono)
+    SELECT Maestra.Bono_Consulta_Numero, Turno.Nro_Turno, Maestra.Consulta_Enfermedades, Maestra.Consulta_Sintomas, Maestra.Bono_Consulta_Fecha_Impresion,Maestra.Bono_Consulta_Fecha_Impresion, NULL AS ID_Bono
+    FROM gd_esquema.Maestra
+      INNER JOIN SELECTIONADOS.Turno
+      ON SELECTIONADOS.Turno.Nro_Turno = Maestra.Turno_Numero
+    WHERE Maestra.Bono_Consulta_Fecha_Impresion IS NOT NULL
+
   END
 GO
 
@@ -229,4 +247,7 @@ ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Espe
 ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([Nro_Afiliado]) REFERENCES [SELECTIONADOS].[Afiliados](numero_afiliado)
 ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional)
 ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
+ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([Nro_Turno]) REFERENCES [SELECTIONADOS].[Turno](Nro_Turno)
+ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([ID_Bono]) REFERENCES [SELECTIONADOS].[Compra_Bono](ID_Bono)
+
 

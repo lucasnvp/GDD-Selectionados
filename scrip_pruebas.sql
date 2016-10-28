@@ -99,3 +99,14 @@ FROM gd_esquema.Maestra
   INNER JOIN SELECTIONADOS.Especialidad
   ON SELECTIONADOS.Especialidad.cod_especialidad = Maestra.Especialidad_Codigo
 WHERE Maestra.Turno_Numero IS NOT NULL
+
+-- Consultas
+SELECT Maestra.Bono_Consulta_Numero, Maestra.Turno_Numero, Maestra.Consulta_Enfermedades, Maestra.Consulta_Sintomas, Maestra.Bono_Consulta_Fecha_Impresion
+FROM gd_esquema.Maestra
+WHERE Maestra.Bono_Consulta_Fecha_Impresion IS NOT NULL
+
+SELECT Maestra.Bono_Consulta_Numero, Turno.Nro_Turno, Maestra.Consulta_Enfermedades, Maestra.Consulta_Sintomas, Maestra.Bono_Consulta_Fecha_Impresion, NULL AS ID_Bono
+FROM gd_esquema.Maestra
+  INNER JOIN SELECTIONADOS.Turno
+  ON SELECTIONADOS.Turno.Nro_Turno = Maestra.Turno_Numero
+WHERE Maestra.Bono_Consulta_Fecha_Impresion IS NOT NULL
