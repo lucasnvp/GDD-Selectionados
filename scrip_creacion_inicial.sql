@@ -182,17 +182,19 @@ CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
 -- SP de migracion de datos
 CREATE PROCEDURE [SELECTIONADOS].[MigracionDeDatos] AS
   BEGIN
-    INSERT INTO [SELECTIONADOS].[Afiliados](Nombre,Apellido,Nro_Doc,Direccion,Telefono,Mail,Fecha_Nac)
-    SELECT [Paciente_Nombre], [Paciente_Apellido], Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
-    FROM gd_esquema.Maestra
-    WHERE Paciente_Nombre IS NOT NULL AND Paciente_Apellido IS NOT NULL
-    GROUP BY [Paciente_Nombre], [Paciente_Apellido], Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac
-    UPDATE SELECTIONADOS.Afiliados SET [Nro_Afiliado] = [ID_Afiliado] * 100
-
     INSERT INTO [SELECTIONADOS].[Planes] (Cod_Plan, Descripcion, Precio_Plan, Precio_Bono_Consulta, Precio_Bono_Farmacia)
     SELECT Plan_Med_Codigo, Plan_Med_Descripcion,0, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
     FROM gd_esquema.Maestra
     GROUP BY Plan_Med_Codigo, Plan_Med_Descripcion, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
+
+    INSERT INTO [SELECTIONADOS].[Afiliados](Nombre,Apellido,Tipo_Dni,Nro_Doc,Direccion,Telefono,Mail,Fecha_Nac,Id_Plan,Nro_Consultas,Activo)
+    SELECT [Paciente_Nombre], [Paciente_Apellido], 'DNI' AS Tipo_Dni, Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac, Planes.Id_Plan, 0 AS Nro_Consultas, 1 AS Activo
+    FROM gd_esquema.Maestra
+      INNER JOIN SELECTIONADOS.Planes
+      ON SELECTIONADOS.Planes.Cod_Plan = Maestra.Plan_Med_Codigo
+    WHERE Paciente_Nombre IS NOT NULL AND Paciente_Apellido IS NOT NULL
+    GROUP BY [Paciente_Nombre], [Paciente_Apellido], Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac, Planes.Id_Plan
+    UPDATE SELECTIONADOS.Afiliados SET [Nro_Afiliado] = [ID_Afiliado] * 100
 
     INSERT INTO [SELECTIONADOS].[Profesional] (Nombre, Apellido, Nro_Doc, Direccion, Telefono, Mail, Fecha_Nac)
     SELECT Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac

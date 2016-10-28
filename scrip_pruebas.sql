@@ -116,3 +116,10 @@ SELECT Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Tele
     FROM gd_esquema.Maestra
     WHERE Medico_Nombre IS NOT NULL
     GROUP BY Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
+
+SELECT [Paciente_Nombre], [Paciente_Apellido], 'DNI' AS Tipo_Dni, Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac, Planes.Id_Plan, 0 AS Nro_Consultas, 1 AS Activo
+FROM gd_esquema.Maestra
+  INNER JOIN SELECTIONADOS.Planes
+  ON SELECTIONADOS.Planes.Cod_Plan = Maestra.Plan_Med_Codigo
+WHERE Paciente_Nombre IS NOT NULL AND Paciente_Apellido IS NOT NULL
+GROUP BY [Paciente_Nombre], [Paciente_Apellido], Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac, Planes.Id_Plan
