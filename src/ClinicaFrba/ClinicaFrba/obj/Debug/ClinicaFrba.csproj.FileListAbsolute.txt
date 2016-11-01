@@ -14,4 +14,5 @@ C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\Clinica
 C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.csprojResolveAssemblyReference.cache
 C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Properties.Resources.resources
 C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.csproj.GenerateResource.Cache
-C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Form1.resources
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Login.Roles.resources
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Login.Cl_Login.resources

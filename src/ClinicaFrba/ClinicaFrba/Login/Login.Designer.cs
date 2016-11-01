@@ -1,6 +1,6 @@
-﻿namespace ClinicaFrba
+﻿namespace ClinicaFrba.Login
 {
-    partial class Form1
+    partial class Cl_Login
     {
         /// <summary>
         /// Variable del diseñador requerida.
@@ -28,51 +28,52 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.BtnAceptar = new System.Windows.Forms.Button();
-            this.BtnCancelar = new System.Windows.Forms.Button();
-            this.TextUsuario = new System.Windows.Forms.Label();
-            this.TextPassword = new System.Windows.Forms.Label();
+            this.Btn_Aceptar = new System.Windows.Forms.Button();
+            this.Btn_Cancelar = new System.Windows.Forms.Button();
+            this.Lbl_Usuario = new System.Windows.Forms.Label();
+            this.Lbl_Password = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // BtnAceptar
+            // Btn_Aceptar
             // 
-            this.BtnAceptar.Location = new System.Drawing.Point(56, 126);
-            this.BtnAceptar.Name = "BtnAceptar";
-            this.BtnAceptar.Size = new System.Drawing.Size(75, 23);
-            this.BtnAceptar.TabIndex = 0;
-            this.BtnAceptar.Text = "Aceptar";
-            this.BtnAceptar.UseVisualStyleBackColor = true;
+            this.Btn_Aceptar.Location = new System.Drawing.Point(56, 126);
+            this.Btn_Aceptar.Name = "Btn_Aceptar";
+            this.Btn_Aceptar.Size = new System.Drawing.Size(75, 23);
+            this.Btn_Aceptar.TabIndex = 0;
+            this.Btn_Aceptar.Text = "Aceptar";
+            this.Btn_Aceptar.UseVisualStyleBackColor = true;
+            this.Btn_Aceptar.Click += new System.EventHandler(this.Btn_Aceptar_Click);
             // 
-            // BtnCancelar
+            // Btn_Cancelar
             // 
-            this.BtnCancelar.Location = new System.Drawing.Point(137, 126);
-            this.BtnCancelar.Name = "BtnCancelar";
-            this.BtnCancelar.Size = new System.Drawing.Size(75, 23);
-            this.BtnCancelar.TabIndex = 1;
-            this.BtnCancelar.Text = "Cancelar";
-            this.BtnCancelar.UseVisualStyleBackColor = true;
-            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
+            this.Btn_Cancelar.Location = new System.Drawing.Point(137, 126);
+            this.Btn_Cancelar.Name = "Btn_Cancelar";
+            this.Btn_Cancelar.Size = new System.Drawing.Size(75, 23);
+            this.Btn_Cancelar.TabIndex = 1;
+            this.Btn_Cancelar.Text = "Cancelar";
+            this.Btn_Cancelar.UseVisualStyleBackColor = true;
+            this.Btn_Cancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
             // 
-            // TextUsuario
+            // Lbl_Usuario
             // 
-            this.TextUsuario.AutoSize = true;
-            this.TextUsuario.Location = new System.Drawing.Point(53, 30);
-            this.TextUsuario.Name = "TextUsuario";
-            this.TextUsuario.Size = new System.Drawing.Size(43, 13);
-            this.TextUsuario.TabIndex = 2;
-            this.TextUsuario.Text = "Usuario";
-            this.TextUsuario.Click += new System.EventHandler(this.label1_Click);
+            this.Lbl_Usuario.AutoSize = true;
+            this.Lbl_Usuario.Location = new System.Drawing.Point(53, 30);
+            this.Lbl_Usuario.Name = "Lbl_Usuario";
+            this.Lbl_Usuario.Size = new System.Drawing.Size(43, 13);
+            this.Lbl_Usuario.TabIndex = 2;
+            this.Lbl_Usuario.Text = "Usuario";
+            this.Lbl_Usuario.Click += new System.EventHandler(this.label1_Click);
             // 
-            // TextPassword
+            // Lbl_Password
             // 
-            this.TextPassword.AutoSize = true;
-            this.TextPassword.Location = new System.Drawing.Point(53, 69);
-            this.TextPassword.Name = "TextPassword";
-            this.TextPassword.Size = new System.Drawing.Size(53, 13);
-            this.TextPassword.TabIndex = 3;
-            this.TextPassword.Text = "Password";
+            this.Lbl_Password.AutoSize = true;
+            this.Lbl_Password.Location = new System.Drawing.Point(53, 69);
+            this.Lbl_Password.Name = "Lbl_Password";
+            this.Lbl_Password.Size = new System.Drawing.Size(53, 13);
+            this.Lbl_Password.TabIndex = 3;
+            this.Lbl_Password.Text = "Password";
             // 
             // textBox1
             // 
@@ -88,19 +89,19 @@
             this.textBox2.Size = new System.Drawing.Size(156, 20);
             this.textBox2.TabIndex = 5;
             // 
-            // Form1
+            // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.TextPassword);
-            this.Controls.Add(this.TextUsuario);
-            this.Controls.Add(this.BtnCancelar);
-            this.Controls.Add(this.BtnAceptar);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Controls.Add(this.Lbl_Password);
+            this.Controls.Add(this.Lbl_Usuario);
+            this.Controls.Add(this.Btn_Cancelar);
+            this.Controls.Add(this.Btn_Aceptar);
+            this.Name = "Login";
+            this.Text = "Login";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -108,10 +109,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Button BtnAceptar;
-        private System.Windows.Forms.Button BtnCancelar;
-        private System.Windows.Forms.Label TextUsuario;
-        private System.Windows.Forms.Label TextPassword;
+        private System.Windows.Forms.Button Btn_Aceptar;
+        private System.Windows.Forms.Button Btn_Cancelar;
+        private System.Windows.Forms.Label Lbl_Usuario;
+        private System.Windows.Forms.Label Lbl_Password;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
     }

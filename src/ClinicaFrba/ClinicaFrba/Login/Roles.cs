@@ -10,32 +10,29 @@ using System.Windows.Forms;
 
 namespace ClinicaFrba.Login
 {
-    public partial class Cl_Login : Form
+    public partial class Roles : Form
     {
-        public Cl_Login()
+        public string rol_name;
+        public Roles()
         {
             InitializeComponent();
-        }
-
-        private void BtnCancelar_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            rol_name = "";
         }
 
         private void Btn_Aceptar_Click(object sender, EventArgs e)
         {
-            Roles roles = new Roles();
-            if (roles.rol_name.Equals("") == true)
+            if (rol_name.Equals("") == true)
+                MessageBox.Show("Seleccione un rol");
+            else
             {
-                roles.ShowDialog();
+                this.Close();
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void Roles_Load(object sender, EventArgs e)
         {
 
         }
-
-        
+       
     }
 }
