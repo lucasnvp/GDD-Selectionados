@@ -1,4 +1,4 @@
--- Base a la cual vamos a usar
+-- Base que vamos a usar
 USE [GD2C2016] GO
 
 -- Creo el schema que vamos a utilizar
