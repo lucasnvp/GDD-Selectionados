@@ -131,17 +131,6 @@ CREATE TABLE [SELECTIONADOS].[Rol_X_Funcionalidad](
   ID_Rol INT FOREIGN KEY REFERENCES SELECTIONADOS.Rol(ID_Rol)
 )GO
 
--- Tabla de Tipo_Usuario
-create table [SELECTIONADOS].[Tipo_Usuario](
-  ID_Tipo_Usuario INT PRIMARY KEY IDENTITY(1,1),
-  Descripcion VARCHAR(255),
-)GO
-
-INSERT INTO [SELECTIONADOS].[Tipo_Usuario]([Descripcion]) VALUES ('Afiliado')
-INSERT INTO [SELECTIONADOS].[Tipo_Usuario]([Descripcion]) VALUES ('Administrativo')
-INSERT INTO [SELECTIONADOS].[Tipo_Usuario]([Descripcion]) VALUES ('Administrador')
-INSERT INTO [SELECTIONADOS].[Tipo_Usuario]([Descripcion]) VALUES ('Profesional')
-
 -- Tabla de usuarios.
 CREATE TABLE [SELECTIONADOS].[Usuarios](
   ID_Usuario INT PRIMARY KEY IDENTITY(1,1),
@@ -149,7 +138,6 @@ CREATE TABLE [SELECTIONADOS].[Usuarios](
   Password VARCHAR(255) NOT NULL ,
   Fecha_Creacion DATETIME NOT NULL,
   Activo BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Desactivo
-  ID_Tipo_Usuario INT FOREIGN KEY REFERENCES SELECTIONADOS.Tipo_Usuario(ID_Tipo_Usuario),
   ID_Afiliado_Profesional INT,
 
   CONSTRAINT Afiliado_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Afiliados(ID_Afiliado),
@@ -276,3 +264,15 @@ ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([ID_Bono]) REFERENCES [S
 -- Creacion de los Nros de turnos
 -- Creacion de los Nros de consultas
 
+-- Usuarios
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('admin', 'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrador', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('afiliado1', '', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional1', '', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo1', '', getdate())
+
+-- Roles
+INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Afiliado')
+INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrativo')
+INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Profesional')
+INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrador')
