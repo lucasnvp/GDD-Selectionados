@@ -1,8 +1,8 @@
 -- Base a la cual vamos a usar
-USE [GD2C2016]
+USE [GD2C2016] GO
 
 -- Creo el schema que vamos a utilizar
-CREATE SCHEMA [SELECTIONADOS]
+CREATE SCHEMA [SELECTIONADOS] GO
 
 -- Creamos la nueva Tabla de Afiliados
 CREATE TABLE [SELECTIONADOS].[Afiliados](
@@ -131,20 +131,36 @@ CREATE TABLE [SELECTIONADOS].[Rol_X_Funcionalidad](
   ID_Rol INT FOREIGN KEY REFERENCES SELECTIONADOS.Rol(ID_Rol)
 )GO
 
+-- Tabla de Tipo_Usuario
+create table [SELECTIONADOS].[Tipo_Usuario](
+  ID_Tipo_Usuario INT PRIMARY KEY IDENTITY(1,1),
+  Descripcion VARCHAR(255),
+)GO
+
+INSERT INTO [SELECTIONADOS].[Tipo_Usuario]([Descripcion]) VALUES ('Afiliado')
+INSERT INTO [SELECTIONADOS].[Tipo_Usuario]([Descripcion]) VALUES ('Administrativo')
+INSERT INTO [SELECTIONADOS].[Tipo_Usuario]([Descripcion]) VALUES ('Administrador')
+INSERT INTO [SELECTIONADOS].[Tipo_Usuario]([Descripcion]) VALUES ('Profesional')
+
 -- Tabla de usuarios.
 CREATE TABLE [SELECTIONADOS].[Usuarios](
   ID_Usuario INT PRIMARY KEY IDENTITY(1,1),
   Username VARCHAR(255) UNIQUE NOT NULL,
   Password VARCHAR(255) NOT NULL ,
   Fecha_Creacion DATETIME NOT NULL,
-  Activo BIT NOT NULL DEFAULT 1 -- 1 Activo 0 Desactivo
+  Activo BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Desactivo
+  ID_Tipo_Usuario INT FOREIGN KEY REFERENCES SELECTIONADOS.Tipo_Usuario(ID_Tipo_Usuario),
+  ID_Afiliado_Profesional INT,
+
+  CONSTRAINT Afiliado_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Afiliados(ID_Afiliado),
+  CONSTRAINT Profesioanl_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Profesional(Id_Profesional)
 )GO
 
 -- Tabla de Asignaciones de Roles y Usuarios cada usuario puede tener mas de un rol
 CREATE TABLE [SELECTIONADOS].[Asignacion_Rol](
   ID_Rol INT,
   ID_Usuario INT,
-)GO /* Idea: Usar el mismo ID de usuario para los afiliados y los medicos*/
+)GO
 
 /*            Lo que me falta ver
 
@@ -247,7 +263,7 @@ GO
 --Creo las FK
 ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([ID_Estado_Civil]) REFERENCES [SELECTIONADOS].[Estado_Civil](Id_Estado_Civil)
 ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([ID_Plan]) REFERENCES [SELECTIONADOS].[Planes](ID_Plan)
-ALTER TABLE [SELECTIONADOS].[Especialidad] ADD FOREIGN KEY ([ID_Tipo_Especialidad]) REFERENCES [SELECTIONADOS].[Tipo_especialidad](ID_Tipo_Especialidad)
+ALTER TABLE [SELECTIONADOS].[Especialidad] ADD FOREIGN KEY ([ID_Tipo_Especialidad]) REFERENCES [SELECTIONADOS].[Tipo_Especialidad](ID_Tipo_Especialidad)
 ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional_Especialidad](ID_Profesional)
 ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
 ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([Nro_Afiliado]) REFERENCES [SELECTIONADOS].[Afiliados](Nro_Afiliado)
@@ -259,3 +275,4 @@ ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([ID_Bono]) REFERENCES [S
 -- Triggers
 -- Creacion de los Nros de turnos
 -- Creacion de los Nros de consultas
+
