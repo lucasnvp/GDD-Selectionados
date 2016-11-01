@@ -26,6 +26,7 @@ namespace ClinicaFrba.Conexiones
                                         Settings.Default.SQL_Timeout +
                                         Settings.Default.SQL_User;
             return sqlCadenaConexion;
+
         }
     }
 }

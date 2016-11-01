@@ -32,8 +32,8 @@
             this.Btn_Cancelar = new System.Windows.Forms.Button();
             this.Lbl_Usuario = new System.Windows.Forms.Label();
             this.Lbl_Password = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.Txt_Usuario = new System.Windows.Forms.TextBox();
+            this.Txt_Password = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Btn_Aceptar
@@ -75,32 +75,32 @@
             this.Lbl_Password.TabIndex = 3;
             this.Lbl_Password.Text = "Password";
             // 
-            // textBox1
+            // Txt_Usuario
             // 
-            this.textBox1.Location = new System.Drawing.Point(56, 46);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(156, 20);
-            this.textBox1.TabIndex = 4;
+            this.Txt_Usuario.Location = new System.Drawing.Point(56, 46);
+            this.Txt_Usuario.Name = "Txt_Usuario";
+            this.Txt_Usuario.Size = new System.Drawing.Size(156, 20);
+            this.Txt_Usuario.TabIndex = 4;
             // 
-            // textBox2
+            // Txt_Password
             // 
-            this.textBox2.Location = new System.Drawing.Point(56, 85);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(156, 20);
-            this.textBox2.TabIndex = 5;
+            this.Txt_Password.Location = new System.Drawing.Point(56, 85);
+            this.Txt_Password.Name = "Txt_Password";
+            this.Txt_Password.Size = new System.Drawing.Size(156, 20);
+            this.Txt_Password.TabIndex = 5;
             // 
-            // Login
+            // Cl_Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.Txt_Password);
+            this.Controls.Add(this.Txt_Usuario);
             this.Controls.Add(this.Lbl_Password);
             this.Controls.Add(this.Lbl_Usuario);
             this.Controls.Add(this.Btn_Cancelar);
             this.Controls.Add(this.Btn_Aceptar);
-            this.Name = "Login";
+            this.Name = "Cl_Login";
             this.Text = "Login";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -113,8 +113,8 @@
         private System.Windows.Forms.Button Btn_Cancelar;
         private System.Windows.Forms.Label Lbl_Usuario;
         private System.Windows.Forms.Label Lbl_Password;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox Txt_Usuario;
+        private System.Windows.Forms.TextBox Txt_Password;
     }
 }
 
