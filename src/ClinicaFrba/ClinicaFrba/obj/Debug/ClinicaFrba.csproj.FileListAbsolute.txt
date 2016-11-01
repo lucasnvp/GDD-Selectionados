@@ -6,3 +6,12 @@ C:\Users\Matias\Documents\Visual Studio 2012\Projects\ClinicaFrba\ClinicaFrba\Cl
 C:\Users\Matias\Documents\Visual Studio 2012\Projects\ClinicaFrba\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.csproj.GenerateResource.Cache
 C:\Users\Matias\Documents\Visual Studio 2012\Projects\ClinicaFrba\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.exe
 C:\Users\Matias\Documents\Visual Studio 2012\Projects\ClinicaFrba\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.pdb
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\bin\Debug\ClinicaFrba.exe.config
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.exe
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.pdb
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\bin\Debug\ClinicaFrba.exe
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\bin\Debug\ClinicaFrba.pdb
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.csprojResolveAssemblyReference.cache
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Properties.Resources.resources
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.csproj.GenerateResource.Cache
+C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Form1.resources
