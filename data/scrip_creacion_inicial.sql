@@ -270,9 +270,27 @@ INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUE
 INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('afiliado1', '', getdate())
 INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional1', '', getdate())
 INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo1', '', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('qwer', '1234', getdate())
 
 -- Roles
 INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Afiliado')
 INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrativo')
 INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Profesional')
 INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrador')
+
+-- SP Get Usuario
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Usuario]
+    @usuario VARCHAR(255),
+    @password VARCHAR(255)
+    --@ID_Usuario INT OUTPUT
+AS
+BEGIN TRY
+  DECLARE @ID_Usuario INT
+  SELECT @ID_Usuario = ID_Usuario FROM [SELECTIONADOS].[Usuarios] WHERE Username = @usuario AND Password = @password
+  SELECT @ID_Usuario
+END TRY
+BEGIN CATCH
+  SELECT 'ERROR', ERROR_MESSAGE()
+END CATCH
+GO
+

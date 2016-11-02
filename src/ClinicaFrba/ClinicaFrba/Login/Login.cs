@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Security.Cryptography;
+using ClinicaFrba.Conexiones;
 
 namespace ClinicaFrba.Login
 {
@@ -32,12 +33,19 @@ namespace ClinicaFrba.Login
                 {
                     roles.ShowDialog();
                 }
+                else
+                {
+                    //Abrir menu
+                    this.Close();
+                }
             }
         }
 
         private bool Validar()
         {
-            //var intentos = 0;
+            int intentos = 0;
+            bool resultado = false;
+            int id_usuario;
 
             if (Txt_Usuario.Text.Length == 0 || Txt_Password.Text.Length == 0)
             {
@@ -45,17 +53,68 @@ namespace ClinicaFrba.Login
                 return false;
             }
 
-            this.LoguearUsuario();
+            string msjLogueo = this.LoguearUsuario(out resultado, out id_usuario);
+            //MessageBox.Show(id_usuario.ToString());
+
+//            if (resultado == false)
+//            {
+//                MessageBox.Show(msjLogueo);
+//                intentos++;
+//                if (intentos == 3)
+//                {
+//                    //Bloquear Usuario
+//                }
+//                return false;
+//            }
+//            else
+//            {
+//                return true;
+//            }
 
             return true;
         }
 
-        private void LoguearUsuario()
+        private string LoguearUsuario(out bool resultado, out int idUsuario)
         {
-            SHA256CryptoServiceProvider sha256 = new SHA256CryptoServiceProvider();
-            UTF8Encoding utf8 = new UTF8Encoding();
+            string mensaje = "";
+            idUsuario = 0;
+            string usuario = Txt_Usuario.Text;
+            string password = Txt_Password.Text;
+
+            //            SHA256CryptoServiceProvider sha256 = new SHA256CryptoServiceProvider();
+            //            UTF8Encoding utf8 = new UTF8Encoding();
             //Muestro el sha256 - es la pass que voy a preguntar
-            MessageBox.Show(BitConverter.ToString(sha256.ComputeHash(utf8.GetBytes(Txt_Password.Text))));
+            //MessageBox.Show(BitConverter.ToString(sha256.ComputeHash(utf8.GetBytes(Txt_Password.Text))));
+            //var password = BitConverter.ToString(sha256.ComputeHash(utf8.GetBytes(Txt_Password.Text)));
+
+            Parametros listaParametros = new Parametros();
+            SqlServer sqlServer = new SqlServer();
+
+            //Usuario
+            listaParametros.AgregarParametro("Usuario", usuario);
+            //Password
+            listaParametros.AgregarParametro("Password", password);
+
+            DataTable dataTable = sqlServer.EjecutarSp("SP_Get_Usuario", listaParametros);
+            if (dataTable.Rows.Count == 0)
+            {
+                resultado = false;
+                mensaje = "Error con la BD";
+            }
+            else
+            {
+                if (dataTable.Rows[0].ItemArray[0].ToString() == "ERROR")
+                {
+                    resultado = false;
+                    mensaje = "Error con la BD";
+                }
+                else
+                {
+                    resultado = true;
+                    idUsuario = int.Parse(dataTable.Rows[0].ItemArray[0].ToString());
+                }
+            }
+            return mensaje;
         }
 
         private void label1_Click(object sender, EventArgs e)

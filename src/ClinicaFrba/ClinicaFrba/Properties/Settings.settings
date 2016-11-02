@@ -9,7 +9,7 @@
       <Value Profile="(Default)">Connection Timeout=999;</Value>
     </Setting>
     <Setting Name="SQL_Database" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Database=GD2C2016</Value>
+      <Value Profile="(Default)">Database=GD2C2016;</Value>
     </Setting>
     <Setting Name="SQL_User" Type="System.String" Scope="User">
       <Value Profile="(Default)">User=gd;</Value>

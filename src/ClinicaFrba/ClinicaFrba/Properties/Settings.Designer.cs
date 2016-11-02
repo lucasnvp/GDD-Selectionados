@@ -49,7 +49,7 @@ namespace ClinicaFrba.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Database=GD2C2016")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Database=GD2C2016;")]
         public string SQL_Database {
             get {
                 return ((string)(this["SQL_Database"]));

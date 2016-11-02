@@ -123,3 +123,10 @@ FROM gd_esquema.Maestra
   ON SELECTIONADOS.Planes.Cod_Plan = Maestra.Plan_Med_Codigo
 WHERE Paciente_Nombre IS NOT NULL AND Paciente_Apellido IS NOT NULL
 GROUP BY [Paciente_Nombre], [Paciente_Apellido], Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac, Planes.Id_Plan
+
+SELECT ID_Usuario FROM SELECTIONADOS.Usuarios WHERE Username = 'admin' AND Password = 'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7';
+
+DECLARE @ID_Usuario INT
+EXECUTE SELECTIONADOS.SP_Get_Usuario 'admin','admin', @ID_Usuario OUT
+EXECUTE SELECTIONADOS.SP_Get_Usuario 'qwer','1234'
+PRINT @ID_Usuario
