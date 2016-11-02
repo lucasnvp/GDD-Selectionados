@@ -16,3 +16,23 @@ C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\Clinica
 C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.csproj.GenerateResource.Cache
 C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Login.Roles.resources
 C:\Users\Lucas\Documents\GitHub\GDD 2016 - Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Login.Cl_Login.resources
+C:\Users\Seba\Desktop\TP GESTION\Selectionados\src\ClinicaFrba\ClinicaFrba\bin\Debug\ClinicaFrba.exe.config
+C:\Users\Seba\Desktop\TP GESTION\Selectionados\src\ClinicaFrba\ClinicaFrba\bin\Debug\ClinicaFrba.exe
+C:\Users\Seba\Desktop\TP GESTION\Selectionados\src\ClinicaFrba\ClinicaFrba\bin\Debug\ClinicaFrba.pdb
+C:\Users\Seba\Desktop\TP GESTION\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Login.Cl_Login.resources
+C:\Users\Seba\Desktop\TP GESTION\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Login.Roles.resources
+C:\Users\Seba\Desktop\TP GESTION\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Properties.Resources.resources
+C:\Users\Seba\Desktop\TP GESTION\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.csproj.GenerateResource.Cache
+C:\Users\Seba\Desktop\TP GESTION\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.exe
+C:\Users\Seba\Desktop\TP GESTION\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.pdb
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\bin\Debug\ClinicaFrba.exe.config
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.exe
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.pdb
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\bin\Debug\ClinicaFrba.exe
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\bin\Debug\ClinicaFrba.pdb
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.csprojResolveAssemblyReference.cache
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.AbmRol.Form1.resources
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Login.Cl_Login.resources
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Login.Roles.resources
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.Properties.Resources.resources
+C:\Users\Seba\Desktop\TP GESTION DEVELOPMENT\Selectionados\src\ClinicaFrba\ClinicaFrba\obj\Debug\ClinicaFrba.csproj.GenerateResource.Cache
