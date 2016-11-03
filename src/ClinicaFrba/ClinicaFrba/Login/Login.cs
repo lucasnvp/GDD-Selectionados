@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Security.Cryptography;
 using ClinicaFrba.Conexiones;
+using ClinicaFrba.Menus;
 
 namespace ClinicaFrba.Login
 {
@@ -38,9 +39,9 @@ namespace ClinicaFrba.Login
                 }
                 else
                 {
-                    //Abrir menu
-                    MessageBox.Show("Muy bien hay q seguir!");
-                    this.Close();
+                    Txt_Password.Clear();
+                    MenuInicial menu = new MenuInicial(_idUsuario);
+                    menu.ShowDialog();
                 }
             }
         }
