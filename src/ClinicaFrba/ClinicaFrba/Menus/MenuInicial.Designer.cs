@@ -30,17 +30,17 @@
         {
             this.Btn_Salir = new System.Windows.Forms.Button();
             this.Btn_ABM_Afiliado = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
+            this.Btn_ABM_Especialidad = new System.Windows.Forms.Button();
+            this.Btn_ABM_Planes = new System.Windows.Forms.Button();
+            this.Btn_ABM_Profesional = new System.Windows.Forms.Button();
+            this.Btn_ABM_Rol = new System.Windows.Forms.Button();
+            this.Btn_Cancelar_Atencion = new System.Windows.Forms.Button();
+            this.Btn_Comprar_Bono = new System.Windows.Forms.Button();
+            this.Btn_Pedir_Turno = new System.Windows.Forms.Button();
+            this.Btn_Listados = new System.Windows.Forms.Button();
+            this.Btn_Registrar_Agenda_Medica = new System.Windows.Forms.Button();
+            this.Btn_Registro_Llegada = new System.Windows.Forms.Button();
+            this.Btn_Registro_Resultado = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Btn_Salir
@@ -62,124 +62,124 @@
             this.Btn_ABM_Afiliado.Text = "ABM Afiliado";
             this.Btn_ABM_Afiliado.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // Btn_ABM_Especialidad
             // 
-            this.button1.Location = new System.Drawing.Point(126, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(108, 37);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "ABM Especialidad";
-            this.button1.UseVisualStyleBackColor = true;
+            this.Btn_ABM_Especialidad.Location = new System.Drawing.Point(126, 12);
+            this.Btn_ABM_Especialidad.Name = "Btn_ABM_Especialidad";
+            this.Btn_ABM_Especialidad.Size = new System.Drawing.Size(108, 37);
+            this.Btn_ABM_Especialidad.TabIndex = 2;
+            this.Btn_ABM_Especialidad.Text = "ABM Especialidad";
+            this.Btn_ABM_Especialidad.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // Btn_ABM_Planes
             // 
-            this.button2.Location = new System.Drawing.Point(240, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(108, 37);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "ABM Planes";
-            this.button2.UseVisualStyleBackColor = true;
+            this.Btn_ABM_Planes.Location = new System.Drawing.Point(240, 12);
+            this.Btn_ABM_Planes.Name = "Btn_ABM_Planes";
+            this.Btn_ABM_Planes.Size = new System.Drawing.Size(108, 37);
+            this.Btn_ABM_Planes.TabIndex = 3;
+            this.Btn_ABM_Planes.Text = "ABM Planes";
+            this.Btn_ABM_Planes.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // Btn_ABM_Profesional
             // 
-            this.button3.Location = new System.Drawing.Point(354, 12);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(108, 37);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "ABM Profesional";
-            this.button3.UseVisualStyleBackColor = true;
+            this.Btn_ABM_Profesional.Location = new System.Drawing.Point(354, 12);
+            this.Btn_ABM_Profesional.Name = "Btn_ABM_Profesional";
+            this.Btn_ABM_Profesional.Size = new System.Drawing.Size(108, 37);
+            this.Btn_ABM_Profesional.TabIndex = 4;
+            this.Btn_ABM_Profesional.Text = "ABM Profesional";
+            this.Btn_ABM_Profesional.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // Btn_ABM_Rol
             // 
-            this.button4.Location = new System.Drawing.Point(468, 12);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(108, 37);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "ABM Rol";
-            this.button4.UseVisualStyleBackColor = true;
+            this.Btn_ABM_Rol.Location = new System.Drawing.Point(468, 12);
+            this.Btn_ABM_Rol.Name = "Btn_ABM_Rol";
+            this.Btn_ABM_Rol.Size = new System.Drawing.Size(108, 37);
+            this.Btn_ABM_Rol.TabIndex = 5;
+            this.Btn_ABM_Rol.Text = "ABM Rol";
+            this.Btn_ABM_Rol.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // Btn_Cancelar_Atencion
             // 
-            this.button5.Location = new System.Drawing.Point(12, 55);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(108, 37);
-            this.button5.TabIndex = 6;
-            this.button5.Text = "Cancelar Atencion";
-            this.button5.UseVisualStyleBackColor = true;
+            this.Btn_Cancelar_Atencion.Location = new System.Drawing.Point(12, 55);
+            this.Btn_Cancelar_Atencion.Name = "Btn_Cancelar_Atencion";
+            this.Btn_Cancelar_Atencion.Size = new System.Drawing.Size(108, 37);
+            this.Btn_Cancelar_Atencion.TabIndex = 6;
+            this.Btn_Cancelar_Atencion.Text = "Cancelar Atencion";
+            this.Btn_Cancelar_Atencion.UseVisualStyleBackColor = true;
             // 
-            // button6
+            // Btn_Comprar_Bono
             // 
-            this.button6.Location = new System.Drawing.Point(126, 55);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(108, 37);
-            this.button6.TabIndex = 7;
-            this.button6.Text = "Comprar Bono";
-            this.button6.UseVisualStyleBackColor = true;
+            this.Btn_Comprar_Bono.Location = new System.Drawing.Point(126, 55);
+            this.Btn_Comprar_Bono.Name = "Btn_Comprar_Bono";
+            this.Btn_Comprar_Bono.Size = new System.Drawing.Size(108, 37);
+            this.Btn_Comprar_Bono.TabIndex = 7;
+            this.Btn_Comprar_Bono.Text = "Comprar Bono";
+            this.Btn_Comprar_Bono.UseVisualStyleBackColor = true;
             // 
-            // button7
+            // Btn_Pedir_Turno
             // 
-            this.button7.Location = new System.Drawing.Point(354, 55);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(108, 37);
-            this.button7.TabIndex = 8;
-            this.button7.Text = "Pedir Turno";
-            this.button7.UseVisualStyleBackColor = true;
+            this.Btn_Pedir_Turno.Location = new System.Drawing.Point(354, 55);
+            this.Btn_Pedir_Turno.Name = "Btn_Pedir_Turno";
+            this.Btn_Pedir_Turno.Size = new System.Drawing.Size(108, 37);
+            this.Btn_Pedir_Turno.TabIndex = 8;
+            this.Btn_Pedir_Turno.Text = "Pedir Turno";
+            this.Btn_Pedir_Turno.UseVisualStyleBackColor = true;
             // 
-            // button8
+            // Btn_Listados
             // 
-            this.button8.Location = new System.Drawing.Point(240, 55);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(108, 37);
-            this.button8.TabIndex = 9;
-            this.button8.Text = "Listados";
-            this.button8.UseVisualStyleBackColor = true;
+            this.Btn_Listados.Location = new System.Drawing.Point(240, 55);
+            this.Btn_Listados.Name = "Btn_Listados";
+            this.Btn_Listados.Size = new System.Drawing.Size(108, 37);
+            this.Btn_Listados.TabIndex = 9;
+            this.Btn_Listados.Text = "Listados";
+            this.Btn_Listados.UseVisualStyleBackColor = true;
             // 
-            // button9
+            // Btn_Registrar_Agenda_Medica
             // 
-            this.button9.Location = new System.Drawing.Point(468, 55);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(108, 37);
-            this.button9.TabIndex = 10;
-            this.button9.Text = "Registar Agenda Medica";
-            this.button9.UseVisualStyleBackColor = true;
+            this.Btn_Registrar_Agenda_Medica.Location = new System.Drawing.Point(468, 55);
+            this.Btn_Registrar_Agenda_Medica.Name = "Btn_Registrar_Agenda_Medica";
+            this.Btn_Registrar_Agenda_Medica.Size = new System.Drawing.Size(108, 37);
+            this.Btn_Registrar_Agenda_Medica.TabIndex = 10;
+            this.Btn_Registrar_Agenda_Medica.Text = "Registar Agenda Medica";
+            this.Btn_Registrar_Agenda_Medica.UseVisualStyleBackColor = true;
             // 
-            // button10
+            // Btn_Registro_Llegada
             // 
-            this.button10.Location = new System.Drawing.Point(12, 98);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(108, 37);
-            this.button10.TabIndex = 11;
-            this.button10.Text = "Registro Llegada";
-            this.button10.UseVisualStyleBackColor = true;
+            this.Btn_Registro_Llegada.Location = new System.Drawing.Point(12, 98);
+            this.Btn_Registro_Llegada.Name = "Btn_Registro_Llegada";
+            this.Btn_Registro_Llegada.Size = new System.Drawing.Size(108, 37);
+            this.Btn_Registro_Llegada.TabIndex = 11;
+            this.Btn_Registro_Llegada.Text = "Registro Llegada";
+            this.Btn_Registro_Llegada.UseVisualStyleBackColor = true;
             // 
-            // button11
+            // Btn_Registro_Resultado
             // 
-            this.button11.Location = new System.Drawing.Point(126, 98);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(108, 37);
-            this.button11.TabIndex = 12;
-            this.button11.Text = "Registro Resultado";
-            this.button11.UseVisualStyleBackColor = true;
+            this.Btn_Registro_Resultado.Location = new System.Drawing.Point(126, 98);
+            this.Btn_Registro_Resultado.Name = "Btn_Registro_Resultado";
+            this.Btn_Registro_Resultado.Size = new System.Drawing.Size(108, 37);
+            this.Btn_Registro_Resultado.TabIndex = 12;
+            this.Btn_Registro_Resultado.Text = "Registro Resultado";
+            this.Btn_Registro_Resultado.UseVisualStyleBackColor = true;
             // 
-            // Menu
+            // MenuInicial
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(594, 261);
-            this.Controls.Add(this.button11);
-            this.Controls.Add(this.button10);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Btn_Registro_Resultado);
+            this.Controls.Add(this.Btn_Registro_Llegada);
+            this.Controls.Add(this.Btn_Registrar_Agenda_Medica);
+            this.Controls.Add(this.Btn_Listados);
+            this.Controls.Add(this.Btn_Pedir_Turno);
+            this.Controls.Add(this.Btn_Comprar_Bono);
+            this.Controls.Add(this.Btn_Cancelar_Atencion);
+            this.Controls.Add(this.Btn_ABM_Rol);
+            this.Controls.Add(this.Btn_ABM_Profesional);
+            this.Controls.Add(this.Btn_ABM_Planes);
+            this.Controls.Add(this.Btn_ABM_Especialidad);
             this.Controls.Add(this.Btn_ABM_Afiliado);
             this.Controls.Add(this.Btn_Salir);
-            this.Name = "Menu";
+            this.Name = "MenuInicial";
             this.Text = "Menu";
             this.ResumeLayout(false);
 
@@ -189,16 +189,16 @@
 
         private System.Windows.Forms.Button Btn_Salir;
         private System.Windows.Forms.Button Btn_ABM_Afiliado;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button Btn_ABM_Especialidad;
+        private System.Windows.Forms.Button Btn_ABM_Planes;
+        private System.Windows.Forms.Button Btn_ABM_Profesional;
+        private System.Windows.Forms.Button Btn_ABM_Rol;
+        private System.Windows.Forms.Button Btn_Cancelar_Atencion;
+        private System.Windows.Forms.Button Btn_Comprar_Bono;
+        private System.Windows.Forms.Button Btn_Pedir_Turno;
+        private System.Windows.Forms.Button Btn_Listados;
+        private System.Windows.Forms.Button Btn_Registrar_Agenda_Medica;
+        private System.Windows.Forms.Button Btn_Registro_Llegada;
+        private System.Windows.Forms.Button Btn_Registro_Resultado;
     }
 }

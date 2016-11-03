@@ -132,11 +132,66 @@ CREATE TABLE [SELECTIONADOS].[Funcionalidades](
   Descripcion VARCHAR(255)
 )GO
 
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_ABM_Afiliado')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_ABM_Especialidad')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_ABM_Planes')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_ABM_Profesional')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_ABM_Rol')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Cancelar_Atencion')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Comprar_Bono')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Listados')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Pedir_Turno')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Registrar_Agenda_Medica')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Registro_Llegada')
+INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Registro_Resultado')
+
 -- Tabla de Rol por funcionalidad. Un rol puedo tener varias funcionalidades.
 CREATE TABLE [SELECTIONADOS].[Rol_X_Funcionalidad](
   ID_Funcionalidad INT FOREIGN KEY REFERENCES SELECTIONADOS.Funcionalidades(ID_Funcionalidad),
-  ID_Rol INT FOREIGN KEY REFERENCES SELECTIONADOS.Rol(ID_Rol)
+  ID_Rol INT FOREIGN KEY REFERENCES SELECTIONADOS.Rol(ID_Rol),
+  Activo BIT NOT NULL -- 1 Activo 0 Desactivo
 )GO
+
+-- Create / Update Funcionalidades por rol
+CREATE PROCEDURE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol]
+  @rol_nombre VARCHAR(255),
+  @funcionalidad_nombre VARCHAR(255),
+  @habilitado bit
+AS
+  BEGIN TRY
+    DECLARE @ID_Rol NUMERIC(18)
+    DECLARE @ID_Funcionalidad NUMERIC(18)
+    DECLARE @ID_Rol_Aux NUMERIC(18)
+    DECLARE @ID_Funcionalidad_Aux NUMERIC(18)
+
+    SELECT @ID_Rol = ID_Rol FROM [SELECTIONADOS].[Rol] WHERE Nombre = @rol_nombre
+    SELECT @ID_Funcionalidad = ID_Funcionalidad FROM [SELECTIONADOS].[Funcionalidades] WHERE Descripcion = @funcionalidad_nombre
+
+    SELECT @ID_Rol_Aux = ID_Rol, @ID_Funcionalidad_Aux = ID_Funcionalidad FROM SELECTIONADOS.Rol_X_Funcionalidad WHERE ID_Rol = @ID_Rol AND ID_Funcionalidad = @ID_Funcionalidad
+
+    IF @ID_Rol_Aux IS NOT NULL AND @ID_Funcionalidad_Aux IS NOT NULL
+      UPDATE [SELECTIONADOS].[Rol_X_Funcionalidad] SET Activo = @habilitado WHERE ID_Rol = @ID_Rol AND ID_Funcionalidad = @ID_Funcionalidad
+    ELSE
+      INSERT INTO [SELECTIONADOS].[Rol_X_Funcionalidad](ID_Funcionalidad, ID_Rol, Activo) VALUES (@ID_Funcionalidad, @ID_Rol, @habilitado)
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+-- Agrego las funciones por rol
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_ABM_Afiliado',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_ABM_Especialidad',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_ABM_Planes',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_ABM_Profesional',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_ABM_Rol',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Cancelar_Atencion',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Comprar_Bono',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Listados',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Pedir_Turno',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Registrar_Agenda_Medica',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Registro_Llegada',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Registro_Resultado',1
 
 -- Tabla de usuarios.
 CREATE TABLE [SELECTIONADOS].[Usuarios](
@@ -153,11 +208,9 @@ CREATE TABLE [SELECTIONADOS].[Usuarios](
 
 -- Usuarios
 INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('admin', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrador', '8c-69-76-e5-b5-41-04-15-bd-e9-08-bd-4d-ee-15-df-b1-67-a9-c8-73-fc-4b-b8-a8-1f-6f-2a-b4-48-a9-18', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('afiliado1', '7d-f0-a4-df-14-70-55-f8-93-61-48-80-f6-3e-a2-9a-61-7c-87-af-0f-47-ee-2b-38-30-03-f0-16-6f-2b-b6', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional1', '79-34-36-03-65-4a-9d-7a-b7-55-0d-e6-02-0b-89-68-ce-cd-9b-05-1f-37-2f-76-e4-c3-bf-8a-02-b1-ee-61', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo1', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('qwer', '03-ac-67-42-16-f3-e1-5c-76-1e-e1-a5-e2-55-f0-67-95-36-23-c8-b3-88-b4-45-9e-13-f9-78-d7-c8-46-f4', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('afiliado', '7d-f0-a4-df-14-70-55-f8-93-61-48-80-f6-3e-a2-9a-61-7c-87-af-0f-47-ee-2b-38-30-03-f0-16-6f-2b-b6', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional', '79-34-36-03-65-4a-9d-7a-b7-55-0d-e6-02-0b-89-68-ce-cd-9b-05-1f-37-2f-76-e4-c3-bf-8a-02-b1-ee-61', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
 
 -- Tabla de Asignaciones de Roles y Usuarios cada usuario puede tener mas de un rol
 CREATE TABLE [SELECTIONADOS].[Asignacion_Rol](
@@ -312,6 +365,24 @@ AS
     INNER JOIN [SELECTIONADOS].[Rol]
         ON [Asignacion_Rol].[ID_Rol] = [Rol].[ID_Rol]
     WHERE [Asignacion_Rol].[ID_Usuario] = @idUsuario
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+-- SP Get Funcionalidades por rol
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Funcionalidades_Rol]
+  @nombre_rol VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT f.Descripcion AS Funcionalidad, rf.Activo AS  Habilitado FROM SELECTIONADOS.Rol_X_Funcionalidad AS rf
+      INNER JOIN SELECTIONADOS.Funcionalidades AS f
+      ON f.ID_Funcionalidad = rf.ID_Funcionalidad
+      INNER JOIN SELECTIONADOS.Rol AS r
+      ON rf.ID_Rol = r.ID_Rol
+        WHERE r.Nombre = @nombre_rol
+    ORDER BY Funcionalidad
   END TRY
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()

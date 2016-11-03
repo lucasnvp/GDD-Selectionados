@@ -41,6 +41,7 @@ namespace ClinicaFrba.Login
                 {
                     Txt_Password.Clear();
                     MenuInicial menu = new MenuInicial(_idUsuario);
+                    menu.LevantarRol(roles.rol_name);
                     menu.ShowDialog();
                 }
             }

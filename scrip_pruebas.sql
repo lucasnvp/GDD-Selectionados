@@ -1,8 +1,10 @@
 --Drops
 DROP SCHEMA SELECTIONADOS;
-DROP PROCEDURE [SELECTIONADOS].[migracionDeDatos];
+DROP PROCEDURE [SELECTIONADOS].[MigracionDeDatos];
+DROP PROCEDURE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol];
 DROP TABLE [SELECTIONADOS].[Afiliados];
 DROP TABLE [SELECTIONADOS].[Tipo_especialidad];
+
 
 SELECT count(*) FROM gd_esquema.Maestra -- 59708
 SELECT count(*) FROM SELECTIONADOS.Afiliados -- 5548
