@@ -128,5 +128,8 @@ SELECT ID_Usuario FROM SELECTIONADOS.Usuarios WHERE Username = 'admin' AND Passw
 
 DECLARE @ID_Usuario INT
 EXECUTE SELECTIONADOS.SP_Get_Usuario 'admin','admin', @ID_Usuario OUT
-EXECUTE SELECTIONADOS.SP_Get_Usuario 'qwer','1234'
+EXECUTE SELECTIONADOS.SP_Get_Usuario 'qwer','12345'
+EXECUTE SELECTIONADOS.SP_Get_Usuario 'admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7'
 PRINT @ID_Usuario
+
+EXECUTE SELECTIONADOS.SP_Get_Usuario_Rol '5'

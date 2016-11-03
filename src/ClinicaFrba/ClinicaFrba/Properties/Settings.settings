@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="SQL_Server" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Data Source = 192.168.1.130</Value>
+      <Value Profile="(Default)">Data Source = 192.168.1.130;</Value>
     </Setting>
     <Setting Name="SQL_Timeout" Type="System.String" Scope="User">
       <Value Profile="(Default)">Connection Timeout=999;</Value>

@@ -88,6 +88,7 @@
     </Compile>
     <Compile Include="Conexiones\Parametros.cs" />
     <Compile Include="Conexiones\SqlServer.cs" />
+    <Compile Include="Funcionalidades\ComboBoxItem.cs" />
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>

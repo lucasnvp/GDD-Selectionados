@@ -2,7 +2,8 @@
 USE [GD2C2016] GO
 
 -- Creo el schema que vamos a utilizar
-CREATE SCHEMA [SELECTIONADOS] GO
+CREATE SCHEMA [SELECTIONADOS] AUTHORIZATION [gd]
+GO
 
 -- Creamos la nueva Tabla de Afiliados
 CREATE TABLE [SELECTIONADOS].[Afiliados](
@@ -51,7 +52,7 @@ CREATE TABLE [SELECTIONADOS].[Planes](
 
 --Tabla de Profesionales
 CREATE TABLE [SELECTIONADOS].[Profesional] (
-  [Id_Profesional]INT PRIMARY KEY IDENTITY(1,1),
+  [ID_Profesional]INT PRIMARY KEY IDENTITY(1,1),
   [Matricula] INT,
   [Nombre] VARCHAR(255),
   [Apellido] VARCHAR(255),
@@ -88,7 +89,7 @@ CREATE TABLE [SELECTIONADOS].[Profesional_Especialidad] (
 --Tabla de turno
 CREATE TABLE [SELECTIONADOS].[Turno] (
   [Nro_Turno] NUMERIC(18) UNIQUE NOT NULL,
-  [Nro_Afiliado] INT,
+  [ID_Afiliado] INT,
   [ID_Profesional] INT,
   [ID_Especialidad] INT,
   [Fecha_Turno] DATE
@@ -119,6 +120,12 @@ CREATE TABLE [SELECTIONADOS].[Rol](
   Activo BIT NOT NULL DEFAULT 1 -- 1 Activo 0 Desactivo
 )GO
 
+-- Roles
+INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Afiliado')
+INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrativo')
+INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Profesional')
+INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrador')
+
 -- Tabla de Funcionalidades
 CREATE TABLE [SELECTIONADOS].[Funcionalidades](
   ID_Funcionalidad INT PRIMARY KEY IDENTITY(1,1),
@@ -141,14 +148,31 @@ CREATE TABLE [SELECTIONADOS].[Usuarios](
   ID_Afiliado_Profesional INT,
 
   CONSTRAINT Afiliado_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Afiliados(ID_Afiliado),
-  CONSTRAINT Profesioanl_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Profesional(Id_Profesional)
+  CONSTRAINT Profesioanl_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Profesional(ID_Profesional)
 )GO
+
+-- Usuarios
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('admin', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrador', '8c-69-76-e5-b5-41-04-15-bd-e9-08-bd-4d-ee-15-df-b1-67-a9-c8-73-fc-4b-b8-a8-1f-6f-2a-b4-48-a9-18', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('afiliado1', '7d-f0-a4-df-14-70-55-f8-93-61-48-80-f6-3e-a2-9a-61-7c-87-af-0f-47-ee-2b-38-30-03-f0-16-6f-2b-b6', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional1', '79-34-36-03-65-4a-9d-7a-b7-55-0d-e6-02-0b-89-68-ce-cd-9b-05-1f-37-2f-76-e4-c3-bf-8a-02-b1-ee-61', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo1', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
+INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('qwer', '03-ac-67-42-16-f3-e1-5c-76-1e-e1-a5-e2-55-f0-67-95-36-23-c8-b3-88-b4-45-9e-13-f9-78-d7-c8-46-f4', getdate())
 
 -- Tabla de Asignaciones de Roles y Usuarios cada usuario puede tener mas de un rol
 CREATE TABLE [SELECTIONADOS].[Asignacion_Rol](
   ID_Rol INT,
   ID_Usuario INT,
 )GO
+
+INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario)
+  SELECT ID_Rol, ID_Usuario FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Administrador' AND Username = 'admin'
+
+INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario)
+  SELECT ID_Rol, ID_Usuario FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Administrativo' AND Username = 'administrativo1'
+
+INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario)
+  SELECT ID_Rol, ID_Usuario FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Afiliado' AND Username = 'administrativo1'
 
 /*            Lo que me falta ver
 
@@ -216,16 +240,16 @@ CREATE PROCEDURE [SELECTIONADOS].[MigracionDeDatos] AS
     GROUP BY Maestra.[Especialidad_Codigo], Maestra.[Especialidad_Descripcion], Tipo_especialidad.[ID_Tipo_Especialidad], Maestra.[Especialidad_Descripcion], Maestra.[Especialidad_Codigo]
 
     INSERT INTO [SELECTIONADOS].[Profesional_Especialidad](ID_Profesional, ID_Especialidad)
-    SELECT Profesional.Id_Profesional, Especialidad.ID_Especialidad
+    SELECT Profesional.ID_Profesional, Especialidad.ID_Especialidad
     FROM gd_esquema.Maestra
       INNER JOIN SELECTIONADOS.Profesional
       ON Maestra.Medico_Dni = SELECTIONADOS.Profesional.Nro_Doc
       INNER JOIN SELECTIONADOS.Especialidad
       ON Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.Cod_Especialidad
-    GROUP BY Profesional.Id_Profesional, Especialidad.ID_Especialidad
+    GROUP BY Profesional.ID_Profesional, Especialidad.ID_Especialidad
 
-    INSERT INTO [SELECTIONADOS].[Turno](Nro_Turno, Nro_Afiliado, ID_Profesional, ID_Especialidad, Fecha_Turno)
-    SELECT Maestra.Turno_Numero, Afiliados.ID_Afiliado, Profesional.Id_Profesional, Especialidad.ID_Especialidad, Maestra.Turno_Fecha
+    INSERT INTO [SELECTIONADOS].[Turno](Nro_Turno, ID_Afiliado, ID_Profesional, ID_Especialidad, Fecha_Turno)
+    SELECT Maestra.Turno_Numero, Afiliados.ID_Afiliado, Profesional.ID_Profesional, Especialidad.ID_Especialidad, Maestra.Turno_Fecha
     FROM gd_esquema.Maestra
       INNER JOIN SELECTIONADOS.Afiliados
       ON SELECTIONADOS.Afiliados.Nro_Doc = Maestra.Paciente_Dni
@@ -252,9 +276,9 @@ GO
 ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([ID_Estado_Civil]) REFERENCES [SELECTIONADOS].[Estado_Civil](Id_Estado_Civil)
 ALTER TABLE [SELECTIONADOS].[Afiliados] ADD FOREIGN KEY ([ID_Plan]) REFERENCES [SELECTIONADOS].[Planes](ID_Plan)
 ALTER TABLE [SELECTIONADOS].[Especialidad] ADD FOREIGN KEY ([ID_Tipo_Especialidad]) REFERENCES [SELECTIONADOS].[Tipo_Especialidad](ID_Tipo_Especialidad)
-ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional_Especialidad](ID_Profesional)
+ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional)
 ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
-ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([Nro_Afiliado]) REFERENCES [SELECTIONADOS].[Afiliados](Nro_Afiliado)
+ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Afiliado]) REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado)
 ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional)
 ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
 ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([Nro_Turno]) REFERENCES [SELECTIONADOS].[Turno](Nro_Turno)
@@ -264,33 +288,32 @@ ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([ID_Bono]) REFERENCES [S
 -- Creacion de los Nros de turnos
 -- Creacion de los Nros de consultas
 
--- Usuarios
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('admin', 'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrador', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('afiliado1', '', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional1', '', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo1', '', getdate())
-INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('qwer', '1234', getdate())
-
--- Roles
-INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Afiliado')
-INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrativo')
-INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Profesional')
-INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrador')
-
 -- SP Get Usuario
 CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Usuario]
-    @usuario VARCHAR(255),
-    @password VARCHAR(255)
-    --@ID_Usuario INT OUTPUT
+  @usuario VARCHAR(255),
+  @password VARCHAR(255)
 AS
-BEGIN TRY
-  DECLARE @ID_Usuario INT
-  SELECT @ID_Usuario = ID_Usuario FROM [SELECTIONADOS].[Usuarios] WHERE Username = @usuario AND Password = @password
-  SELECT @ID_Usuario
-END TRY
-BEGIN CATCH
-  SELECT 'ERROR', ERROR_MESSAGE()
-END CATCH
+  BEGIN TRY
+    DECLARE @ID_Usuario INT
+    SELECT @ID_Usuario = ID_Usuario FROM [SELECTIONADOS].[Usuarios] WHERE Username = @usuario AND Password = @password
+    SELECT @ID_Usuario
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
 GO
 
+-- SP Get Usuario Rol
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Usuario_Rol]
+  @idUsuario INT
+AS
+  BEGIN TRY
+    SELECT Nombre, Asignacion_Rol.ID_Rol FROM [SELECTIONADOS].[Asignacion_Rol]
+    INNER JOIN [SELECTIONADOS].[Rol]
+        ON [Asignacion_Rol].[ID_Rol] = [Rol].[ID_Rol]
+    WHERE [Asignacion_Rol].[ID_Usuario] = @idUsuario
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO

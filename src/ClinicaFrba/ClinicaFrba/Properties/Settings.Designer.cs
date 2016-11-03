@@ -25,7 +25,7 @@ namespace ClinicaFrba.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source = 192.168.1.130")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source = 192.168.1.130;")]
         public string SQL_Server {
             get {
                 return ((string)(this["SQL_Server"]));

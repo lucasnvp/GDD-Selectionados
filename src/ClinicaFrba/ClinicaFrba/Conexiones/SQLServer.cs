@@ -26,7 +26,8 @@ namespace ClinicaFrba.Conexiones
 //                                       Settings.Default.SQL_Security +
 //                                       Settings.Default.SQL_Timeout +
 //                                       Settings.Default.SQL_User;
-            string sqlCadenaConexion = "Data Source = 192.168.1.130; Initial Catalog = master; Persist Security Info = True; User ID = gd";
+            string sqlCadenaConexion =
+                "Data Source=192.168.1.130;Initial Catalog=GD2C2016;Persist Security Info=True;User ID=gd;Password=gd2016;";
 
             return sqlCadenaConexion;
 
@@ -108,6 +109,28 @@ namespace ClinicaFrba.Conexiones
                 dataRow[1] = e.ToString();
                 dataTable.Rows.Add(dataRow);
                 return dataTable;
+            }
+            return dataTable;
+        }
+
+        public DataTable EjecutarSp(string procedure)
+        {
+            SqlCommand cmdCommand = new SqlCommand();
+            SqlDataAdapter dataAdapter;
+            DataTable dataTable = new DataTable();
+            try
+            {
+                cmdCommand.CommandType = CommandType.StoredProcedure;
+                cmdCommand.Connection = AbrirConnection();
+                cmdCommand.CommandText = "[" + Settings.Default.SQL_Schema + "].[" + procedure + "]";
+                dataAdapter = new SqlDataAdapter(cmdCommand);
+                dataAdapter.Fill(dataTable);
+                CerraConnection(cmdCommand.Connection);
+                cmdCommand.Dispose();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
             }
             return dataTable;
         }
