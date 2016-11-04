@@ -214,8 +214,9 @@ INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUE
 
 -- Tabla de Asignaciones de Roles y Usuarios cada usuario puede tener mas de un rol
 CREATE TABLE [SELECTIONADOS].[Asignacion_Rol](
-  ID_Rol INT,
-  ID_Usuario INT,
+  ID_Rol INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Rol] (ID_Rol),
+  ID_Usuario INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Usuarios] (ID_Usuario),
+  Activo BIT
 )GO
 
 INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario)
@@ -388,3 +389,75 @@ AS
     SELECT 'ERROR', ERROR_MESSAGE()
   END CATCH
 GO
+
+-- SP Get Funcionalidades
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Funcionalidades]
+AS
+  BEGIN TRY
+    SELECT Descripcion AS Funcionalidades FROM [SELECTIONADOS].[Funcionalidades] ORDER BY Funcionalidades
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+-- SP Get Roles
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Roles]
+AS
+  BEGIN TRY
+    SELECT Nombre AS Rol, Activo AS Habilitado FROM [SELECTIONADOS].[Rol]
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+-- SP Crear Rol
+CREATE PROCEDURE [SELECTIONADOS].[SP_Create_Rol]
+  @nombre_rol VARCHAR(255),
+  @habilitado BIT
+AS
+  BEGIN TRY
+    DECLARE @nombre VARCHAR(255)
+    DECLARE @mensaje VARCHAR(255) SET @mensaje = 'El rol ya existe'
+    SELECT @nombre = Nombre FROM [SELECTIONADOS].[Rol] WHERE Nombre = @nombre_rol
+    IF @nombre IS NULL
+        BEGIN
+          INSERT INTO SELECTIONADOS.Rol(Nombre, Activo) VALUES (@nombre_rol, @habilitado)
+          INSERT INTO SELECTIONADOS.Rol_X_Funcionalidad(ID_Funcionalidad, ID_Rol, Activo)
+            SELECT ID_Funcionalidad, ID_Rol, 0 FROM SELECTIONADOS.Rol, SELECTIONADOS.Funcionalidades WHERE Nombre = @nombre_rol
+        END
+    ELSE
+      SELECT @mensaje
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+-- SP Update Rol
+CREATE PROCEDURE [SELECTIONADOS].[SP_Update_Rol]
+  @nombre_rol VARCHAR(255),
+  @habilitado BIT
+AS
+  BEGIN TRY
+    DECLARE @nombre VARCHAR(255)
+    DECLARE @mensaje VARCHAR(255)
+    DECLARE @ID_Rol NUMERIC(18)
+
+    SELECT @nombre = nombre, @ID_Rol = ID_Rol FROM [SELECTIONADOS].[Rol] WHERE Nombre = @nombre_rol
+
+    IF @nombre IS NULL
+      BEGIN
+        INSERT INTO SELECTIONADOS.Rol (Nombre, Activo) VALUES (@nombre_rol, @habilitado)
+        INSERT INTO SELECTIONADOS.Rol_X_Funcionalidad(ID_Funcionalidad, ID_Rol, Activo)
+          SELECT ID_Rol, ID_Funcionalidad, 0 FROM SELECTIONADOS.Rol, SELECTIONADOS.Funcionalidades WHERE Nombre = @nombre_rol
+      END
+    ELSE
+      UPDATE SELECTIONADOS.Rol SET Activo = @habilitado WHERE Nombre = @nombre
+    IF @habilitado = 0
+        UPDATE SELECTIONADOS.Asignacion_Rol SET Activo = 0 WHERE ID_Rol = @ID_Rol
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH

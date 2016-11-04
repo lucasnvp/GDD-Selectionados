@@ -97,6 +97,7 @@
             this.Btn_ABM_Rol.TabIndex = 5;
             this.Btn_ABM_Rol.Text = "ABM Rol";
             this.Btn_ABM_Rol.UseVisualStyleBackColor = true;
+            this.Btn_ABM_Rol.Click += new System.EventHandler(this.Btn_ABM_Rol_Click);
             // 
             // Btn_Cancelar_Atencion
             // 

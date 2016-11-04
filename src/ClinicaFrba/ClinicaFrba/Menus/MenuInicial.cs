@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClinicaFrba.Abm_Rol;
 using ClinicaFrba.Conexiones;
 
 namespace ClinicaFrba.Menus
@@ -48,5 +49,10 @@ namespace ClinicaFrba.Menus
             }
         }
 
+        private void Btn_ABM_Rol_Click(object sender, EventArgs e)
+        {
+            ABM_Rol rol = new ABM_Rol();
+            rol.ShowDialog();
+        }
     }
 }

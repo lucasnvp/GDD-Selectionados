@@ -62,6 +62,12 @@
     <Compile Include="Abm Profesional\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Rol\ABM_Rol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Rol\ABM_Rol.Designer.cs">
+      <DependentUpon>ABM_Rol.cs</DependentUpon>
+    </Compile>
     <Compile Include="Cancelar Atencion\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +133,9 @@
     <Compile Include="Registro Resultado\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Abm Rol\ABM_Rol.resx">
+      <DependentUpon>ABM_Rol.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -160,7 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Abm Afiliado\" />
-    <Folder Include="Abm Rol\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
