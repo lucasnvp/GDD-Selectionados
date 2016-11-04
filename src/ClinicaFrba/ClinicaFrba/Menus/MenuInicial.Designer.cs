@@ -61,6 +61,7 @@
             this.Btn_ABM_Afiliado.TabIndex = 1;
             this.Btn_ABM_Afiliado.Text = "ABM Afiliado";
             this.Btn_ABM_Afiliado.UseVisualStyleBackColor = true;
+            this.Btn_ABM_Afiliado.Click += new System.EventHandler(this.Btn_ABM_Afiliado_Click);
             // 
             // Btn_ABM_Especialidad
             // 
@@ -88,6 +89,7 @@
             this.Btn_ABM_Profesional.TabIndex = 4;
             this.Btn_ABM_Profesional.Text = "ABM Profesional";
             this.Btn_ABM_Profesional.UseVisualStyleBackColor = true;
+            this.Btn_ABM_Profesional.Click += new System.EventHandler(this.Btn_ABM_Profesional_Click);
             // 
             // Btn_ABM_Rol
             // 

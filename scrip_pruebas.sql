@@ -2,6 +2,7 @@
 DROP SCHEMA SELECTIONADOS;
 DROP PROCEDURE [SELECTIONADOS].[MigracionDeDatos];
 DROP PROCEDURE [SELECTIONADOS].[SP_Create_Rol];
+DROP PROCEDURE [SELECTIONADOS].[SP_Get_Afiliado_By];
 DROP PROCEDURE [SELECTIONADOS].[SP_Get_Funcionalidades];
 DROP PROCEDURE [SELECTIONADOS].[SP_Get_Funcionalidades_Rol];
 DROP PROCEDURE [SELECTIONADOS].[SP_Get_Roles];
@@ -24,3 +25,11 @@ DROP TABLE [SELECTIONADOS].[Rol_X_Funcionalidad];
 DROP TABLE [SELECTIONADOS].[Tipo_Especialidad];
 DROP TABLE [SELECTIONADOS].[Turno];
 DROP TABLE [SELECTIONADOS].[Usuarios];
+
+SELECT
+      ID_Afiliado, Nro_Afiliado, Nombre, Apellido, Tipo_Dni, Nro_Doc, Direccion, Telefono, Mail, Fecha_Nac, Sexo, Nro_Consultas, Afiliados.ID_Estado_Civil
+    FROM
+      [SELECTIONADOS].[Afiliados]
+    WHERE
+      (Afiliados.Nombre LIKE 'AAR' + '%') AND
+      (Activo = 1)

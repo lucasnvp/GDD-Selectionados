@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClinicaFrba.Abm_Afiliado;
+using ClinicaFrba.Abm_Profesional;
 using ClinicaFrba.Abm_Rol;
 using ClinicaFrba.Conexiones;
 
@@ -53,6 +55,18 @@ namespace ClinicaFrba.Menus
         {
             ABM_Rol rol = new ABM_Rol();
             rol.ShowDialog();
+        }
+
+        private void Btn_ABM_Profesional_Click(object sender, EventArgs e)
+        {
+            ABM_Profesional profesional = new ABM_Profesional();
+            profesional.ShowDialog();
+        }
+
+        private void Btn_ABM_Afiliado_Click(object sender, EventArgs e)
+        {
+            ABM_Afiliado afiliado = new ABM_Afiliado();
+            afiliado.ShowDialog();
         }
     }
 }

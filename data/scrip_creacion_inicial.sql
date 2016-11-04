@@ -31,6 +31,7 @@ create table [SELECTIONADOS].[Estado_Civil](
 )GO
 
 -- Se insertar los valosres por defecto en la talba de Estado Civil
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Completar')
 INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Casado')
 INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Casada')
 INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Soltero')
@@ -270,8 +271,8 @@ CREATE PROCEDURE [SELECTIONADOS].[MigracionDeDatos] AS
     FROM gd_esquema.Maestra
     GROUP BY Plan_Med_Codigo, Plan_Med_Descripcion, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
 
-    INSERT INTO [SELECTIONADOS].[Afiliados](Nombre,Apellido,Tipo_Dni,Nro_Doc,Direccion,Telefono,Mail,Fecha_Nac,Id_Plan,Nro_Consultas,Activo)
-    SELECT [Paciente_Nombre], [Paciente_Apellido], 'DNI' AS Tipo_Dni, Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac, Planes.Id_Plan, 0 AS Nro_Consultas, 1 AS Activo
+    INSERT INTO [SELECTIONADOS].[Afiliados](Nombre,Apellido,Tipo_Dni,Nro_Doc,Direccion,Telefono,Mail,Fecha_Nac,ID_Estado_Civil,Id_Plan,Nro_Consultas,Activo)
+    SELECT [Paciente_Nombre], [Paciente_Apellido], 'DNI' AS Tipo_Dni, Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac, 1, Planes.Id_Plan, 0 AS Nro_Consultas, 1 AS Activo
     FROM gd_esquema.Maestra
       INNER JOIN SELECTIONADOS.Planes
       ON SELECTIONADOS.Planes.Cod_Plan = Maestra.Plan_Med_Codigo
@@ -466,3 +467,35 @@ AS
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()
   END CATCH
+ GO
+
+-- SP Get Afiliado By
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Afiliado_By]
+  @nombreAfiliado VARCHAR(255) = NULL ,
+  @apellidoAfiliado VARCHAR(255) = NULL ,
+  @dni INT = NULL,
+  @nroAfiliado INT = NULL
+AS
+  BEGIN TRY
+    SELECT
+      ID_Afiliado, Nro_Afiliado, Nombre, Apellido, Tipo_Dni, Nro_Doc, Direccion, Telefono, Mail, Fecha_Nac, Sexo,
+      Estado_Civil.Descripcion AS Estado_Civil,
+      Planes.Descripcion AS Descipcion_Plan,
+      Nro_Consultas
+    FROM
+      [SELECTIONADOS].[Afiliados]
+    INNER JOIN SELECTIONADOS.Estado_Civil
+      ON Estado_Civil.Id_Estado_Civil = Afiliados.ID_Estado_Civil
+    INNER JOIN SELECTIONADOS.Planes
+      ON Planes.Id_Plan = Afiliados.ID_Plan
+    WHERE
+      (@nombreAfiliado IS NULL OR Afiliados.Nombre LIKE @nombreAfiliado + '%') AND
+      (@apellidoAfiliado IS NULL OR Afiliados.Apellido LIKE @apellidoAfiliado + '%') AND
+      (@dni IS NULL OR Afiliados.Nro_Doc LIKE @dni) AND
+      (@nroAfiliado IS NULL OR Afiliados.Nro_Afiliado LIKE @nroAfiliado) AND
+      (Activo = 1)
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO

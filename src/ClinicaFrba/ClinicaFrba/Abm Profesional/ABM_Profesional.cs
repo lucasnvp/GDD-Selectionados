@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace ClinicaFrba.Abm_Profesional
 {
-    public partial class Form1 : Form
+    public partial class ABM_Profesional : Form
     {
-        public Form1()
+        public ABM_Profesional()
         {
             InitializeComponent();
+        }
+
+        private void Btn_Cerrar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

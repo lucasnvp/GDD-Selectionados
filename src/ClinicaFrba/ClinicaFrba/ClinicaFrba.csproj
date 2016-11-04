@@ -44,6 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abm Afiliado\ABM_Afiliado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Afiliado\ABM_Afiliado.Designer.cs">
+      <DependentUpon>ABM_Afiliado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Abm Afiliado\ResultadosDeBusqueda.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Afiliado\ResultadosDeBusqueda.Designer.cs">
+      <DependentUpon>ResultadosDeBusqueda.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Especialidades Medicas\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -56,11 +68,11 @@
     <Compile Include="Abm Planes\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Profesional\Form1.cs">
+    <Compile Include="Abm Profesional\ABM_Profesional.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Profesional\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Abm Profesional\ABM_Profesional.Designer.cs">
+      <DependentUpon>ABM_Profesional.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Rol\ABM_Rol.cs">
       <SubType>Form</SubType>
@@ -82,6 +94,7 @@
     </Compile>
     <Compile Include="Conexiones\Parametros.cs" />
     <Compile Include="Conexiones\SqlServer.cs" />
+    <Compile Include="DAOs\AfiliadoDAO.cs" />
     <Compile Include="Funcionalidades\ComboBoxItem.cs" />
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
@@ -133,6 +146,15 @@
     <Compile Include="Registro Resultado\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Abm Afiliado\ABM_Afiliado.resx">
+      <DependentUpon>ABM_Afiliado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Afiliado\ResultadosDeBusqueda.resx">
+      <DependentUpon>ResultadosDeBusqueda.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Profesional\ABM_Profesional.resx">
+      <DependentUpon>ABM_Profesional.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Abm Rol\ABM_Rol.resx">
       <DependentUpon>ABM_Rol.cs</DependentUpon>
     </EmbeddedResource>
@@ -167,9 +189,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Abm Afiliado\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
