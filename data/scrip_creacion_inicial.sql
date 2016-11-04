@@ -125,6 +125,7 @@ INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Afiliado')
 INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrativo')
 INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Profesional')
 INSERT INTO [SELECTIONADOS].[Rol](Nombre) VALUES ('Administrador')
+GO
 
 -- Tabla de Funcionalidades
 CREATE TABLE [SELECTIONADOS].[Funcionalidades](
@@ -144,6 +145,7 @@ INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Pedir_Turno
 INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Registrar_Agenda_Medica')
 INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Registro_Llegada')
 INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Registro_Resultado')
+GO
 
 -- Tabla de Rol por funcionalidad. Un rol puedo tener varias funcionalidades.
 CREATE TABLE [SELECTIONADOS].[Rol_X_Funcionalidad](
@@ -192,6 +194,7 @@ EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Pe
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Registrar_Agenda_Medica',1
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Registro_Llegada',1
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Registro_Resultado',1
+GO
 
 -- Tabla de usuarios.
 CREATE TABLE [SELECTIONADOS].[Usuarios](
@@ -211,23 +214,24 @@ INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUE
 INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('afiliado', '7d-f0-a4-df-14-70-55-f8-93-61-48-80-f6-3e-a2-9a-61-7c-87-af-0f-47-ee-2b-38-30-03-f0-16-6f-2b-b6', getdate())
 INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional', '79-34-36-03-65-4a-9d-7a-b7-55-0d-e6-02-0b-89-68-ce-cd-9b-05-1f-37-2f-76-e4-c3-bf-8a-02-b1-ee-61', getdate())
 INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
+GO
 
 -- Tabla de Asignaciones de Roles y Usuarios cada usuario puede tener mas de un rol
 CREATE TABLE [SELECTIONADOS].[Asignacion_Rol](
   ID_Rol INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Rol] (ID_Rol),
   ID_Usuario INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Usuarios] (ID_Usuario),
-  Activo BIT
+  Activo BIT -- 1 Activo 0 Desactivo
 )GO
 
-INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario)
-  SELECT ID_Rol, ID_Usuario FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Administrador' AND Username = 'admin'
+INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+  SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Administrador' AND Username = 'admin'
 
-INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario)
-  SELECT ID_Rol, ID_Usuario FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Administrativo' AND Username = 'administrativo1'
+INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+  SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Administrativo' AND Username = 'administrativo'
 
-INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario)
-  SELECT ID_Rol, ID_Usuario FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Afiliado' AND Username = 'administrativo1'
-
+INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+  SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Afiliado' AND Username = 'administrativo'
+GO
 /*            Lo que me falta ver
 
 -- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
@@ -337,6 +341,7 @@ ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Profesional]) REFERENCE
 ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
 ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([Nro_Turno]) REFERENCES [SELECTIONADOS].[Turno](Nro_Turno)
 ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([ID_Bono]) REFERENCES [SELECTIONADOS].[Compra_Bono](ID_Bono)
+GO
 
 -- Triggers
 -- Creacion de los Nros de turnos

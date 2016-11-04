@@ -49,14 +49,7 @@ namespace ClinicaFrba.Abm_Rol
         private void Btn_Buscar_Click(object sender, EventArgs e)
         {
             this.DGV_Roles.DataSource = GetRoles();
-            this.Clb_Funcionalidades.DisplayMember = "Funcionalidades";
             this.DGV_Roles.AllowUserToAddRows = false;
-            if (this.DGV_Roles.RowCount > 0)
-            {
-                this.Txt_NombreRol.Text = this.DGV_Roles.SelectedRows[0].Cells[0].Value.ToString();
-                this.Cmb_Estado.SelectedIndex = Convert.ToInt32(this.DGV_Roles.SelectedRows[0].Cells[1].Value);
-                this.CompletarFuncionalidades();
-            }
         }
 
         public static DataTable GetRoles()
