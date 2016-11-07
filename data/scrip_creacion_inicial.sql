@@ -233,17 +233,31 @@ INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
 INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
   SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Afiliado' AND Username = 'administrativo'
 GO
-/*            Lo que me falta ver
+
 
 -- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
-create table [SELECTIONADOS].[Baja](
-  Id_Baja INT PRIMARY KEY IDENTITY(1,1),
-  Id_Afiliado INT,
+CREATE TABLE [SELECTIONADOS].[Bajas_Afiliados](
+  ID_Baja INT PRIMARY KEY IDENTITY(1,1),
+  ID_Afiliado INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
   Fecha_Baja DATETIME,
   Motivo VARCHAR(255),
 )GO
--- Crear triger para que cuando se inserte en esta tabla se tenga que dar de baja en la de afiliados
 
+-- Triger para que cuando se inserte en esta tabla se tenga que dar de baja en la de afiliados
+CREATE TRIGGER [SELECTIONADOS].[Tr_Baja_Afiliado] ON [SELECTIONADOS].[Bajas_Afiliados]
+AFTER INSERT
+AS
+DECLARE @afiliado INT
+
+SELECT @afiliado = ID_Afiliado FROM inserted
+
+UPDATE [SELECTIONADOS].[Afiliados] SET Activo = 0 where 
+ID_Afiliado = @afiliado
+
+GO
+
+--Hay que completar este trigger para que se liberen los turnos solicitados por este usuario al momento de la baja.
+/*
 -- Tabla de logs de modificacion
 CREATE TABLE [SELECTIONADOS].[Modificación] (
   [id_modificacion] INT PRIMARY KEY,
