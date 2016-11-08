@@ -51,6 +51,7 @@
             this.Btn_NuevoAfiliado.TabIndex = 4;
             this.Btn_NuevoAfiliado.Text = "Nuevo Afiliado";
             this.Btn_NuevoAfiliado.UseVisualStyleBackColor = true;
+            this.Btn_NuevoAfiliado.Click += new System.EventHandler(this.Btn_NuevoAfiliado_Click);
             // 
             // Btn_Cerrar
             // 

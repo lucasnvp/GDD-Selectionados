@@ -161,7 +161,7 @@ namespace ClinicaFrba.Abm_Rol
             Parametros parametros = new Parametros();
 
             parametros.AgregarParametro("rol_nombre", nombreRol);
-            parametros.AgregarParametro("funcionalidad_nombre", funcionalidad.ToString());
+            parametros.AgregarParametro("funcionalidad_nombre", funcionalidad);
             parametros.AgregarParametro("habilitado", habilitado.ToString());
             DataTable tabla = sql.EjecutarSp("SP_Update_Funionalidad_Por_Rol", parametros);
             if (tabla.Rows.Count > 0 && tabla.Rows[0].ItemArray[0].ToString() == "ERROR")

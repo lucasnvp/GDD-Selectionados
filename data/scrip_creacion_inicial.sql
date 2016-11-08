@@ -20,8 +20,8 @@ CREATE TABLE [SELECTIONADOS].[Afiliados](
   [Sexo] CHAR,
   [ID_Estado_Civil] INT,
   [ID_Plan] INT,
-  [Nro_Consultas] INT,
-  [Activo] BIT -- 1 Activo 0 Desactivo
+  [Nro_Consultas] INT DEFAULT 0,
+  [Activo] BIT NOT NULL DEFAULT 1 -- 1 Activo 0 Desactivo
 )GO
 
 -- Creamos la nueva Tabla de Estados Civiles
@@ -40,6 +40,29 @@ INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Viudo')
 INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Viuda')
 INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiado')
 INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Divorsiada')
+INSERT INTO [SELECTIONADOS].[Estado_Civil]([Descripcion]) VALUES ('Concubinato')
+
+-- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
+CREATE TABLE [SELECTIONADOS].[Log_Baja_Afiliado](
+  ID_Baja INT PRIMARY KEY IDENTITY(1,1),
+  ID_Afiliado INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
+  Fecha_Baja DATETIME
+)GO
+
+-- Triger para que cuando se inserte en esta tabla se tenga que dar de baja en la de afiliados
+CREATE TRIGGER [SELECTIONADOS].[Tr_Log_Baja_Afiliado]
+  ON [SELECTIONADOS].[Afiliados]
+  AFTER UPDATE
+AS
+  BEGIN TRY
+    IF UPDATE (Activo)
+        INSERT INTO SELECTIONADOS.Log_Baja_Afiliado
+        SELECT ID_Afiliado, getdate() FROM INSERTED;
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
 
 -- Creamos la nueva Tabla de Planes Medicos
 CREATE TABLE [SELECTIONADOS].[Planes](
@@ -234,28 +257,6 @@ INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
   SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Afiliado' AND Username = 'administrativo'
 GO
 
-
--- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
-CREATE TABLE [SELECTIONADOS].[Bajas_Afiliados](
-  ID_Baja INT PRIMARY KEY IDENTITY(1,1),
-  ID_Afiliado INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
-  Fecha_Baja DATETIME,
-  Motivo VARCHAR(255),
-)GO
-
--- Triger para que cuando se inserte en esta tabla se tenga que dar de baja en la de afiliados
-CREATE TRIGGER [SELECTIONADOS].[Tr_Baja_Afiliado] ON [SELECTIONADOS].[Bajas_Afiliados]
-AFTER INSERT
-AS
-DECLARE @afiliado INT
-
-SELECT @afiliado = ID_Afiliado FROM inserted
-
-UPDATE [SELECTIONADOS].[Afiliados] SET Activo = 0 where 
-ID_Afiliado = @afiliado
-
-GO
-
 --Hay que completar este trigger para que se liberen los turnos solicitados por este usuario al momento de la baja.
 /*
 -- Tabla de logs de modificacion
@@ -292,7 +293,7 @@ CREATE PROCEDURE [SELECTIONADOS].[MigracionDeDatos] AS
       ON SELECTIONADOS.Planes.Cod_Plan = Maestra.Plan_Med_Codigo
     WHERE Paciente_Nombre IS NOT NULL AND Paciente_Apellido IS NOT NULL
     GROUP BY [Paciente_Nombre], [Paciente_Apellido], Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac, Planes.Id_Plan
-    UPDATE SELECTIONADOS.Afiliados SET [Nro_Afiliado] = [ID_Afiliado] * 100
+    UPDATE SELECTIONADOS.Afiliados SET [Nro_Afiliado] = (([ID_Afiliado] * 100) + 1)
 
     INSERT INTO [SELECTIONADOS].[Profesional] (Nombre, Apellido, Nro_Doc, Direccion, Telefono, Mail, Fecha_Nac)
     SELECT Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
@@ -357,10 +358,6 @@ ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Especialidad]) REFERENC
 ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([Nro_Turno]) REFERENCES [SELECTIONADOS].[Turno](Nro_Turno)
 ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([ID_Bono]) REFERENCES [SELECTIONADOS].[Compra_Bono](ID_Bono)
 GO
-
--- Triggers
--- Creacion de los Nros de turnos
--- Creacion de los Nros de consultas
 
 -- SP Get Usuario
 CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Usuario]
@@ -513,3 +510,73 @@ AS
     SELECT 'ERROR', ERROR_MESSAGE()
   END CATCH
 GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Delete_Afiliado]
+  @ID_Afiliado INT
+AS
+  BEGIN TRY
+    UPDATE [SELECTIONADOS].[Afiliados] SET Activo = 0 WHERE ID_Afiliado = @ID_Afiliado
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Estado_Civil]
+AS
+  BEGIN TRY
+    SELECT Id_Estado_Civil AS IdEstadoCivil, Descripcion FROM [SELECTIONADOS].[Estado_Civil]
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Planes]
+AS
+  BEGIN TRY
+    SELECT Id_Plan AS IdPlan, Descripcion FROM [SELECTIONADOS].[Planes]
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Update_Afiliado]
+  @ID_Afiliado INT = NULL,
+  @Nombre VARCHAR(255),
+  @Apellido VARCHAR(255),
+  @Tipo_Dni VARCHAR(4),
+  @Nro_Doc NUMERIC(18),
+  @Fecha_Nac DATETIME,
+  @Sexo CHAR,
+
+  @ID_Estado_Civil INT,
+  @Telefono NUMERIC(18) = NULL ,
+  @Direccion VARCHAR(255),
+  @Mail VARCHAR(255),
+  @ID_Plan INT
+AS
+  BEGIN TRY
+    IF @ID_Afiliado IS NULL
+      BEGIN
+        INSERT INTO [SELECTIONADOS].[Afiliados](Nombre,Apellido,Tipo_Dni,Nro_Doc,Direccion,Telefono,Mail,Fecha_Nac,Sexo,ID_Estado_Civil,Id_Plan)
+          VALUES (@Nombre, @Apellido, @Tipo_Dni, @Nro_Doc, @Direccion, @Telefono, @Mail, @Fecha_Nac, @Sexo, @ID_Estado_Civil, @ID_Plan)
+        UPDATE [SELECTIONADOS].[Afiliados] SET [Nro_Afiliado] = (([ID_Afiliado] * 100) + 1) WHERE Nro_Doc = @Nro_Doc
+      END
+    ELSE
+      UPDATE [SELECTIONADOS].[Afiliados] SET ID_Estado_Civil = @ID_Estado_Civil, Telefono = @Telefono, Direccion = @Direccion,
+          Mail = @Mail, ID_Plan = @ID_Plan
+        WHERE ID_Afiliado = @ID_Afiliado
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+
+
+  -- Triggers
+-- Creacion de los Nros de turnos
+-- Creacion de los Nros de consultas
+-- Crear trigger para que cuando se haga la baja logica de un afiliado, se ingrese el log.

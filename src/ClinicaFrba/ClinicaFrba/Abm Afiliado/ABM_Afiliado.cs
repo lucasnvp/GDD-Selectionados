@@ -63,5 +63,11 @@ namespace ClinicaFrba.Abm_Afiliado
 
 
         }
+
+        private void Btn_NuevoAfiliado_Click(object sender, EventArgs e)
+        {
+            ABM_Afiliado_Registros abmAfiliadoRegistros = new ABM_Afiliado_Registros();
+            abmAfiliadoRegistros.ShowDialog();
+        }
     }
 }

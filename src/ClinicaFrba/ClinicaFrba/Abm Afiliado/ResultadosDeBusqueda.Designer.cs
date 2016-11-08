@@ -50,7 +50,7 @@
             this.DGV_Resultados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DGV_Resultados.Location = new System.Drawing.Point(13, 30);
             this.DGV_Resultados.Name = "DGV_Resultados";
-            this.DGV_Resultados.Size = new System.Drawing.Size(761, 184);
+            this.DGV_Resultados.Size = new System.Drawing.Size(971, 184);
             this.DGV_Resultados.TabIndex = 1;
             // 
             // Btn_Modificar
@@ -61,6 +61,7 @@
             this.Btn_Modificar.TabIndex = 2;
             this.Btn_Modificar.Text = "Modificar";
             this.Btn_Modificar.UseVisualStyleBackColor = true;
+            this.Btn_Modificar.Click += new System.EventHandler(this.Btn_Modificar_Click);
             // 
             // Btn_Eliminar
             // 
@@ -70,10 +71,11 @@
             this.Btn_Eliminar.TabIndex = 3;
             this.Btn_Eliminar.Text = "Eliminar";
             this.Btn_Eliminar.UseVisualStyleBackColor = true;
+            this.Btn_Eliminar.Click += new System.EventHandler(this.Btn_Eliminar_Click);
             // 
             // Btn_Salir
             // 
-            this.Btn_Salir.Location = new System.Drawing.Point(699, 226);
+            this.Btn_Salir.Location = new System.Drawing.Point(909, 226);
             this.Btn_Salir.Name = "Btn_Salir";
             this.Btn_Salir.Size = new System.Drawing.Size(75, 23);
             this.Btn_Salir.TabIndex = 4;
@@ -85,7 +87,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(786, 261);
+            this.ClientSize = new System.Drawing.Size(996, 266);
             this.Controls.Add(this.Btn_Salir);
             this.Controls.Add(this.Btn_Eliminar);
             this.Controls.Add(this.Btn_Modificar);
