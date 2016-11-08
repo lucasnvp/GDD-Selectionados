@@ -266,17 +266,17 @@ CREATE TABLE [SELECTIONADOS].[Modificación] (
   [fecha_modificacion] DATETIME,
   [motivo] VARCHAR(255)
 )GO
-
+*/
 --Tabla de disponibilidad profesional
 CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
-  [matricula] INT PRIMARY KEY,
+  [ID_Profesional] INT PRIMARY KEY,
   [dia] INT,
   [hora_desde] DATETIME,
   [hora_hasta] DATETIME,
-  [especialidad] INT
+  [ID_Especialidad] INT
 )GO
 
-*/
+
 
 -- SP de migracion de datos
 CREATE PROCEDURE [SELECTIONADOS].[MigracionDeDatos] AS
