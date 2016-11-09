@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClinicaFrba.Conexiones;
 
 namespace ClinicaFrba.Registro_Agenda
 {
@@ -93,5 +94,34 @@ namespace ClinicaFrba.Registro_Agenda
         {
             this.Close();
         }
+
+        public static void CrearAgenda(int ID_Profesional, DateTime fecha, int hora_desde, int hora_hasta,int ID_Especialidad, CheckedListBox funcionalidades)
+        {
+            SqlServer sql = new SqlServer();
+            Parametros parametros = new Parametros();
+
+            parametros.AgregarParametro("id_profesional", ID_Profesional.ToString());
+            parametros.AgregarParametro("fecha", fecha.ToString());
+            parametros.AgregarParametro("hora_desde", hora_desde.ToString());
+            parametros.AgregarParametro("hora_hasta", hora_hasta.ToString());
+            parametros.AgregarParametro("id_especialidad", ID_Especialidad.ToString());
+            DataTable tabla = sql.EjecutarSp("SP_Cargar_Dia_Agenda", parametros);
+
+            if (tabla.Rows.Count > 0 && tabla.Rows[0].ItemArray[0].ToString() == "ERROR")
+            {
+                MessageBox.Show(tabla.Rows[0].ItemArray[1].ToString());
+            }
+            else if (tabla.Rows.Count > 0)
+            {
+                MessageBox.Show(tabla.Rows[0].ItemArray[0].ToString());
+            }
+            
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+  
     }
 }

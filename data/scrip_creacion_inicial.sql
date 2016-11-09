@@ -575,7 +575,20 @@ AS
   END CATCH
 GO
 
-
+CREATE PROCEDURE [SELECTIONADOS].[SP_Cargar_Dia_Agenda]
+  @ID_Profesional INT,
+  @fecha DATETIME,
+  @hora_desde INT,
+  @hora_hasta INT,
+  @ID_Especialidad INT
+AS
+  BEGIN TRY
+	INSERT INTO [SELECTIONADOS].[Disp_Profesional](ID_Profesional,fecha,hora_desde,hora_hasta,ID_Especialidad) VALUES(@ID_Profesional, @fecha, @hora_desde, @hora_hasta,@ID_Especialidad)
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
 
   -- Triggers
 -- Creacion de los Nros de turnos
