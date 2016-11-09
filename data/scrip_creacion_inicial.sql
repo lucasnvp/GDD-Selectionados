@@ -269,11 +269,12 @@ CREATE TABLE [SELECTIONADOS].[Modificación] (
 */
 --Tabla de disponibilidad profesional
 CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
-  [ID_Profesional] INT PRIMARY KEY,
-  [dia] INT,
-  [hora_desde] DATETIME,
-  [hora_hasta] DATETIME,
-  [ID_Especialidad] INT
+  [ID_Disp_Profesional] INT PRIMARY KEY,
+  [ID_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Profesional] (ID_Profesional),
+  [fecha] DATETIME,
+  [hora_desde] INT,
+  [hora_hasta] INT,
+  [ID_Especialidad] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Especialidad] (ID_Especialidad),
 )GO
 
 
