@@ -126,5 +126,52 @@ namespace ClinicaFrba.DAOs
             
         }
 
+        public static void UpdateFamiliarACargo(string idAfiliado, string nroAfiliado, string nombre, string apellido, string tipo_doc,
+            string nro_doc, string sexo, string fecha_nac, string telefono, string mail, string tipo_familiar)
+        {
+            string result = "";
+            SqlServer sql = new SqlServer();
+            Parametros parametros = new Parametros();
+
+            parametros.AgregarParametro("ID_Afiliado", idAfiliado.Trim());
+
+            if (nroAfiliado.Equals(""))
+            {
+                parametros.AgregarParametro("Nro_Afiliado", DBNull.Value);
+            }
+            else
+            {
+                parametros.AgregarParametro("Nro_Afiliado", nroAfiliado.Trim());
+            }
+
+            parametros.AgregarParametro("Nombre", nombre.Trim());
+            parametros.AgregarParametro("Apellido", apellido.Trim());
+            parametros.AgregarParametro("Tipo_Dni", tipo_doc.Trim());
+            parametros.AgregarParametro("Nro_Doc", nro_doc.Trim());
+            parametros.AgregarParametro("Sexo", sexo.Trim());
+            parametros.AgregarParametro("Fecha_Nac", fecha_nac);
+            parametros.AgregarParametro("Telefono", telefono.Trim());
+            parametros.AgregarParametro("Mail", mail.Trim());
+            parametros.AgregarParametro("Tipo_Familiar", tipo_familiar.Trim());
+
+            try
+            {
+                DataTable table = sql.EjecutarSp("SP_Update_FamiliarACargo", parametros);
+                if (table.Rows.Count > 0 && table.Rows[0].ItemArray[0].ToString() == "ERROR")
+                {
+                    MessageBox.Show(table.Rows[0].ItemArray[1].ToString());
+                }
+                else
+                {
+                    MessageBox.Show("Familiar guardado");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
     }
 }

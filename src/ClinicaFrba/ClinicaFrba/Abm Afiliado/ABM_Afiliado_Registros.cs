@@ -109,13 +109,34 @@ namespace ClinicaFrba.Abm_Afiliado
                 AfiliadoDAO.UpdateAfiliado(_IdAfiliado, Txt_Nombre.Text, Txt_Apellido.Text,
                     CBX_TipoDni.Text, Txt_Dni.Text, DTP_FechaDeNacimiento.Value.Date.ToString("yyyy/MM/dd"), CBX_Sexo.SelectedValue.ToString(), CBX_EstadoCivil.SelectedValue.ToString(),
                     Txt_Telefono.Text, Txt_Direccion.Text, Txt_email.Text, CBX_PlanMedico.SelectedValue.ToString());
-
-                this.Close();
+                
             }
             else
             {
                 this.Close();
             }
+        }
+
+        private void Btn_Conyuge_Click(object sender, EventArgs e)
+        {
+            //Btn_Guardar_Click(sender, e);
+            ABM_Familiares_Afiliado familiaresAfiliado = new ABM_Familiares_Afiliado(_IdAfiliado);
+            familiaresAfiliado.ConyugeDatos();
+            familiaresAfiliado.ShowDialog();
+        }
+
+        private void Btn_Hijos_Click(object sender, EventArgs e)
+        {
+            ABM_Familiares_Afiliado familiaresAfiliado = new ABM_Familiares_Afiliado(_IdAfiliado);
+            familiaresAfiliado.FamiliarDatos();
+            familiaresAfiliado.ShowDialog();
+        }
+
+        private void Btn_Familiar_Click(object sender, EventArgs e)
+        {
+            ABM_Familiares_Afiliado familiaresAfiliado = new ABM_Familiares_Afiliado(_IdAfiliado);
+            familiaresAfiliado.FamiliarDatos();
+            familiaresAfiliado.ShowDialog();
         }
     }
 }

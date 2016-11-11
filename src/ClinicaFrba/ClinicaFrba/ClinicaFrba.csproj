@@ -56,6 +56,12 @@
     <Compile Include="Abm Afiliado\ABM_Afiliado_Registros.Designer.cs">
       <DependentUpon>ABM_Afiliado_Registros.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Afiliado\ABM_Familiares_Afiliado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Afiliado\ABM_Familiares_Afiliado.Designer.cs">
+      <DependentUpon>ABM_Familiares_Afiliado.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Afiliado\ResultadosDeBusqueda.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Afiliado\ABM_Afiliado_Registros.resx">
       <DependentUpon>ABM_Afiliado_Registros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Afiliado\ABM_Familiares_Afiliado.resx">
+      <DependentUpon>ABM_Familiares_Afiliado.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Afiliado\ResultadosDeBusqueda.resx">
       <DependentUpon>ResultadosDeBusqueda.cs</DependentUpon>

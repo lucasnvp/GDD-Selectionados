@@ -320,6 +320,7 @@
             this.Btn_Conyuge.TabIndex = 4;
             this.Btn_Conyuge.Text = "Datos Conyuge";
             this.Btn_Conyuge.UseVisualStyleBackColor = true;
+            this.Btn_Conyuge.Click += new System.EventHandler(this.Btn_Conyuge_Click);
             // 
             // Btn_Hijos
             // 
@@ -329,6 +330,7 @@
             this.Btn_Hijos.TabIndex = 5;
             this.Btn_Hijos.Text = "Datos Hijos";
             this.Btn_Hijos.UseVisualStyleBackColor = true;
+            this.Btn_Hijos.Click += new System.EventHandler(this.Btn_Hijos_Click);
             // 
             // Btn_Familiar
             // 
@@ -338,6 +340,7 @@
             this.Btn_Familiar.TabIndex = 6;
             this.Btn_Familiar.Text = "Datos Familiar";
             this.Btn_Familiar.UseVisualStyleBackColor = true;
+            this.Btn_Familiar.Click += new System.EventHandler(this.Btn_Familiar_Click);
             // 
             // ABM_Afiliado_Registros
             // 
