@@ -108,10 +108,12 @@ GO
   )
 
   --Tabla de bonos
-  CREATE TABLE [SELECTIONADOS].[Compra_Bono] (
-    [ID_Bono] INT PRIMARY KEY IDENTITY(1,1),
+  CREATE TABLE [SELECTIONADOS].[Bono_Afiliado] (
+    [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
     [Nro_Afiliado] INT,
-    [Fecha_Impresion] DATETIME,
+    [Compra_Bono_Fecha] DATETIME,
+    [Usado] INT DEFAULT 0, -- 0 Sin Usar 1 Usado
+    [ID_Plan] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Planes](Id_Plan)
   )
 
   -- Tabla de consultas
@@ -164,6 +166,19 @@ GO
     ID_Usuario INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Usuarios] (ID_Usuario),
     Activo BIT -- 1 Activo 0 Desactivo
   )
+
+  -- Tabla de log de compra de bonos
+  CREATE TABLE [SELECTIONADOS].[Log_Compra_Bono] (
+    [ID_Compra] INT PRIMARY KEY IDENTITY(1,1),
+    [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
+    [Nro_Afiliado] INT,
+    [Compra_Bono_Fecha] DATETIME,
+    [ID_Plan] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Planes](Id_Plan),
+    [Valor_Bono] MONEY,
+    [Cant_Comprados] INT,
+    [Total_Pagado] MONEY
+  )
+
 
 /**********************
 * Creacion de triggers
@@ -645,6 +660,50 @@ AS
       END
     IF @Nro_Afiliado IS NOT NULL
       UPDATE [SELECTIONADOS].[Familiar_ACargo] SET Telefono = @Telefono, Mail = @Mail WHERE Nro_Afiliado = @Nro_Afiliado
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Insert_Compra_Bono]
+  @idAfiliado INT,
+  @nroAfiliado INT,
+  @cantComprados INT
+AS
+  BEGIN TRY
+    IF ((SELECT Activo FROM Afiliados WHERE ID_Afiliado = @idAfiliado) = 1)
+      BEGIN
+        DECLARE @idPlan INT
+        SELECT @idPlan = ID_Plan FROM SELECTIONADOS.Afiliados WHERE ID_Afiliado = @idAfiliado
+        DECLARE @valorBono INT
+        SELECT @valorBono = Precio_Bono_Consulta FROM SELECTIONADOS.Planes WHERE Id_Plan = @idPlan
+        INSERT INTO SELECTIONADOS.Log_Compra_Bono(ID_Afiliado, Nro_Afiliado, Compra_Bono_Fecha, ID_Plan, Valor_Bono, Cant_Comprados, Total_Pagado)
+          VALUES (@idAfiliado, @nroAfiliado, getdate(), @idPlan, @valorBono, @cantComprados, @valorBono*@cantComprados)
+
+        WHILE (@cantComprados != 0)
+        BEGIN
+          INSERT INTO SELECTIONADOS.Bono_Afiliado (ID_Afiliado, Nro_Afiliado, Compra_Bono_Fecha, ID_Plan)
+            VALUES (@idAfiliado, @nroAfiliado, getdate(),@idPlan);
+          SET @cantComprados = @cantComprados - 1;
+        END
+      END
+    ELSE
+      RAISERROR ('Usuario inactivo',16,1)
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Planes_PrecioBono]
+  @nroAfiliado INT
+AS
+  BEGIN TRY
+    SELECT Precio_Bono_Consulta FROM SELECTIONADOS.Afiliados
+      INNER JOIN SELECTIONADOS.Planes
+        ON Afiliados.ID_Plan = Planes.Id_Plan
+    WHERE Afiliados.Nro_Afiliado = @nroAfiliado
   END TRY
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()

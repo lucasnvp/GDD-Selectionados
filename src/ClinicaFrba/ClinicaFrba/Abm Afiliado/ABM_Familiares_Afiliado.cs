@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -52,6 +53,28 @@ namespace ClinicaFrba.Abm_Afiliado
             Btn_Guardar_Conyuge.Visible = true;
             Btn_Guardar_Familiar.Visible = false;
 
+            DataTable table = AfiliadoDAO.SearchConyuge(this.IdAfiliado, "C");
+            if (table != null)
+            {
+                DataRow row = table.Rows[0];
+                this.IdAfiliado = row[0].ToString();
+                this.NroAfiliado = row[1].ToString();
+                
+                this.Txt_Nombre.Text = row[2].ToString();
+                this.Txt_Nombre.Enabled = false;
+                this.Txt_Apellido.Text = row[3].ToString();
+                this.Txt_Apellido.Enabled = false;
+                this.CBX_TipoDoc.Text = row[4].ToString();
+                this.CBX_TipoDoc.Enabled = false;
+                this.Txt_Dni.Text = row[5].ToString();
+                this.Txt_Dni.Enabled = false;
+                this.CBX_Sexo.Text = row[6].ToString();
+                this.CBX_Sexo.Enabled = false;
+                this.DTP_FechaDeNacimiento.Text = row[7].ToString();
+                this.DTP_FechaDeNacimiento.Enabled = false;
+                this.Txt_Telefono.Text = row[8].ToString();
+                this.Txt_email.Text = row[9].ToString();
+            }
         }
 
         public void FamiliarDatos()

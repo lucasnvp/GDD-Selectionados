@@ -118,6 +118,7 @@
             this.Btn_Comprar_Bono.TabIndex = 7;
             this.Btn_Comprar_Bono.Text = "Comprar Bono";
             this.Btn_Comprar_Bono.UseVisualStyleBackColor = true;
+            this.Btn_Comprar_Bono.Click += new System.EventHandler(this.Btn_Comprar_Bono_Click);
             // 
             // Btn_Pedir_Turno
             // 

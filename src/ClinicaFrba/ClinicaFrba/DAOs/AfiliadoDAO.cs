@@ -173,5 +173,87 @@ namespace ClinicaFrba.DAOs
 
         }
 
+        public static DataTable SearchConyuge(string idfiliado, string tipoFamiliar)
+        {
+            SqlServer sql = new SqlServer();
+            Parametros parametros = new Parametros();
+            if (idfiliado.Equals(""))
+            {
+                parametros.AgregarParametro("idAfiliado", DBNull.Value);
+            }
+            else
+            {
+                parametros.AgregarParametro("idAfiliado", idfiliado);
+            }
+            if (tipoFamiliar.Equals(""))
+            {
+                parametros.AgregarParametro("Tipo_Familiar", DBNull.Value);
+            }
+            else
+            {
+                parametros.AgregarParametro("Tipo_Familiar", tipoFamiliar);
+            }
+            
+            try
+            {
+                DataTable table = null;
+                table = sql.EjecutarSp("SP_Get_FamiliarACargo", parametros);
+                if (table.Rows.Count == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return table;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
+        public static string GetPrecioBono(string nroAfiliado)
+        {
+            SqlServer sql = new SqlServer();
+            Parametros parametros = new Parametros();
+
+            parametros.AgregarParametro("nroAfiliado", nroAfiliado);
+
+            try
+            {
+                DataTable table = null;
+                table = sql.EjecutarSp("SP_Get_Planes_PrecioBono", parametros);
+                if (table.Rows.Count == 0)
+                {
+                    MessageBox.Show("Error a buscar el precio del bono");
+                    return null;
+                }
+                else
+                {
+                    DataRow row = table.Rows[0];
+                    string precio = row.ItemArray[0].ToString();
+                    return precio;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
+        public static void ComprarBono(string idAfiliado, string nroAfiliado, string cantComprados)
+        {
+            Parametros parametros = new Parametros();
+            SqlServer sql = new SqlServer();
+
+            parametros.AgregarParametro("idAfiliado", idAfiliado);
+            parametros.AgregarParametro("nroAfiliado", nroAfiliado);
+            parametros.AgregarParametro("cantComprados", cantComprados);
+            sql.EjecutarSp("SP_Insert_Compra_Bono", parametros);
+        }
+
     }
 }

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ClinicaFrba.Abm_Afiliado;
 using ClinicaFrba.Abm_Profesional;
 using ClinicaFrba.Abm_Rol;
+using ClinicaFrba.Compra_Bono;
 using ClinicaFrba.Conexiones;
 
 namespace ClinicaFrba.Menus
@@ -67,6 +68,12 @@ namespace ClinicaFrba.Menus
         {
             ABM_Afiliado afiliado = new ABM_Afiliado();
             afiliado.ShowDialog();
+        }
+
+        private void Btn_Comprar_Bono_Click(object sender, EventArgs e)
+        {
+            CompraBono compraBono = new CompraBono();
+            compraBono.ShowDialog();
         }
     }
 }
