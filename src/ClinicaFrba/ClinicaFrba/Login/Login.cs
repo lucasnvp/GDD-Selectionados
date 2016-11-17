@@ -15,7 +15,7 @@ namespace ClinicaFrba.Login
 {
     public partial class Cl_Login : Form
     {
-        int _intentos = 0;
+        private int _intentos = 0;
         private int _idUsuario;
 
         public Cl_Login()
@@ -67,7 +67,12 @@ namespace ClinicaFrba.Login
                 this._intentos++;
                 if (_intentos == 3)
                 {
-                    //Bloquear Usuario
+                    Parametros parametros = new Parametros();
+                    SqlServer sql = new SqlServer();
+
+                    parametros.AgregarParametro("usuario", Txt_Usuario.Text);
+                    sql.EjecutarSp("SP_Block_Usuario", parametros);
+
                     MessageBox.Show("Usuario Bloqueado");
                 }
                 return false;

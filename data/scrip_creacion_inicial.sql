@@ -179,6 +179,19 @@ GO
     [Total_Pagado] MONEY
   )
 
+  -- Tabla de log de bloqueos
+  CREATE TABLE [SELECTIONADOS].[Log_Block_Usuario] (
+    [ID_Block] INT PRIMARY KEY IDENTITY(1,1),
+    [ID_Usuario] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Usuarios](ID_Usuario),
+    [Fecha_Bloqueo] DATETIME
+  )
+
+  -- Tabla de Dispoinibilidad Profesional
+  CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
+    [ID_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional),
+    [ID_Especialidad] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad),
+    [Fecha] DATETIME
+  )
 
 /**********************
 * Creacion de triggers
@@ -211,6 +224,21 @@ GO
       IF UPDATE (Activo)
           INSERT INTO SELECTIONADOS.Log_Baja_Afiliado
           SELECT ID_Afiliado, getdate() FROM INSERTED;
+    END TRY
+    BEGIN CATCH
+      SELECT 'ERROR', ERROR_MESSAGE()
+    END CATCH
+  GO
+
+  -- Triger bloqueo de usuarios
+  CREATE TRIGGER [SELECTIONADOS].[Tr_Bloqueo_Usuarios]
+    ON [SELECTIONADOS].[Usuarios]
+    AFTER UPDATE
+  AS
+    BEGIN TRY
+      IF UPDATE (Activo)
+          INSERT INTO SELECTIONADOS.Log_Baja_Afiliado
+          SELECT ID_Usuario, getdate() FROM INSERTED;
     END TRY
     BEGIN CATCH
       SELECT 'ERROR', ERROR_MESSAGE()
@@ -259,7 +287,8 @@ BEGIN
   -- Usuarios
   INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('admin', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
   INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('afiliado', '7d-f0-a4-df-14-70-55-f8-93-61-48-80-f6-3e-a2-9a-61-7c-87-af-0f-47-ee-2b-38-30-03-f0-16-6f-2b-b6', getdate())
-  INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional', '79-34-36-03-65-4a-9d-7a-b7-55-0d-e6-02-0b-89-68-ce-cd-9b-05-1f-37-2f-76-e4-c3-bf-8a-02-b1-ee-61', getdate())
+  INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional1', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
+  INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional2', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
   INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
 
   --Asigno los roles a los usuarios
@@ -271,6 +300,12 @@ BEGIN
 
   INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
     SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Afiliado' AND Username = 'administrativo'
+
+  INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+    SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Profesional' AND Username = 'profesional1'
+
+  INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+    SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Profesional' AND Username = 'profesional2'
 
 END
 GO
@@ -403,6 +438,19 @@ EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Pe
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Registrar_Agenda_Medica',1
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Registro_Llegada',1
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_Registro_Resultado',1
+
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_ABM_Afiliado',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_ABM_Especialidad',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_ABM_Planes',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_ABM_Profesional',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_ABM_Rol',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Cancelar_Atencion',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Comprar_Bono',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Listados',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Pedir_Turno',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registrar_Agenda_Medica',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registro_Llegada',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registro_Resultado',0
 
 -- SP Get Usuario
 CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Usuario]
@@ -704,6 +752,75 @@ AS
       INNER JOIN SELECTIONADOS.Planes
         ON Afiliados.ID_Plan = Planes.Id_Plan
     WHERE Afiliados.Nro_Afiliado = @nroAfiliado
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Block_Usuario]
+  @usuario VARCHAR(255)
+AS
+  BEGIN TRY
+     UPDATE SELECTIONADOS.Usuarios SET Activo = 0 WHERE Username = @usuario
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Especialidad_Descripcion]
+  @idProfesional VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT Especialidad.ID_Especialidad, Especialidad.Descripcion FROM SELECTIONADOS.Profesional
+      INNER JOIN SELECTIONADOS.Profesional_Especialidad
+      ON Profesional.ID_Profesional = Profesional_Especialidad.ID_Profesional
+      INNER JOIN SELECTIONADOS.Especialidad
+      ON Profesional_Especialidad.ID_Especialidad = Especialidad.ID_Especialidad
+      WHERE Profesional.ID_Profesional = @idProfesional
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Insert_Disponibilidad_Profesional]
+  @idProfesional VARCHAR(255),
+  @idEspecialidad VARCHAR(255),
+  @fecha VARCHAR(255)
+AS
+  BEGIN TRY
+    INSERT INTO SELECTIONADOS.Disp_Profesional (ID_Profesional, ID_Especialidad, Fecha) VALUES (@idProfesional, @idEspecialidad, CONVERT(DATETIME,@fecha,121))
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_IdAsociado_Usuario]
+  @idUsuario VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT ID_Afiliado_Profesional FROM SELECTIONADOS.Usuarios WHERE ID_Usuario = @idUsuario
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_AgendaProfesional]
+  @idProfesional VARCHAR(255),
+  @idEspecialidad VARCHAR(255),
+  @fechaInicio VARCHAR(255),
+  @fechaFin VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT Disp_Profesional.ID_Profesional, Disp_Profesional.ID_Especialidad, Disp_Profesional.Fecha
+      FROM SELECTIONADOS.Disp_Profesional
+      WHERE ID_Profesional = @idProfesional AND
+            ID_Especialidad = @idEspecialidad AND
+            Fecha BETWEEN CONVERT(DATETIME,@fechaInicio,121) AND CONVERT(DATETIME,@fechaFin,121)
   END TRY
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()

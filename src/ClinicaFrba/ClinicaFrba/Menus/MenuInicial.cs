@@ -12,6 +12,7 @@ using ClinicaFrba.Abm_Profesional;
 using ClinicaFrba.Abm_Rol;
 using ClinicaFrba.Compra_Bono;
 using ClinicaFrba.Conexiones;
+using ClinicaFrba.Registrar_Agenta_Medico;
 
 namespace ClinicaFrba.Menus
 {
@@ -74,6 +75,12 @@ namespace ClinicaFrba.Menus
         {
             CompraBono compraBono = new CompraBono();
             compraBono.ShowDialog();
+        }
+
+        private void Btn_Registrar_Agenda_Medica_Click(object sender, EventArgs e)
+        {
+            AgendaMedica agendaMedica = new AgendaMedica(IdUsuario);
+            agendaMedica.ShowDialog();
         }
     }
 }

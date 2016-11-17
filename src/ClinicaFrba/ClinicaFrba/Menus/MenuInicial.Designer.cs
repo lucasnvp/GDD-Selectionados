@@ -146,6 +146,7 @@
             this.Btn_Registrar_Agenda_Medica.TabIndex = 10;
             this.Btn_Registrar_Agenda_Medica.Text = "Registar Agenda Medica";
             this.Btn_Registrar_Agenda_Medica.UseVisualStyleBackColor = true;
+            this.Btn_Registrar_Agenda_Medica.Click += new System.EventHandler(this.Btn_Registrar_Agenda_Medica_Click);
             // 
             // Btn_Registro_Llegada
             // 
