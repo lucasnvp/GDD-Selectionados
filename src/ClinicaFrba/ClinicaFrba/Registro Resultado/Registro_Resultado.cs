@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ClinicaFrba.Listados
+namespace ClinicaFrba.Registro_Resultado
 {
-    public partial class Form1 : Form
+    public partial class Registro_Resultado : Form
     {
-        public Form1()
+        public Registro_Resultado()
         {
             InitializeComponent();
         }
@@ -21,20 +21,7 @@ namespace ClinicaFrba.Listados
         {
 
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
+
+
