@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace ClinicaFrba.Listados
 {
-    public partial class Listados_Estadisticos : Form
+    public partial class ProfesionalesMenosHoras : Form
     {
-        public Listados_Estadisticos()
+        public ProfesionalesMenosHoras(DateTime fecha)
         {
             InitializeComponent();
+        }
+
+        private void ProfesionalesMenosHoras_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
