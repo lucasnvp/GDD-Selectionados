@@ -128,6 +128,7 @@
             this.Btn_Pedir_Turno.TabIndex = 8;
             this.Btn_Pedir_Turno.Text = "Pedir Turno";
             this.Btn_Pedir_Turno.UseVisualStyleBackColor = true;
+            this.Btn_Pedir_Turno.Click += new System.EventHandler(this.Btn_Pedir_Turno_Click);
             // 
             // Btn_Listados
             // 

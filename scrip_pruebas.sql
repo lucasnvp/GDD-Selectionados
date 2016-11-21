@@ -38,21 +38,12 @@ DROP TABLE [SELECTIONADOS].[Especialidad];
 DROP TABLE [SELECTIONADOS].[Profesional];
 DROP TABLE [SELECTIONADOS].[Tipo_Especialidad];
 
-SELECTIONADOS.SP_Insert_Disponibilidad_Profesional 1, 10, '11/15/2015 07:00:00'
+SELECT ID_Profesional, ID_Especialidad, Fecha FROM SELECTIONADOS.Disp_Profesional
+  WHERE ID_Profesional = 2 AND ID_Especialidad = 18
+        AND Fecha BETWEEN '2016-11-21' AND '2016-11-21 23:59:59.997';
 
-SELECT ID_Afiliado_Profesional FROM SELECTIONADOS.Usuarios WHERE ID_Usuario = 5;
+[SELECTIONADOS].[SP_Get_DisponibilidadProfesional] 2, 18, '2016-11-21'
 
-SELECT Especialidad.ID_Especialidad, Especialidad.Descripcion FROM SELECTIONADOS.Profesional
-      INNER JOIN SELECTIONADOS.Profesional_Especialidad
-      ON Profesional.ID_Profesional = Profesional_Especialidad.ID_Profesional
-      INNER JOIN SELECTIONADOS.Especialidad
-      ON Profesional_Especialidad.ID_Especialidad = Especialidad.ID_Especialidad
-      WHERE Profesional.ID_Profesional = 1
-
--- Disponibilidad
--- Id Prof = 2 // Especialidad = 18 8 // Primer turno de la semana entre el ultimo turno de semana
-SELECT Disp_Profesional.ID_Profesional, Disp_Profesional.ID_Especialidad, Disp_Profesional.Fecha
-  FROM SELECTIONADOS.Disp_Profesional
-  WHERE ID_Profesional = 2 AND ID_Especialidad = 18 AND Fecha BETWEEN '2016-11-21 00:00:00' AND '2016-11-26 23:59:59';
-
-[SELECTIONADOS].[SP_Get_AgendaProfesional] 2, 18, '2016-11-21 00:00:00', '2016-11-26 23:59:59'
+SELECT ID_Profesional, ID_Especialidad, Fecha, RIGHT(CONVERT(DATETIME, Fecha, 114),8) AS Turno  FROM SELECTIONADOS.Disp_Profesional
+  WHERE ID_Profesional = 2 AND ID_Especialidad = 18
+        AND Fecha BETWEEN '2016-11-21' AND '2016-11-21 23:59:59.997';

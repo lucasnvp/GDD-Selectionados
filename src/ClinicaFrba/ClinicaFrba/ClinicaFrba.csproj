@@ -132,11 +132,11 @@
     <Compile Include="Menus\MenuInicial.Designer.cs">
       <DependentUpon>MenuInicial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pedir Turno\Form1.cs">
+    <Compile Include="Pedir Turno\Turno.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Pedir Turno\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Pedir Turno\Turno.Designer.cs">
+      <DependentUpon>Turno.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -187,6 +187,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menus\MenuInicial.resx">
       <DependentUpon>MenuInicial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pedir Turno\Turno.resx">
+      <DependentUpon>Turno.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

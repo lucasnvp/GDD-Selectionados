@@ -102,9 +102,11 @@ GO
   CREATE TABLE [SELECTIONADOS].[Turno] (
     [Nro_Turno] NUMERIC(18) UNIQUE NOT NULL,
     [ID_Afiliado] INT,
+    [Nro_Afiliado] INT,
     [ID_Profesional] INT,
     [ID_Especialidad] INT,
-    [Fecha_Turno] DATE
+    [Fecha_Turno] DATETIME,
+    [ID_Disp_Profesional] INT
   )
 
   --Tabla de bonos
@@ -188,9 +190,11 @@ GO
 
   -- Tabla de Dispoinibilidad Profesional
   CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
+    [ID_Disponibilidad] INT PRIMARY KEY IDENTITY(1,1),
     [ID_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional),
     [ID_Especialidad] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad),
-    [Fecha] DATETIME
+    [Fecha] DATETIME,
+    [Disponible] BIT NOT NULL DEFAULT 1, -- 1 Disponible 0 Ocupado
   )
 
 /**********************
@@ -244,10 +248,6 @@ GO
       SELECT 'ERROR', ERROR_MESSAGE()
     END CATCH
   GO
-
-/**********************
-* SP de Migracion
-***********************/
 
 -- SP de inserts de datos
 CREATE PROCEDURE [SELECTIONADOS].[01_Insert_Datos_Iniciales] AS
@@ -821,6 +821,59 @@ AS
       WHERE ID_Profesional = @idProfesional AND
             ID_Especialidad = @idEspecialidad AND
             Fecha BETWEEN CONVERT(DATETIME,@fechaInicio,121) AND CONVERT(DATETIME,@fechaFin,121)
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_EspecialidadMedicas]
+AS
+  BEGIN TRY
+    SELECT ID_Especialidad, Descripcion FROM [SELECTIONADOS].[Especialidad]
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Profesional_ByEspecialidad]
+  @idEspecialidad VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT Profesional.ID_Profesional, Profesional.Apellido FROM [SELECTIONADOS].[Profesional_Especialidad]
+      INNER JOIN [SELECTIONADOS].[Profesional]
+      ON Profesional_Especialidad.ID_Profesional = Profesional.ID_Profesional
+      WHERE ID_Especialidad = @idEspecialidad
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_DisponibilidadProfesional]
+  @idProfesional VARCHAR(255),
+  @idEspecialidad VARCHAR(255),
+  @fecha VARCHAR(255)
+AS
+  BEGIN TRY
+    DECLARE @fechaFin VARCHAR(255)
+    SET @fechaFin = @fecha + ' 23:59:59.997'
+    SELECT  ID_Disponibilidad, ID_Profesional, ID_Especialidad, Fecha, RIGHT(CONVERT(DATETIME, Fecha, 114),8) AS Turno FROM SELECTIONADOS.Disp_Profesional
+      WHERE ID_Profesional = @idProfesional AND ID_Especialidad = @idEspecialidad
+        AND Fecha BETWEEN @fecha AND @fechaFin
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE SELECTIONADOS.[SP_GenerarTurno]
+  @idProfesional VARCHAR(255),
+  @idEspecialidad VARCHAR(255)
+AS
+  BEGIN TRY
+
   END TRY
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()

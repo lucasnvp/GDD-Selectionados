@@ -12,6 +12,7 @@ using ClinicaFrba.Abm_Profesional;
 using ClinicaFrba.Abm_Rol;
 using ClinicaFrba.Compra_Bono;
 using ClinicaFrba.Conexiones;
+using ClinicaFrba.Pedir_Turno;
 using ClinicaFrba.Registrar_Agenta_Medico;
 
 namespace ClinicaFrba.Menus
@@ -81,6 +82,12 @@ namespace ClinicaFrba.Menus
         {
             AgendaMedica agendaMedica = new AgendaMedica(IdUsuario);
             agendaMedica.ShowDialog();
+        }
+
+        private void Btn_Pedir_Turno_Click(object sender, EventArgs e)
+        {
+            Turno turno = new Turno();
+            turno.ShowDialog();
         }
     }
 }

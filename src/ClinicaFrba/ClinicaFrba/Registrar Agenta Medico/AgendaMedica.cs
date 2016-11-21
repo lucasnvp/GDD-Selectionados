@@ -33,8 +33,6 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
             GetIdProfesional();
             FillEspecialidad();
 
-            DTP_Fecha_ValueChanged(this, EventArgs.Empty);
-
             this.CLB_Lunes.DataSource = TablaHorariosLV();
             this.CLB_Lunes.ValueMember = "Valor";
             this.CLB_Lunes.DisplayMember = "Hora";
@@ -53,6 +51,8 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
             this.CLB_Sabado.DataSource = TablaHorariosS();
             this.CLB_Sabado.ValueMember = "Valor";
             this.CLB_Sabado.DisplayMember = "Hora";
+
+            DTP_Fecha_ValueChanged(this, EventArgs.Empty);
 
         }
 
@@ -214,7 +214,7 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
                 var row = (item as DataRowView).Row;
                 DateTime horaTime = Convert.ToDateTime(row["Valor"]);
                 DateTime fechaAIngresar = diaTime.AddHours(horaTime.Hour).AddMinutes(horaTime.Minute);
-                parametros.AgregarParametro("fecha", fechaAIngresar.ToString("yyyy-MM-dd hh:mm:ss"));
+                parametros.AgregarParametro("fecha", fechaAIngresar.ToString("yyyy-MM-dd HH:mm:ss"));
 
                 DataTable table = sql.EjecutarSp("SP_Insert_Disponibilidad_Profesional", parametros);
                 if (table.Rows.Count > 0 && table.Rows[0].ItemArray[0].ToString() == "ERROR")
@@ -265,8 +265,8 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
             Parametros parametros = new Parametros();
             parametros.AgregarParametro("idProfesional", _idProfesional);
             parametros.AgregarParametro("idEspecialidad", idEspecialidad);
-            parametros.AgregarParametro("fechaInicio", primerTurnoTime.ToString("yyyy-MM-dd hh:mm:ss"));
-            parametros.AgregarParametro("fechaFin", ultimoTurnoTime.ToString("yyyy-MM-dd hh:mm:ss"));
+            parametros.AgregarParametro("fechaInicio", primerTurnoTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            parametros.AgregarParametro("fechaFin", ultimoTurnoTime.ToString("yyyy-MM-dd HH:mm:ss"));
 
             DataTable table = sql.EjecutarSp("SP_Get_AgendaProfesional", parametros);
 
@@ -286,30 +286,91 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
                 {
                     for (int j = 0; j < CLB_Lunes.Items.Count; j++)
                     {
-                        //CLB_Lunes.Items[j];
-                        MessageBox.Show("Lunes");
-                        MessageBox.Show(CLB_Lunes.Items[j].ToString());
+                        DataRowView itemBox = (DataRowView)CLB_Lunes.Items[j];
+                        DateTime horaTurno = Convert.ToDateTime(itemBox["Valor"]);
+
+                        if (fechaTime.ToString("HH:mm") == horaTurno.ToString("HH:mm"))
+                        {
+                            CLB_Lunes.SetItemChecked(j, true);
+                            CLB_Lunes.SetItemCheckState(j, CheckState.Indeterminate);
+                        }
+
                     }
                 }
                 else if (fechaTime.Day == _martes.Day)
                 {
-                    
+                    for (int j = 0; j < CLB_Martes.Items.Count; j++)
+                    {
+                        DataRowView itemBox = (DataRowView)CLB_Martes.Items[j];
+                        DateTime horaTurno = Convert.ToDateTime(itemBox["Valor"]);
+
+                        if (fechaTime.ToString("HH:mm") == horaTurno.ToString("HH:mm"))
+                        {
+                            CLB_Martes.SetItemChecked(j, true);
+                            CLB_Martes.SetItemCheckState(j, CheckState.Indeterminate);
+                        }
+
+                    }
                 }
                 else if (fechaTime.Day == _miercoles.Day)
                 {
+                    for (int j = 0; j < CLB_Miercoles.Items.Count; j++)
+                    {
+                        DataRowView itemBox = (DataRowView)CLB_Miercoles.Items[j];
+                        DateTime horaTurno = Convert.ToDateTime(itemBox["Valor"]);
 
+                        if (fechaTime.ToString("HH:mm") == horaTurno.ToString("HH:mm"))
+                        {
+                            CLB_Miercoles.SetItemChecked(j, true);
+                            CLB_Miercoles.SetItemCheckState(j, CheckState.Indeterminate);
+                        }
+
+                    }
                 }
                 else if (fechaTime.Day == _jueves.Day)
                 {
+                    for (int j = 0; j < CLB_Jueves.Items.Count; j++)
+                    {
+                        DataRowView itemBox = (DataRowView)CLB_Jueves.Items[j];
+                        DateTime horaTurno = Convert.ToDateTime(itemBox["Valor"]);
 
+                        if (fechaTime.ToString("HH:mm") == horaTurno.ToString("HH:mm"))
+                        {
+                            CLB_Jueves.SetItemChecked(j, true);
+                            CLB_Jueves.SetItemCheckState(j, CheckState.Indeterminate);
+                        }
+
+                    }
                 }
                 else if (fechaTime.Day == _viernes.Day)
                 {
+                    for (int j = 0; j < CLB_Viernes.Items.Count; j++)
+                    {
+                        DataRowView itemBox = (DataRowView)CLB_Viernes.Items[j];
+                        DateTime horaTurno = Convert.ToDateTime(itemBox["Valor"]);
 
+                        if (fechaTime.ToString("HH:mm") == horaTurno.ToString("HH:mm"))
+                        {
+                            CLB_Viernes.SetItemChecked(j, true);
+                            CLB_Viernes.SetItemCheckState(j, CheckState.Indeterminate);
+                        }
+
+                    }
                 }
                 else if (fechaTime.Day == _sabado.Day)
                 {
+                    for (int j = 0; j < CLB_Sabado.Items.Count; j++)
+                    {
+                        DataRowView itemBox = (DataRowView)CLB_Sabado.Items[j];
+                        DateTime horaTurno = Convert.ToDateTime(itemBox["Valor"]);
 
+                        if (fechaTime.ToString("HH:mm") == horaTurno.ToString("HH:mm"))
+                        {
+                            CLB_Sabado.SetItemChecked(j, true);
+                            CLB_Sabado.SetItemCheckState(j, CheckState.Indeterminate);
+                        }
+
+                    }
                 }
                 else
                 {
@@ -318,5 +379,10 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
             }
         }
 
+        private void CBX_Especialidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LimpiarCLB();
+            GetAgenda();
+        }
     }
 }

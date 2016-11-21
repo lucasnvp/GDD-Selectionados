@@ -101,6 +101,7 @@
             this.CBX_Especialidad.Name = "CBX_Especialidad";
             this.CBX_Especialidad.Size = new System.Drawing.Size(151, 21);
             this.CBX_Especialidad.TabIndex = 5;
+            this.CBX_Especialidad.SelectedIndexChanged += new System.EventHandler(this.CBX_Especialidad_SelectedIndexChanged);
             // 
             // Lbl_Miercoles
             // 
