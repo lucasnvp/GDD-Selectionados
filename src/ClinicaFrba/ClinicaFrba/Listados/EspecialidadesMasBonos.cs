@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace ClinicaFrba.Listados
 {
-    public partial class Form1 : Form
+    public partial class EspecialidadesMasBonos : Form
     {
-        public Form1()
+        public EspecialidadesMasBonos()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
