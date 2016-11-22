@@ -74,7 +74,19 @@ namespace ClinicaFrba.Pedir_Turno
 
         private void Btn_GenerarTurno_Click(object sender, EventArgs e)
         {
-
+            SqlServer sql = new SqlServer();
+            Parametros parametros = new Parametros();
+            parametros.AgregarParametro("idAfiliado", "Falta");
+            parametros.AgregarParametro("nroAfiliado", Txt_NroAfiliado.Text);
+            parametros.AgregarParametro("idProfesional", Cbx_Profesional.SelectedValue.ToString());
+            parametros.AgregarParametro("idEspecialidad", Cbx_Especialidad.SelectedValue.ToString());
+            parametros.AgregarParametro("idDispProfesional", Cbx_Horario.SelectedValue.ToString());
+            DataTable table = sql.EjecutarSp("SP_GenerarTurno", parametros);
+            if (table.Rows.Count > 0 && table.Rows[0].ItemArray[0].ToString() == "ERROR")
+            {
+                MessageBox.Show(table.Rows[0].ItemArray[1].ToString());
+            }
+            //Mostrar el turno
         }
     }
 }

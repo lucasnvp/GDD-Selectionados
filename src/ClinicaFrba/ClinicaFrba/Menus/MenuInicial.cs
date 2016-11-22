@@ -14,6 +14,7 @@ using ClinicaFrba.Compra_Bono;
 using ClinicaFrba.Conexiones;
 using ClinicaFrba.Pedir_Turno;
 using ClinicaFrba.Registrar_Agenta_Medico;
+using ClinicaFrba.Registro_Llegada;
 
 namespace ClinicaFrba.Menus
 {
@@ -88,6 +89,12 @@ namespace ClinicaFrba.Menus
         {
             Turno turno = new Turno();
             turno.ShowDialog();
+        }
+
+        private void Btn_Registro_Llegada_Click(object sender, EventArgs e)
+        {
+            RegistroLlegada registroLlegada = new RegistroLlegada();
+            registroLlegada.ShowDialog();
         }
     }
 }

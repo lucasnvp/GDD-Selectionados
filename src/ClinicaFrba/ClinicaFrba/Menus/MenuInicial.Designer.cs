@@ -157,6 +157,7 @@
             this.Btn_Registro_Llegada.TabIndex = 11;
             this.Btn_Registro_Llegada.Text = "Registro Llegada";
             this.Btn_Registro_Llegada.UseVisualStyleBackColor = true;
+            this.Btn_Registro_Llegada.Click += new System.EventHandler(this.Btn_Registro_Llegada_Click);
             // 
             // Btn_Registro_Resultado
             // 

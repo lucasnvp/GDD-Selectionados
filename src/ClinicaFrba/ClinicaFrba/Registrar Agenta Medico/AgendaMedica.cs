@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClinicaFrba.Conexiones;
+using ClinicaFrba.DAOs;
 
 namespace ClinicaFrba.Registrar_Agenta_Medico
 {
@@ -182,21 +183,9 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
 
         private void FillEspecialidad()
         {
-            SqlServer sql = new SqlServer();
-            Parametros parametros = new Parametros();
-            parametros.AgregarParametro("idProfesional", _idProfesional);
-
-            try
-            {
-                DataTable table = sql.EjecutarSp("SP_Get_Especialidad_Descripcion", parametros);
-                CBX_Especialidad.DataSource = table;
-                CBX_Especialidad.DisplayMember = "Descripcion";
-                CBX_Especialidad.ValueMember = "ID_Especialidad";
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            CBX_Especialidad.DataSource = ProfesionalDAO.EspecialidadesById(_idProfesional);
+            CBX_Especialidad.DisplayMember = "Descripcion";
+            CBX_Especialidad.ValueMember = "ID_Especialidad";
         }
 
         private void CargarAgenda(string idEspecialidad, CheckedListBox diaListBox, DateTime diaTime)

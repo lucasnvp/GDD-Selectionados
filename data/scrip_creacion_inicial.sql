@@ -98,35 +98,14 @@ GO
     [ID_Especialidad] INT
   )
 
-  --Tabla de turno
-  CREATE TABLE [SELECTIONADOS].[Turno] (
-    [Nro_Turno] NUMERIC(18) UNIQUE NOT NULL,
-    [ID_Afiliado] INT,
-    [Nro_Afiliado] INT,
-    [ID_Profesional] INT,
-    [ID_Especialidad] INT,
-    [Fecha_Turno] DATETIME,
-    [ID_Disp_Profesional] INT
-  )
-
   --Tabla de bonos
   CREATE TABLE [SELECTIONADOS].[Bono_Afiliado] (
+    [Nro_Bono] INT UNIQUE NOT NULL ,
     [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
     [Nro_Afiliado] INT,
     [Compra_Bono_Fecha] DATETIME,
     [Usado] INT DEFAULT 0, -- 0 Sin Usar 1 Usado
     [ID_Plan] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Planes](Id_Plan)
-  )
-
-  -- Tabla de consultas
-  CREATE TABLE [SELECTIONADOS].[Consulta] (
-    [Nro_Consulta] NUMERIC(18) UNIQUE NOT NULL,
-    [Nro_Turno] NUMERIC(18),
-    [Enfermedades] VARCHAR(255),
-    [Sintomas] VARCHAR(255),
-    [Fecha_Consulta] DATETIME,
-    [Fecha_Llegada] DATETIME,
-    [ID_Bono] INT
   )
 
   -- Tabla de Roles de Usuario
@@ -156,6 +135,7 @@ GO
     Password VARCHAR(255) NOT NULL ,
     Fecha_Creacion DATETIME NOT NULL,
     Activo BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Desactivo
+    TipoUsuario CHAR, -- 'A'filiado 'P'rofesional
     ID_Afiliado_Profesional INT,
 
     CONSTRAINT Afiliado_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Afiliados(ID_Afiliado),
@@ -197,6 +177,37 @@ GO
     [Disponible] BIT NOT NULL DEFAULT 1, -- 1 Disponible 0 Ocupado
   )
 
+  --Tabla de turno
+  CREATE TABLE [SELECTIONADOS].[Turno] (
+    [Nro_Turno] NUMERIC(18) UNIQUE NOT NULL,
+    [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
+    [Nro_Afiliado] INT,
+    [ID_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional),
+    [ID_Especialidad] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad),
+    [ID_Disp_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Disp_Profesional](ID_Disponibilidad),
+    [Activo] BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Se registro la visita
+  )
+
+  -- Tabla de consultas
+  CREATE TABLE [SELECTIONADOS].[Consulta] (
+    [Nro_Consulta] NUMERIC(18) PRIMARY KEY IDENTITY(1,1),
+    [Nro_Turno] NUMERIC(18) FOREIGN KEY REFERENCES [SELECTIONADOS].[Turno](Nro_Turno),
+    [Enfermedades] VARCHAR(255),
+    [Sintomas] VARCHAR(255),
+    [Fecha_Llegada_Paciente] DATETIME,
+    [Fecha_DeLaConsulta] DATETIME,
+    [Nro_Bono] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Bono_Afiliado](Nro_Bono),
+    [Realizada] BIT
+  )
+
+  -- Tabla de Cancelaciones
+  CREATE TABLE [SELECTIONADOS].[Cancelacion] (
+    [Tipo_Cancelacion] CHAR,
+    [Nro_Turno] NUMERIC(18) FOREIGN KEY REFERENCES [SELECTIONADOS].[Turno](Nro_Turno),
+    [Tipo] VARCHAR(255),
+    [Detalle] VARCHAR(255)
+  )
+
 /**********************
 * Creacion de triggers
 ***********************/
@@ -207,12 +218,8 @@ GO
   AS
     BEGIN TRY
       DECLARE @ID_Afiliado_Ingresado INT
-      DECLARE @Tipo_Afiliado CHAR
-
-      SELECT @ID_Afiliado_Ingresado = ID_Afiliado, @Tipo_Afiliado = Tipo_Afiliado FROM INSERTED
-
+      SELECT @ID_Afiliado_Ingresado = ID_Afiliado FROM INSERTED
       UPDATE SELECTIONADOS.Afiliados SET [Nro_Afiliado] = ((@ID_Afiliado_Ingresado * 100) + 1) WHERE ID_Afiliado = @ID_Afiliado_Ingresado
-
     END TRY
     BEGIN CATCH
       SELECT 'ERROR', ERROR_MESSAGE()
@@ -327,8 +334,8 @@ CREATE PROCEDURE [SELECTIONADOS].[02_Migracion_De_Datos] AS
     GROUP BY [Paciente_Nombre], [Paciente_Apellido], Paciente_Dni, Paciente_Direccion, Paciente_Telefono, Paciente_Mail, Paciente_Fecha_Nac, Planes.Id_Plan
     UPDATE SELECTIONADOS.Afiliados SET [Nro_Afiliado] = ((ID_Afiliado * 100) + 1)
 
-    INSERT INTO [SELECTIONADOS].[Profesional] (Nombre, Apellido, Nro_Doc, Direccion, Telefono, Mail, Fecha_Nac)
-    SELECT Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
+    INSERT INTO [SELECTIONADOS].[Profesional] (Nombre, Apellido,Tipo_Doc, Nro_Doc, Direccion, Telefono, Mail, Fecha_Nac)
+    SELECT Medico_Nombre, Medico_Apellido,'DNI', Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
     FROM gd_esquema.Maestra
     WHERE Medico_Nombre IS NOT NULL
     GROUP BY Medico_Nombre, Medico_Apellido, Medico_Dni, Medico_Direccion, Medico_Telefono, Medico_Mail, Medico_Fecha_Nac
@@ -354,8 +361,8 @@ CREATE PROCEDURE [SELECTIONADOS].[02_Migracion_De_Datos] AS
       ON Maestra.Especialidad_Codigo = SELECTIONADOS.Especialidad.Cod_Especialidad
     GROUP BY Profesional.ID_Profesional, Especialidad.ID_Especialidad
 
-    INSERT INTO [SELECTIONADOS].[Turno](Nro_Turno, ID_Afiliado, ID_Profesional, ID_Especialidad, Fecha_Turno)
-    SELECT Maestra.Turno_Numero, Afiliados.ID_Afiliado, Profesional.ID_Profesional, Especialidad.ID_Especialidad, Maestra.Turno_Fecha
+    INSERT INTO [SELECTIONADOS].[Disp_Profesional] (ID_Profesional, ID_Especialidad, Fecha, Disponible)
+    SELECT Profesional.ID_Profesional, Especialidad.ID_Especialidad, Maestra.Turno_Fecha, 0
     FROM gd_esquema.Maestra
       INNER JOIN SELECTIONADOS.Afiliados
       ON SELECTIONADOS.Afiliados.Nro_Doc = Maestra.Paciente_Dni
@@ -365,12 +372,32 @@ CREATE PROCEDURE [SELECTIONADOS].[02_Migracion_De_Datos] AS
       ON SELECTIONADOS.Especialidad.Cod_Especialidad = Maestra.Especialidad_Codigo
     WHERE Maestra.Turno_Numero IS NOT NULL
 
-    INSERT INTO [SELECTIONADOS].[Consulta](Nro_Consulta, Nro_Turno, Enfermedades, Sintomas, Fecha_Consulta, Fecha_Llegada, ID_Bono)
-    SELECT Maestra.Bono_Consulta_Numero, Turno.Nro_Turno, Maestra.Consulta_Enfermedades, Maestra.Consulta_Sintomas, Maestra.Bono_Consulta_Fecha_Impresion,Maestra.Bono_Consulta_Fecha_Impresion, NULL AS ID_Bono
+    INSERT INTO [SELECTIONADOS].[Turno](Nro_Turno, ID_Afiliado,Nro_Afiliado, ID_Profesional, ID_Especialidad, ID_Disp_Profesional)
+    SELECT Maestra.Turno_Numero, Afiliados.ID_Afiliado, Afiliados.Nro_Afiliado, Profesional.ID_Profesional, Especialidad.ID_Especialidad, Disp_Profesional.ID_Disponibilidad
     FROM gd_esquema.Maestra
-      INNER JOIN SELECTIONADOS.Turno
-      ON SELECTIONADOS.Turno.Nro_Turno = Maestra.Turno_Numero
-    WHERE Maestra.Bono_Consulta_Fecha_Impresion IS NOT NULL
+      LEFT JOIN SELECTIONADOS.Afiliados
+        ON SELECTIONADOS.Afiliados.Nro_Doc = Maestra.Paciente_Dni
+      LEFT JOIN SELECTIONADOS.Profesional
+        ON SELECTIONADOS.Profesional.Nro_Doc = Maestra.Medico_Dni
+      LEFT JOIN SELECTIONADOS.Especialidad
+        ON SELECTIONADOS.Especialidad.Cod_Especialidad = Maestra.Especialidad_Codigo
+      LEFT JOIN SELECTIONADOS.Disp_Profesional
+        ON Profesional.ID_Profesional = Disp_Profesional.ID_Profesional AND Especialidad.ID_Especialidad = Disp_Profesional.ID_Especialidad AND Disp_Profesional.Fecha = Maestra.Turno_Fecha
+    WHERE Maestra.Turno_Numero IS NOT NULL
+
+    INSERT INTO SELECTIONADOS.Bono_Afiliado(Nro_Bono, ID_Afiliado, Nro_Afiliado, Compra_Bono_Fecha, Usado, ID_Plan)
+    SELECT Maestra.Bono_Consulta_Numero, Afiliados.ID_Afiliado, Afiliados.Nro_Afiliado, Maestra.Bono_Consulta_Fecha_Impresion, 1, Planes.Id_Plan
+    FROM gd_esquema.Maestra
+      LEFT JOIN SELECTIONADOS.Afiliados
+        ON SELECTIONADOS.Afiliados.Nro_Doc = Maestra.Paciente_Dni
+      LEFT JOIN SELECTIONADOS.Planes
+        ON SELECTIONADOS.Planes.Cod_Plan = Maestra.Plan_Med_Codigo
+    WHERE Bono_Consulta_Fecha_Impresion IS NOT NULL
+
+    INSERT INTO SELECTIONADOS.Consulta(Nro_Turno, Enfermedades, Sintomas, Fecha_Llegada_Paciente, Fecha_DeLaConsulta, Nro_Bono, Realizada)
+      SELECT Maestra.Turno_Numero, Maestra.Consulta_Enfermedades, Maestra.Consulta_Sintomas, Maestra.Bono_Consulta_Fecha_Impresion, Maestra.Bono_Consulta_Fecha_Impresion, Maestra.Bono_Consulta_Numero, 1
+      FROM gd_esquema.Maestra
+      WHERE Consulta_Enfermedades IS NOT NULL AND Consulta_Sintomas IS NOT NULL
 
   END
 GO
@@ -868,12 +895,57 @@ AS
   END CATCH
 GO
 
-CREATE PROCEDURE SELECTIONADOS.[SP_GenerarTurno]
+CREATE PROCEDURE [SELECTIONADOS].[SP_GenerarTurno]
+  @idAfiliado VARCHAR(255),
+  @nroAfiliado VARCHAR(255),
   @idProfesional VARCHAR(255),
-  @idEspecialidad VARCHAR(255)
+  @idEspecialidad VARCHAR(255),
+  @idDispProfesional VARCHAR(255)
 AS
   BEGIN TRY
+    DECLARE @nroTurno INT
+    SELECT @nroTurno = MAX(Nro_Turno) FROM SELECTIONADOS.Turno
+    SET @nroTurno = @nroTurno + 1
+    INSERT INTO [SELECTIONADOS].[Turno] (Nro_Turno, ID_Afiliado, Nro_Afiliado, ID_Profesional, ID_Especialidad, ID_Disp_Profesional)
+      VALUES (@nroTurno,@idAfiliado,@nroAfiliado,@idProfesional,@idEspecialidad,@idDispProfesional)
+    SELECT @nroTurno
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
 
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Profesional_ByApellido]
+  @apellido VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT * FROM SELECTIONADOS.Profesional WHERE Apellido LIKE @apellido + '%'
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Profesional_ByApellidoAndEspecialidad]
+  @apellido VARCHAR(255),
+  @idEspeciadad VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT * FROM SELECTIONADOS.Profesional
+      INNER JOIN SELECTIONADOS.Profesional_Especialidad
+      ON Profesional_Especialidad.ID_Profesional = Profesional.ID_Profesional
+      WHERE ID_Especialidad = @idEspeciadad AND Apellido LIKE @apellido + '%'
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Turnos_ByProfesional]
+  @idProfesional VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT * FROM SELECTIONADOS.Turno WHERE ID_Profesional = @idProfesional AND Activo = 1
   END TRY
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()

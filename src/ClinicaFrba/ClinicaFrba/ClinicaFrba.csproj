@@ -107,18 +107,13 @@
     <Compile Include="Conexiones\Parametros.cs" />
     <Compile Include="Conexiones\SqlServer.cs" />
     <Compile Include="DAOs\AfiliadoDAO.cs" />
+    <Compile Include="DAOs\ProfesionalDAO.cs" />
     <Compile Include="Funcionalidades\ComboBoxItem.cs" />
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Listados\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Listados\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Roles.cs">
       <SubType>Form</SubType>
@@ -146,11 +141,11 @@
     <Compile Include="Registrar Agenta Medico\AgendaMedica.Designer.cs">
       <DependentUpon>AgendaMedica.cs</DependentUpon>
     </Compile>
-    <Compile Include="Registro Llegada\Form1.cs">
+    <Compile Include="Registro Llegada\RegistroLlegada.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Registro Llegada\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Registro Llegada\RegistroLlegada.Designer.cs">
+      <DependentUpon>RegistroLlegada.cs</DependentUpon>
     </Compile>
     <Compile Include="Registro Resultado\Form1.cs">
       <SubType>Form</SubType>
@@ -175,6 +170,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Rol\ABM_Rol.resx">
       <DependentUpon>ABM_Rol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cancelar Atencion\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Compra Bono\CompraBono.resx">
       <DependentUpon>CompraBono.cs</DependentUpon>
@@ -203,6 +201,9 @@
     <EmbeddedResource Include="Registrar Agenta Medico\AgendaMedica.resx">
       <DependentUpon>AgendaMedica.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Registro Llegada\RegistroLlegada.resx">
+      <DependentUpon>RegistroLlegada.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -216,7 +217,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Listados\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
