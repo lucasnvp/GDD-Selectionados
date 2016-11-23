@@ -82,5 +82,22 @@ namespace ClinicaFrba.DAOs
             }
         }
 
+        public static DataTable TurnosBy(string idProfesional)
+        {
+            SqlServer sql = new SqlServer();
+            Parametros parametros = new Parametros();
+            parametros.AgregarParametro("idProfesional", idProfesional);
+            try
+            {
+                DataTable table = sql.EjecutarSp("SP_Get_Turnos_ByProfesional", parametros);
+                return table;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
     }
 }

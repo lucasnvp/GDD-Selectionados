@@ -5,200 +5,200 @@ USE [GD2C2016] GO
 CREATE SCHEMA [SELECTIONADOS] AUTHORIZATION [gd]
 GO
 
-  -- Creamos la nueva Tabla de Afiliados
-  CREATE TABLE [SELECTIONADOS].[Afiliados](
-    [ID_Afiliado] INT PRIMARY KEY IDENTITY(1,1),
-    [Nro_Afiliado] INT,
-    [Nombre] VARCHAR(255) NOT NULL ,
-    [Apellido] VARCHAR(255) NOT NULL ,
-    [Tipo_Dni] VARCHAR(4),
-    [Nro_Doc] NUMERIC(18),
-    [Direccion] VARCHAR(255),
-    [Telefono] NUMERIC(18),
-    [Mail] VARCHAR(255),
-    [Fecha_Nac] DATETIME,
-    [Sexo] CHAR,
-    [ID_Estado_Civil] INT,
-    [ID_Plan] INT,
-    [Nro_Consultas] INT DEFAULT 0,
-    [Activo] BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Desactivo
-  )
+-- Creamos la nueva Tabla de Afiliados
+CREATE TABLE [SELECTIONADOS].[Afiliados](
+  [ID_Afiliado] INT PRIMARY KEY IDENTITY(1,1),
+  [Nro_Afiliado] INT,
+  [Nombre] VARCHAR(255) NOT NULL ,
+  [Apellido] VARCHAR(255) NOT NULL ,
+  [Tipo_Dni] VARCHAR(4),
+  [Nro_Doc] NUMERIC(18),
+  [Direccion] VARCHAR(255),
+  [Telefono] NUMERIC(18),
+  [Mail] VARCHAR(255),
+  [Fecha_Nac] DATETIME,
+  [Sexo] CHAR,
+  [ID_Estado_Civil] INT,
+  [ID_Plan] INT,
+  [Nro_Consultas] INT DEFAULT 0,
+  [Activo] BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Desactivo
+)
 
-  -- Familiares a cargo
-  CREATE TABLE [SELECTIONADOS].[Familiar_ACargo] (
-    [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
-    [Nro_Afiliado] INT,
-    [Nombre] VARCHAR(255),
-    [Apellido] VARCHAR(255),
-    [Tipo_Doc] VARCHAR(4),
-    [Nro_Doc] NUMERIC(18),
-    [Sexo] CHAR,
-    [Fecha_Nac] DATETIME,
-    [Telefono] NUMERIC(18),
-    [Mail] VARCHAR(255),
-    [Tipo_Familiar] CHAR -- 'C'onyuge 'H'ijos 'O'tros
-  );
+-- Familiares a cargo
+CREATE TABLE [SELECTIONADOS].[Familiar_ACargo] (
+  [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
+  [Nro_Afiliado] INT,
+  [Nombre] VARCHAR(255),
+  [Apellido] VARCHAR(255),
+  [Tipo_Doc] VARCHAR(4),
+  [Nro_Doc] NUMERIC(18),
+  [Sexo] CHAR,
+  [Fecha_Nac] DATETIME,
+  [Telefono] NUMERIC(18),
+  [Mail] VARCHAR(255),
+  [Tipo_Familiar] CHAR -- 'C'onyuge 'H'ijos 'O'tros
+);
 
-  -- Creamos la nueva Tabla de Estados Civiles
-  create table [SELECTIONADOS].[Estado_Civil](
-    Id_Estado_Civil INT PRIMARY KEY IDENTITY(1,1),
-    Descripcion VARCHAR(255),
-  )
+-- Creamos la nueva Tabla de Estados Civiles
+create table [SELECTIONADOS].[Estado_Civil](
+  Id_Estado_Civil INT PRIMARY KEY IDENTITY(1,1),
+  Descripcion VARCHAR(255),
+)
 
-  -- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
-  CREATE TABLE [SELECTIONADOS].[Log_Baja_Afiliado](
-    ID_Baja INT PRIMARY KEY IDENTITY(1,1),
-    ID_Afiliado INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
-    Fecha_Baja DATETIME
-  )
+-- Creamos la tabla Bajas, se utiliza para registrar el evento de baja de un afiliado
+CREATE TABLE [SELECTIONADOS].[Log_Baja_Afiliado](
+  ID_Baja INT PRIMARY KEY IDENTITY(1,1),
+  ID_Afiliado INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
+  Fecha_Baja DATETIME
+)
 
-  -- Creamos la nueva Tabla de Planes Medicos
-  CREATE TABLE [SELECTIONADOS].[Planes](
-    [Id_Plan] INT PRIMARY KEY IDENTITY(1,1),
-    [Cod_Plan] NUMERIC(18),
-    [Descripcion] VARCHAR(255),
-    [Precio_Plan] NUMERIC(18),
-    [Precio_Bono_Consulta] NUMERIC(18),
-    [Precio_Bono_Farmacia] NUMERIC(18)
-  )
+-- Creamos la nueva Tabla de Planes Medicos
+CREATE TABLE [SELECTIONADOS].[Planes](
+  [Id_Plan] INT PRIMARY KEY IDENTITY(1,1),
+  [Cod_Plan] NUMERIC(18),
+  [Descripcion] VARCHAR(255),
+  [Precio_Plan] NUMERIC(18),
+  [Precio_Bono_Consulta] NUMERIC(18),
+  [Precio_Bono_Farmacia] NUMERIC(18)
+)
 
-  --Tabla de Profesionales
-  CREATE TABLE [SELECTIONADOS].[Profesional] (
-    [ID_Profesional]INT PRIMARY KEY IDENTITY(1,1),
-    [Matricula] INT,
-    [Nombre] VARCHAR(255),
-    [Apellido] VARCHAR(255),
-    [Tipo_Doc] VARCHAR(4),
-    [Nro_Doc] NUMERIC(18),
-    [Direccion] VARCHAR(255),
-    [Telefono] NUMERIC(18),
-    [Mail] VARCHAR(255),
-    [Fecha_Nac] DATETIME,
-    [Sexo] CHAR
-  )
+--Tabla de Profesionales
+CREATE TABLE [SELECTIONADOS].[Profesional] (
+  [ID_Profesional]INT PRIMARY KEY IDENTITY(1,1),
+  [Matricula] INT,
+  [Nombre] VARCHAR(255),
+  [Apellido] VARCHAR(255),
+  [Tipo_Doc] VARCHAR(4),
+  [Nro_Doc] NUMERIC(18),
+  [Direccion] VARCHAR(255),
+  [Telefono] NUMERIC(18),
+  [Mail] VARCHAR(255),
+  [Fecha_Nac] DATETIME,
+  [Sexo] CHAR
+)
 
-  --Tabla de tipo de especialidad
-  CREATE TABLE [SELECTIONADOS].[Tipo_Especialidad] (
-    [ID_Tipo_Especialidad] INT PRIMARY KEY IDENTITY(1,1),
-    [Cod_Tipo_Especialidad] NUMERIC(18),
-    [Descripcion] VARCHAR(255)
-  )
+--Tabla de tipo de especialidad
+CREATE TABLE [SELECTIONADOS].[Tipo_Especialidad] (
+  [ID_Tipo_Especialidad] INT PRIMARY KEY IDENTITY(1,1),
+  [Cod_Tipo_Especialidad] NUMERIC(18),
+  [Descripcion] VARCHAR(255)
+)
 
-  --Tabla de especialidad
-  CREATE TABLE [SELECTIONADOS].[Especialidad] (
-    [ID_Especialidad] INT PRIMARY KEY IDENTITY(1,1),
-    [Cod_Especialidad] INT,
-    [Descripcion] VARCHAR(255),
-    [ID_Tipo_Especialidad] INT
-  )
+--Tabla de especialidad
+CREATE TABLE [SELECTIONADOS].[Especialidad] (
+  [ID_Especialidad] INT PRIMARY KEY IDENTITY(1,1),
+  [Cod_Especialidad] INT,
+  [Descripcion] VARCHAR(255),
+  [ID_Tipo_Especialidad] INT
+)
 
-  --Tabla de especializacion
-  CREATE TABLE [SELECTIONADOS].[Profesional_Especialidad] (
-    [ID_Profesional] INT,
-    [ID_Especialidad] INT
-  )
+--Tabla de especializacion
+CREATE TABLE [SELECTIONADOS].[Profesional_Especialidad] (
+  [ID_Profesional] INT,
+  [ID_Especialidad] INT
+)
 
-  --Tabla de bonos
-  CREATE TABLE [SELECTIONADOS].[Bono_Afiliado] (
-    [Nro_Bono] INT UNIQUE NOT NULL ,
-    [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
-    [Nro_Afiliado] INT,
-    [Compra_Bono_Fecha] DATETIME,
-    [Usado] INT DEFAULT 0, -- 0 Sin Usar 1 Usado
-    [ID_Plan] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Planes](Id_Plan)
-  )
+--Tabla de bonos
+CREATE TABLE [SELECTIONADOS].[Bono_Afiliado] (
+  [Nro_Bono] INT UNIQUE NOT NULL ,
+  [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
+  [Nro_Afiliado] INT,
+  [Compra_Bono_Fecha] DATETIME,
+  [Usado] INT DEFAULT 0, -- 0 Sin Usar 1 Usado
+  [ID_Plan] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Planes](Id_Plan)
+)
 
-  -- Tabla de Roles de Usuario
-  CREATE TABLE [SELECTIONADOS].[Rol](
-    ID_Rol INT PRIMARY KEY IDENTITY(1,1),
-    Nombre VARCHAR(255),
-    Activo BIT NOT NULL DEFAULT 1 -- 1 Activo 0 Desactivo
-  )
+-- Tabla de Roles de Usuario
+CREATE TABLE [SELECTIONADOS].[Rol](
+  ID_Rol INT PRIMARY KEY IDENTITY(1,1),
+  Nombre VARCHAR(255),
+  Activo BIT NOT NULL DEFAULT 1 -- 1 Activo 0 Desactivo
+)
 
-  -- Tabla de Funcionalidades
-  CREATE TABLE [SELECTIONADOS].[Funcionalidades](
-    ID_Funcionalidad INT PRIMARY KEY IDENTITY(1,1),
-    Descripcion VARCHAR(255)
-  )
+-- Tabla de Funcionalidades
+CREATE TABLE [SELECTIONADOS].[Funcionalidades](
+  ID_Funcionalidad INT PRIMARY KEY IDENTITY(1,1),
+  Descripcion VARCHAR(255)
+)
 
-  -- Tabla de Rol por funcionalidad. Un rol puedo tener varias funcionalidades.
-  CREATE TABLE [SELECTIONADOS].[Rol_X_Funcionalidad](
-    ID_Funcionalidad INT FOREIGN KEY REFERENCES SELECTIONADOS.Funcionalidades(ID_Funcionalidad),
-    ID_Rol INT FOREIGN KEY REFERENCES SELECTIONADOS.Rol(ID_Rol),
-    Activo BIT NOT NULL -- 1 Activo 0 Desactivo
-  )
+-- Tabla de Rol por funcionalidad. Un rol puedo tener varias funcionalidades.
+CREATE TABLE [SELECTIONADOS].[Rol_X_Funcionalidad](
+  ID_Funcionalidad INT FOREIGN KEY REFERENCES SELECTIONADOS.Funcionalidades(ID_Funcionalidad),
+  ID_Rol INT FOREIGN KEY REFERENCES SELECTIONADOS.Rol(ID_Rol),
+  Activo BIT NOT NULL -- 1 Activo 0 Desactivo
+)
 
-  -- Tabla de usuarios.
-  CREATE TABLE [SELECTIONADOS].[Usuarios](
-    ID_Usuario INT PRIMARY KEY IDENTITY(1,1),
-    Username VARCHAR(255) UNIQUE NOT NULL,
-    Password VARCHAR(255) NOT NULL ,
-    Fecha_Creacion DATETIME NOT NULL,
-    Activo BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Desactivo
-    TipoUsuario CHAR, -- 'A'filiado 'P'rofesional
-    ID_Afiliado_Profesional INT,
+-- Tabla de usuarios.
+CREATE TABLE [SELECTIONADOS].[Usuarios](
+  ID_Usuario INT PRIMARY KEY IDENTITY(1,1),
+  Username VARCHAR(255) UNIQUE NOT NULL,
+  Password VARCHAR(255) NOT NULL ,
+  Fecha_Creacion DATETIME NOT NULL,
+  Activo BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Desactivo
+  TipoUsuario CHAR, -- 'A'filiado 'P'rofesional
+  ID_Afiliado_Profesional INT,
 
-    CONSTRAINT Afiliado_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Afiliados(ID_Afiliado),
-    CONSTRAINT Profesioanl_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Profesional(ID_Profesional)
-  )
+  CONSTRAINT Afiliado_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Afiliados(ID_Afiliado),
+  CONSTRAINT Profesioanl_FK FOREIGN KEY (ID_Afiliado_Profesional) REFERENCES SELECTIONADOS.Profesional(ID_Profesional)
+)
 
-  -- Tabla de Asignaciones de Roles y Usuarios cada usuario puede tener mas de un rol
-  CREATE TABLE [SELECTIONADOS].[Asignacion_Rol](
-    ID_Rol INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Rol] (ID_Rol),
-    ID_Usuario INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Usuarios] (ID_Usuario),
-    Activo BIT -- 1 Activo 0 Desactivo
-  )
+-- Tabla de Asignaciones de Roles y Usuarios cada usuario puede tener mas de un rol
+CREATE TABLE [SELECTIONADOS].[Asignacion_Rol](
+  ID_Rol INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Rol] (ID_Rol),
+  ID_Usuario INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Usuarios] (ID_Usuario),
+  Activo BIT -- 1 Activo 0 Desactivo
+)
 
-  -- Tabla de log de compra de bonos
-  CREATE TABLE [SELECTIONADOS].[Log_Compra_Bono] (
-    [ID_Compra] INT PRIMARY KEY IDENTITY(1,1),
-    [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
-    [Nro_Afiliado] INT,
-    [Compra_Bono_Fecha] DATETIME,
-    [ID_Plan] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Planes](Id_Plan),
-    [Valor_Bono] MONEY,
-    [Cant_Comprados] INT,
-    [Total_Pagado] MONEY
-  )
+-- Tabla de log de compra de bonos
+CREATE TABLE [SELECTIONADOS].[Log_Compra_Bono] (
+  [ID_Compra] INT PRIMARY KEY IDENTITY(1,1),
+  [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
+  [Nro_Afiliado] INT,
+  [Compra_Bono_Fecha] DATETIME,
+  [ID_Plan] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Planes](Id_Plan),
+  [Valor_Bono] MONEY,
+  [Cant_Comprados] INT,
+  [Total_Pagado] MONEY
+)
 
-  -- Tabla de log de bloqueos
-  CREATE TABLE [SELECTIONADOS].[Log_Block_Usuario] (
-    [ID_Block] INT PRIMARY KEY IDENTITY(1,1),
-    [ID_Usuario] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Usuarios](ID_Usuario),
-    [Fecha_Bloqueo] DATETIME
-  )
+-- Tabla de log de bloqueos
+CREATE TABLE [SELECTIONADOS].[Log_Block_Usuario] (
+  [ID_Block] INT PRIMARY KEY IDENTITY(1,1),
+  [ID_Usuario] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Usuarios](ID_Usuario),
+  [Fecha_Bloqueo] DATETIME
+)
 
-  -- Tabla de Dispoinibilidad Profesional
-  CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
-    [ID_Disponibilidad] INT PRIMARY KEY IDENTITY(1,1),
-    [ID_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional),
-    [ID_Especialidad] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad),
-    [Fecha] DATETIME,
-    [Disponible] BIT NOT NULL DEFAULT 1, -- 1 Disponible 0 Ocupado
-  )
+-- Tabla de Dispoinibilidad Profesional
+CREATE TABLE [SELECTIONADOS].[Disp_Profesional] (
+  [ID_Disponibilidad] INT PRIMARY KEY IDENTITY(1,1),
+  [ID_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional),
+  [ID_Especialidad] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad),
+  [Fecha] DATETIME,
+  [Disponible] BIT NOT NULL DEFAULT 1, -- 1 Disponible 0 Ocupado
+)
 
-  --Tabla de turno
-  CREATE TABLE [SELECTIONADOS].[Turno] (
-    [Nro_Turno] NUMERIC(18) UNIQUE NOT NULL,
-    [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
-    [Nro_Afiliado] INT,
-    [ID_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional),
-    [ID_Especialidad] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad),
-    [ID_Disp_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Disp_Profesional](ID_Disponibilidad),
-    [Activo] BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Se registro la visita
-  )
+--Tabla de turno
+CREATE TABLE [SELECTIONADOS].[Turno] (
+  [Nro_Turno] NUMERIC(18) UNIQUE NOT NULL,
+  [ID_Afiliado] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado),
+  [Nro_Afiliado] INT,
+  [ID_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional),
+  [ID_Especialidad] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad),
+  [ID_Disp_Profesional] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Disp_Profesional](ID_Disponibilidad),
+  [Activo] BIT NOT NULL DEFAULT 1, -- 1 Activo 0 Se registro la visita
+)
 
-  -- Tabla de consultas
-  CREATE TABLE [SELECTIONADOS].[Consulta] (
-    [Nro_Consulta] NUMERIC(18) PRIMARY KEY IDENTITY(1,1),
-    [Nro_Turno] NUMERIC(18) FOREIGN KEY REFERENCES [SELECTIONADOS].[Turno](Nro_Turno),
-    [Enfermedades] VARCHAR(255),
-    [Sintomas] VARCHAR(255),
-    [Fecha_Llegada_Paciente] DATETIME,
-    [Fecha_DeLaConsulta] DATETIME,
-    [Nro_Bono] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Bono_Afiliado](Nro_Bono),
-    [Realizada] BIT
-  )
+-- Tabla de consultas
+CREATE TABLE [SELECTIONADOS].[Consulta] (
+  [Nro_Consulta] NUMERIC(18) PRIMARY KEY IDENTITY(1,1),
+  [Nro_Turno] NUMERIC(18) FOREIGN KEY REFERENCES [SELECTIONADOS].[Turno](Nro_Turno),
+  [Enfermedades] VARCHAR(255),
+  [Sintomas] VARCHAR(255),
+  [Fecha_Llegada_Paciente] DATETIME,
+  [Fecha_DeLaConsulta] DATETIME,
+  [Nro_Bono] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Bono_Afiliado](Nro_Bono),
+  [Realizada] BIT
+)
 
   -- Tabla de Cancelaciones
   CREATE TABLE [SELECTIONADOS].[Cancelacion] (
@@ -290,29 +290,6 @@ BEGIN
   INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Registrar_Agenda_Medica')
   INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Registro_Llegada')
   INSERT INTO SELECTIONADOS.Funcionalidades (Descripcion) VALUES ('Btn_Registro_Resultado')
-
-  -- Usuarios
-  INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('admin', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
-  INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('afiliado', '7d-f0-a4-df-14-70-55-f8-93-61-48-80-f6-3e-a2-9a-61-7c-87-af-0f-47-ee-2b-38-30-03-f0-16-6f-2b-b6', getdate())
-  INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional1', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
-  INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('profesional2', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
-  INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
-
-  --Asigno los roles a los usuarios
-  INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
-    SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Administrador' AND Username = 'admin'
-
-  INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
-    SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Administrativo' AND Username = 'administrativo'
-
-  INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
-    SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Afiliado' AND Username = 'administrativo'
-
-  INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
-    SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Profesional' AND Username = 'profesional1'
-
-  INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
-    SELECT ID_Rol, ID_Usuario, 1 FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios] WHERE Nombre = 'Profesional' AND Username = 'profesional2'
 
 END
 GO
@@ -411,11 +388,7 @@ BEGIN
   ALTER TABLE [SELECTIONADOS].[Especialidad] ADD FOREIGN KEY ([ID_Tipo_Especialidad]) REFERENCES [SELECTIONADOS].[Tipo_Especialidad](ID_Tipo_Especialidad)
   ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional)
   ALTER TABLE [SELECTIONADOS].[Profesional_Especialidad] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
-  ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Afiliado]) REFERENCES [SELECTIONADOS].[Afiliados](ID_Afiliado)
-  ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Profesional]) REFERENCES [SELECTIONADOS].[Profesional](ID_Profesional)
-  ALTER TABLE [SELECTIONADOS].[Turno] ADD FOREIGN KEY ([ID_Especialidad]) REFERENCES [SELECTIONADOS].[Especialidad](ID_Especialidad)
-  ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([Nro_Turno]) REFERENCES [SELECTIONADOS].[Turno](Nro_Turno)
-  ALTER TABLE [SELECTIONADOS].[Consulta] ADD FOREIGN KEY ([ID_Bono]) REFERENCES [SELECTIONADOS].[Compra_Bono](ID_Bono)
+
 END
 GO
 
@@ -451,6 +424,49 @@ AS
     SELECT 'ERROR', ERROR_MESSAGE()
   END CATCH
 GO
+
+CREATE PROCEDURE [SELECTIONADOS].[04_Usuarios]
+AS
+  BEGIN TRY
+    -- Usuarios
+    INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('admin', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
+    INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion,TipoUsuario, ID_Afiliado_Profesional) VALUES ('afiliado', '7d-f0-a4-df-14-70-55-f8-93-61-48-80-f6-3e-a2-9a-61-7c-87-af-0f-47-ee-2b-38-30-03-f0-16-6f-2b-b6', getdate(),'A',1)
+    INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion,TipoUsuario, ID_Afiliado_Profesional) VALUES ('profesional1', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate(),'P',1)
+    INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion,TipoUsuario, ID_Afiliado_Profesional) VALUES ('profesional2', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate(),'P',2)
+    INSERT INTO [SELECTIONADOS].[Usuarios](Username, Password, Fecha_Creacion) VALUES ('administrativo', 'e6-b8-70-50-bf-cb-81-43-fc-b8-db-01-70-a4-dc-9e-d0-0d-90-4d-dd-3e-2a-4a-d1-b1-e8-dc-0f-dc-9b-e7', getdate())
+
+    --Asigno los roles a los usuarios
+    INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+      SELECT ID_Rol, ID_Usuario, 1
+      FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios]
+      WHERE Nombre = 'Administrador' AND Username = 'admin'
+
+    INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+      SELECT ID_Rol, ID_Usuario, 1
+      FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios]
+      WHERE Nombre = 'Administrativo' AND Username = 'administrativo'
+
+    INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+      SELECT ID_Rol, ID_Usuario, 1
+      FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios]
+      WHERE Nombre = 'Afiliado' AND Username = 'administrativo'
+
+    INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+      SELECT ID_Rol, ID_Usuario, 1
+      FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios]
+      WHERE Nombre = 'Profesional' AND Username = 'profesional1'
+
+    INSERT INTO [SELECTIONADOS].[Asignacion_Rol] (ID_Rol, ID_Usuario, Activo)
+      SELECT ID_Rol, ID_Usuario, 1
+      FROM [SELECTIONADOS].[Rol], [SELECTIONADOS].[Usuarios]
+      WHERE Nombre = 'Profesional' AND Username = 'profesional2'
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+EXECUTE [SELECTIONADOS].[04_Usuarios]
 
 -- Agrego las funciones por rol
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrador','Btn_ABM_Afiliado',1
