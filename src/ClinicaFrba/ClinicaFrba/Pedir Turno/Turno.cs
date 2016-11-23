@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClinicaFrba.Conexiones;
+using ClinicaFrba.DAOs;
 
 namespace ClinicaFrba.Pedir_Turno
 {
@@ -76,7 +77,7 @@ namespace ClinicaFrba.Pedir_Turno
         {
             SqlServer sql = new SqlServer();
             Parametros parametros = new Parametros();
-            parametros.AgregarParametro("idAfiliado", "Falta");
+            parametros.AgregarParametro("idAfiliado", AfiliadoDAO.GetIdByNro(Txt_NroAfiliado.Text));
             parametros.AgregarParametro("nroAfiliado", Txt_NroAfiliado.Text);
             parametros.AgregarParametro("idProfesional", Cbx_Profesional.SelectedValue.ToString());
             parametros.AgregarParametro("idEspecialidad", Cbx_Especialidad.SelectedValue.ToString());
@@ -86,7 +87,8 @@ namespace ClinicaFrba.Pedir_Turno
             {
                 MessageBox.Show(table.Rows[0].ItemArray[1].ToString());
             }
-            //Mostrar el turno
+            MessageBox.Show("Su nro de turno es: " + table.Rows[0].ItemArray[0]);
+            this.Close();
         }
     }
 }

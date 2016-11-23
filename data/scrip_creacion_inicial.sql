@@ -902,9 +902,12 @@ AS
   BEGIN TRY
     DECLARE @fechaFin VARCHAR(255)
     SET @fechaFin = @fecha + ' 23:59:59.997'
-    SELECT  ID_Disponibilidad, ID_Profesional, ID_Especialidad, Fecha, RIGHT(CONVERT(DATETIME, Fecha, 114),8) AS Turno FROM SELECTIONADOS.Disp_Profesional
-      WHERE ID_Profesional = @idProfesional AND ID_Especialidad = @idEspecialidad
-        AND Fecha BETWEEN @fecha AND @fechaFin
+    SELECT  ID_Disponibilidad, ID_Profesional, ID_Especialidad, Fecha, RIGHT(CONVERT(DATETIME, Fecha, 114),8) AS Turno
+    FROM SELECTIONADOS.Disp_Profesional
+    WHERE     ID_Profesional = @idProfesional
+          AND ID_Especialidad = @idEspecialidad
+          AND Disponible = 1
+          AND Fecha BETWEEN @fecha AND @fechaFin
   END TRY
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()
@@ -924,6 +927,7 @@ AS
     SET @nroTurno = @nroTurno + 1
     INSERT INTO [SELECTIONADOS].[Turno] (Nro_Turno, ID_Afiliado, Nro_Afiliado, ID_Profesional, ID_Especialidad, ID_Disp_Profesional)
       VALUES (@nroTurno,@idAfiliado,@nroAfiliado,@idProfesional,@idEspecialidad,@idDispProfesional)
+    UPDATE SELECTIONADOS.Disp_Profesional SET Disponible = 0 WHERE ID_Disponibilidad = @idDispProfesional
     SELECT @nroTurno
   END TRY
   BEGIN CATCH

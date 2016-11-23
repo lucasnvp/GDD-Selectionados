@@ -255,5 +255,11 @@ namespace ClinicaFrba.DAOs
             sql.EjecutarSp("SP_Insert_Compra_Bono", parametros);
         }
 
+        public static string GetIdByNro(string nroAfiliado)
+        {
+            string idAfiliado = nroAfiliado.Substring(0, nroAfiliado.Length - 2);
+            return idAfiliado;
+        }
+
     }
 }
