@@ -261,5 +261,39 @@ namespace ClinicaFrba.DAOs
             return idAfiliado;
         }
 
+        public static string GetNroAfiliadoByTurno(string nroTurno)
+        {
+            SqlServer sql = new SqlServer();
+            Parametros parametros = new Parametros();
+            parametros.AgregarParametro("nroTurno", nroTurno);
+            try
+            {
+                DataTable table = sql.EjecutarSp("SP_Get_NroAfiliado_ByTurno", parametros);
+                return table.Rows[0].ItemArray[0].ToString();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
+        public static DataTable GetNrosBonosDisponibles(string idAfiliado)
+        {
+            SqlServer sql = new SqlServer();
+            Parametros parametros = new Parametros();
+            parametros.AgregarParametro("idAfiliado", idAfiliado);
+            try
+            {
+                DataTable table = sql.EjecutarSp("SP_Get_NrosBonosDisponibles_ByAfiliado", parametros);
+                return table;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
     }
 }

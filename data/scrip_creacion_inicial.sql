@@ -197,7 +197,7 @@ CREATE TABLE [SELECTIONADOS].[Consulta] (
   [Fecha_Llegada_Paciente] DATETIME,
   [Fecha_DeLaConsulta] DATETIME,
   [Nro_Bono] INT FOREIGN KEY REFERENCES [SELECTIONADOS].[Bono_Afiliado](Nro_Bono),
-  [Realizada] BIT
+  [Realizada] BIT NOT NULL DEFAULT 0, -- 1 Realizada 0 En proceso
 )
 
   -- Tabla de Cancelaciones
@@ -349,8 +349,8 @@ CREATE PROCEDURE [SELECTIONADOS].[02_Migracion_De_Datos] AS
       ON SELECTIONADOS.Especialidad.Cod_Especialidad = Maestra.Especialidad_Codigo
     WHERE Maestra.Turno_Numero IS NOT NULL
 
-    INSERT INTO [SELECTIONADOS].[Turno](Nro_Turno, ID_Afiliado,Nro_Afiliado, ID_Profesional, ID_Especialidad, ID_Disp_Profesional)
-    SELECT Maestra.Turno_Numero, Afiliados.ID_Afiliado, Afiliados.Nro_Afiliado, Profesional.ID_Profesional, Especialidad.ID_Especialidad, Disp_Profesional.ID_Disponibilidad
+    INSERT INTO [SELECTIONADOS].[Turno](Nro_Turno, ID_Afiliado,Nro_Afiliado, ID_Profesional, ID_Especialidad, ID_Disp_Profesional, Activo)
+    SELECT Maestra.Turno_Numero, Afiliados.ID_Afiliado, Afiliados.Nro_Afiliado, Profesional.ID_Profesional, Especialidad.ID_Especialidad, Disp_Profesional.ID_Disponibilidad, 0
     FROM gd_esquema.Maestra
       LEFT JOIN SELECTIONADOS.Afiliados
         ON SELECTIONADOS.Afiliados.Nro_Doc = Maestra.Paciente_Dni
@@ -771,12 +771,14 @@ AS
         SELECT @valorBono = Precio_Bono_Consulta FROM SELECTIONADOS.Planes WHERE Id_Plan = @idPlan
         INSERT INTO SELECTIONADOS.Log_Compra_Bono(ID_Afiliado, Nro_Afiliado, Compra_Bono_Fecha, ID_Plan, Valor_Bono, Cant_Comprados, Total_Pagado)
           VALUES (@idAfiliado, @nroAfiliado, getdate(), @idPlan, @valorBono, @cantComprados, @valorBono*@cantComprados)
-
-        WHILE (@cantComprados != 0)
+        DECLARE @NroBono INT
+        SELECT @NroBono = MAX(Nro_Bono) FROM SELECTIONADOS.Bono_Afiliado
+        WHILE @cantComprados != 0
         BEGIN
-          INSERT INTO SELECTIONADOS.Bono_Afiliado (ID_Afiliado, Nro_Afiliado, Compra_Bono_Fecha, ID_Plan)
-            VALUES (@idAfiliado, @nroAfiliado, getdate(),@idPlan);
-          SET @cantComprados = @cantComprados - 1;
+          SET @cantComprados = @cantComprados - 1
+          SET @NroBono = @NroBono + 1
+          INSERT INTO SELECTIONADOS.Bono_Afiliado (Nro_Bono, ID_Afiliado, Nro_Afiliado, Compra_Bono_Fecha, ID_Plan)
+            VALUES (@NroBono, @idAfiliado, @nroAfiliado, getdate(),@idPlan)
         END
       END
     ELSE
@@ -961,11 +963,56 @@ AS
   END CATCH
 GO
 
-CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Turnos_ByProfesional]
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Turnos_Today_ByProfesional]
   @idProfesional VARCHAR(255)
 AS
   BEGIN TRY
-    SELECT * FROM SELECTIONADOS.Turno WHERE ID_Profesional = @idProfesional AND Activo = 1
+    SELECT Turno.Nro_Turno, Turno.ID_Afiliado, Turno.Nro_Afiliado, Disp_Profesional.Fecha
+    FROM SELECTIONADOS.Turno
+      INNER JOIN SELECTIONADOS.Disp_Profesional
+      ON Turno.ID_Disp_Profesional = Disp_Profesional.ID_Disponibilidad
+    WHERE Turno.ID_Profesional = @idProfesional AND Activo = 1
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_NroAfiliado_ByTurno]
+  @nroTurno VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT Afiliados.Nro_Afiliado FROM SELECTIONADOS.Afiliados
+      INNER JOIN SELECTIONADOS.Turno
+      ON Afiliados.ID_Afiliado = Turno.ID_Afiliado
+    WHERE Turno.Nro_Turno = @nroTurno
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_NrosBonosDisponibles_ByAfiliado]
+  @idAfiliado VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT Nro_Bono,ID_Afiliado,Nro_Afiliado,Compra_Bono_Fecha,ID_Plan
+    FROM SELECTIONADOS.Bono_Afiliado
+    WHERE ID_Afiliado = @idAfiliado AND Usado = 0
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Insert_Consulta]
+  @nroTurno VARCHAR(255),
+  @nroBono VARCHAR(255)
+AS
+  BEGIN TRY
+    INSERT INTO SELECTIONADOS.Consulta(Nro_Turno, Fecha_Llegada_Paciente, Nro_Bono) VALUES (@nroTurno,getdate(),@nroBono)
+    UPDATE SELECTIONADOS.Turno SET Activo = 0 WHERE Nro_Turno = @nroTurno
+    UPDATE SELECTIONADOS.Bono_Afiliado SET Usado = 1 WHERE Nro_Bono = @nroBono
   END TRY
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()

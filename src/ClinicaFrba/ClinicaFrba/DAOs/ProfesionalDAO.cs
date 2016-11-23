@@ -89,7 +89,7 @@ namespace ClinicaFrba.DAOs
             parametros.AgregarParametro("idProfesional", idProfesional);
             try
             {
-                DataTable table = sql.EjecutarSp("SP_Get_Turnos_ByProfesional", parametros);
+                DataTable table = sql.EjecutarSp("SP_Get_Turnos_Today_ByProfesional", parametros);
                 return table;
             }
             catch (Exception e)

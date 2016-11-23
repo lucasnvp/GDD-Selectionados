@@ -30,7 +30,7 @@ DROP PROCEDURE [SELECTIONADOS].[SP_Get_Planes_PrecioBono];
 DROP PROCEDURE [SELECTIONADOS].[SP_Get_Profesional_ByApellido];
 DROP PROCEDURE [SELECTIONADOS].[SP_Get_Profesional_ByApellidoAndEspecialidad];
 DROP PROCEDURE [SELECTIONADOS].[SP_Get_Profesional_ByEspecialidad];
-DROP PROCEDURE [SELECTIONADOS].[SP_Get_Turnos_ByProfesional];
+DROP PROCEDURE [SELECTIONADOS].[SP_Get_Turnos_Today_ByProfesional];
 DROP PROCEDURE [SELECTIONADOS].[SP_Insert_Disponibilidad_Profesional];
 DROP PROCEDURE [SELECTIONADOS].[SP_Update_FamiliarACargo];
 DROP TRIGGER [SELECTIONADOS].[Tr_Nro_Afiliado];
