@@ -487,13 +487,39 @@ EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_ABM_
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_ABM_Planes',0
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_ABM_Profesional',0
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_ABM_Rol',0
-EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Cancelar_Atencion',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Cancelar_Atencion',1
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Comprar_Bono',0
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Listados',0
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Pedir_Turno',0
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registrar_Agenda_Medica',1
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registro_Llegada',0
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registro_Resultado',1
+
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_ABM_Afiliado',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_ABM_Especialidad',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_ABM_Planes',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_ABM_Profesional',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_ABM_Rol',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_Cancelar_Atencion',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_Comprar_Bono',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_Listados',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_Pedir_Turno',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_Registrar_Agenda_Medica',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_Registro_Llegada',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Afiliado','Btn_Registro_Resultado',0
+
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_ABM_Afiliado',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_ABM_Especialidad',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_ABM_Planes',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_ABM_Profesional',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_ABM_Rol',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_Cancelar_Atencion',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_Comprar_Bono',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_Listados',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_Pedir_Turno',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_Registrar_Agenda_Medica',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_Registro_Llegada',1
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Administrativo','Btn_Registro_Resultado',0
 
 -- SP Get Usuario
 CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Usuario]
@@ -1044,6 +1070,31 @@ AS
   BEGIN TRY
     UPDATE SELECTIONADOS.Consulta SET Enfermedades = @enfermedad, Sintomas = @sintomas, Fecha_DeLaConsulta = CONVERT(DATETIME,@fechaConsulta,121), Realizada = 1
     WHERE Nro_Consulta = @nroConsulta
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_TipoUsuario]
+  @idUsuario VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT TipoUsuario FROM SELECTIONADOS.Usuarios WHERE ID_Usuario = @idUsuario
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Turnos_ByIdAfiliado]
+  @idAfiliado VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT Turno.Nro_Turno, Disp_Profesional.Fecha FROM SELECTIONADOS.Turno
+      INNER JOIN SELECTIONADOS.Disp_Profesional
+      ON Turno.ID_Disp_Profesional = Disp_Profesional.ID_Disponibilidad
+    WHERE ID_Afiliado = @idAfiliado AND Activo = 0
   END TRY
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()

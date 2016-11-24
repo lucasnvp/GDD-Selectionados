@@ -92,11 +92,11 @@
     <Compile Include="Abm Rol\ABM_Rol.Designer.cs">
       <DependentUpon>ABM_Rol.cs</DependentUpon>
     </Compile>
-    <Compile Include="Cancelar Atencion\Form1.cs">
+    <Compile Include="Cancelar Atencion\CancelarAtencion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Cancelar Atencion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Cancelar Atencion\CancelarAtencion.Designer.cs">
+      <DependentUpon>CancelarAtencion.cs</DependentUpon>
     </Compile>
     <Compile Include="Compra Bono\CompraBono.cs">
       <SubType>Form</SubType>
@@ -171,8 +171,8 @@
     <EmbeddedResource Include="Abm Rol\ABM_Rol.resx">
       <DependentUpon>ABM_Rol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Cancelar Atencion\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Cancelar Atencion\CancelarAtencion.resx">
+      <DependentUpon>CancelarAtencion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Compra Bono\CompraBono.resx">
       <DependentUpon>CompraBono.cs</DependentUpon>

@@ -109,6 +109,7 @@
             this.Btn_Cancelar_Atencion.TabIndex = 6;
             this.Btn_Cancelar_Atencion.Text = "Cancelar Atencion";
             this.Btn_Cancelar_Atencion.UseVisualStyleBackColor = true;
+            this.Btn_Cancelar_Atencion.Click += new System.EventHandler(this.Btn_Cancelar_Atencion_Click);
             // 
             // Btn_Comprar_Bono
             // 

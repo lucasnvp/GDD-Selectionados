@@ -58,20 +58,7 @@ DROP TABLE [SELECTIONADOS].[Especialidad];
 DROP TABLE [SELECTIONADOS].[Profesional];
 DROP TABLE [SELECTIONADOS].[Tipo_Especialidad];
 
-SELECT Consulta.Nro_Consulta, Turno.Nro_Afiliado FROM SELECTIONADOS.Consulta
-  INNER JOIN SELECTIONADOS.Turno
-  ON Consulta.Nro_Turno = Turno.Nro_Turno
-  INNER JOIN SELECTIONADOS.Profesional
-  ON Turno.ID_Profesional = Profesional.ID_Profesional
-WHERE Consulta.Realizada = 0 AND Profesional.ID_Profesional = 1
-
-SELECT * FROM SELECTIONADOS.Consulta WHERE Nro_Consulta = 30002
-
-UPDATE SELECTIONADOS.Consulta SET Enfermedades = NULL , Sintomas = NULL , Fecha_DeLaConsulta = NULL , Realizada = 0
-WHERE Nro_Consulta = 30002
-
-UPDATE SELECTIONADOS.Consulta SET Enfermedades = 'a' , Sintomas = 's' , Fecha_DeLaConsulta = '2016-11-24 12:16:00' , Realizada = 0
-WHERE Nro_Consulta = 30002
-
-UPDATE SELECTIONADOS.Consulta SET Enfermedades = @enfermedad, Sintomas = @sintomas, Fecha_DeLaConsulta = @fecha_consulta, Realizada = 1
-    WHERE Nro_Consulta = @nroConsulta
+SELECT Turno.Nro_Turno, Disp_Profesional.Fecha FROM SELECTIONADOS.Turno
+  INNER JOIN SELECTIONADOS.Disp_Profesional
+  ON Turno.ID_Disp_Profesional = Disp_Profesional.ID_Disponibilidad
+WHERE ID_Afiliado = 1 AND Activo = 0

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ClinicaFrba.Abm_Afiliado;
 using ClinicaFrba.Abm_Profesional;
 using ClinicaFrba.Abm_Rol;
+using ClinicaFrba.Cancelar_Atencion;
 using ClinicaFrba.Compra_Bono;
 using ClinicaFrba.Conexiones;
 using ClinicaFrba.Pedir_Turno;
@@ -102,6 +103,12 @@ namespace ClinicaFrba.Menus
         {
             RegistroResultado registroResultado = new RegistroResultado(IdUsuario);
             registroResultado.ShowDialog();
+        }
+
+        private void Btn_Cancelar_Atencion_Click(object sender, EventArgs e)
+        {
+            CancelarAtencion cancelarAtencion = new CancelarAtencion(IdUsuario);
+            cancelarAtencion.ShowDialog();
         }
     }
 }
