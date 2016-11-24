@@ -167,6 +167,7 @@
             this.Btn_Registro_Resultado.TabIndex = 12;
             this.Btn_Registro_Resultado.Text = "Registro Resultado";
             this.Btn_Registro_Resultado.UseVisualStyleBackColor = true;
+            this.Btn_Registro_Resultado.Click += new System.EventHandler(this.Btn_Registro_Resultado_Click);
             // 
             // MenuInicial
             // 

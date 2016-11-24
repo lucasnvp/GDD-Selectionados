@@ -31,7 +31,7 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
             InitializeComponent();
 
             this._idUsuario = idUsuario;
-            GetIdProfesional();
+            _idProfesional = ProfesionalDAO.GetIdProfesional(_idUsuario.ToString());
             FillEspecialidad();
 
             this.CLB_Lunes.DataSource = TablaHorariosLV();
@@ -212,15 +212,6 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
                 }
 
             }
-        }
-
-        private void GetIdProfesional()
-        {
-            SqlServer sql = new SqlServer();
-            Parametros parametros = new Parametros();
-            parametros.AgregarParametro("idUsuario", _idUsuario.ToString());
-            DataTable tabla = sql.EjecutarSp("SP_Get_IdAsociado_Usuario", parametros);
-            _idProfesional = tabla.Rows[0].ItemArray[0].ToString();
         }
 
         private void LimpiarCLB()

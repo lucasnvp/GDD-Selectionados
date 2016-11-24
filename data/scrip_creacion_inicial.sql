@@ -493,7 +493,7 @@ EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_List
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Pedir_Turno',0
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registrar_Agenda_Medica',1
 EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registro_Llegada',0
-EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registro_Resultado',0
+EXECUTE [SELECTIONADOS].[SP_Update_Funionalidad_Por_Rol] 'Profesional','Btn_Registro_Resultado',1
 
 -- SP Get Usuario
 CREATE PROCEDURE [SELECTIONADOS].[SP_Get_Usuario]
@@ -1013,6 +1013,37 @@ AS
     INSERT INTO SELECTIONADOS.Consulta(Nro_Turno, Fecha_Llegada_Paciente, Nro_Bono) VALUES (@nroTurno,getdate(),@nroBono)
     UPDATE SELECTIONADOS.Turno SET Activo = 0 WHERE Nro_Turno = @nroTurno
     UPDATE SELECTIONADOS.Bono_Afiliado SET Usado = 1 WHERE Nro_Bono = @nroBono
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Get_RegistroResultado]
+  @idProfesional VARCHAR(255)
+AS
+  BEGIN TRY
+    SELECT Consulta.Nro_Consulta, Turno.Nro_Afiliado FROM SELECTIONADOS.Consulta
+      INNER JOIN SELECTIONADOS.Turno
+      ON Consulta.Nro_Turno = Turno.Nro_Turno
+      INNER JOIN SELECTIONADOS.Profesional
+      ON Turno.ID_Profesional = Profesional.ID_Profesional
+    WHERE Consulta.Realizada = 0 AND Profesional.ID_Profesional = @idProfesional
+  END TRY
+  BEGIN CATCH
+    SELECT 'ERROR', ERROR_MESSAGE()
+  END CATCH
+GO
+
+CREATE PROCEDURE [SELECTIONADOS].[SP_Update_FinalizarConsulta]
+  @nroConsulta VARCHAR(255),
+  @enfermedad VARCHAR(255),
+  @sintomas VARCHAR(255),
+  @fechaConsulta VARCHAR(255)
+AS
+  BEGIN TRY
+    UPDATE SELECTIONADOS.Consulta SET Enfermedades = @enfermedad, Sintomas = @sintomas, Fecha_DeLaConsulta = CONVERT(DATETIME,@fechaConsulta,121), Realizada = 1
+    WHERE Nro_Consulta = @nroConsulta
   END TRY
   BEGIN CATCH
     SELECT 'ERROR', ERROR_MESSAGE()

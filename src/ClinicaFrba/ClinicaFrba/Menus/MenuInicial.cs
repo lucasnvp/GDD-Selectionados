@@ -15,6 +15,7 @@ using ClinicaFrba.Conexiones;
 using ClinicaFrba.Pedir_Turno;
 using ClinicaFrba.Registrar_Agenta_Medico;
 using ClinicaFrba.Registro_Llegada;
+using ClinicaFrba.Registro_Resultado;
 
 namespace ClinicaFrba.Menus
 {
@@ -95,6 +96,12 @@ namespace ClinicaFrba.Menus
         {
             RegistroLlegada registroLlegada = new RegistroLlegada();
             registroLlegada.ShowDialog();
+        }
+
+        private void Btn_Registro_Resultado_Click(object sender, EventArgs e)
+        {
+            RegistroResultado registroResultado = new RegistroResultado(IdUsuario);
+            registroResultado.ShowDialog();
         }
     }
 }
