@@ -1,2 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/ClinicaFrba/ClinicaFrba/obj/Debug
+/src/ClinicaFrba/ClinicaFrba/bin/Debug
 
 \.idea/

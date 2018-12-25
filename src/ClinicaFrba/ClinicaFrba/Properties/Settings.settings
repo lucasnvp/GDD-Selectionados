@@ -1,0 +1,36 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ClinicaFrba.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SQL_Server" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source = 192.168.1.130;</Value>
+    </Setting>
+    <Setting Name="SQL_Timeout" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Connection Timeout=999;</Value>
+    </Setting>
+    <Setting Name="SQL_Database" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Database=GD2C2016;</Value>
+    </Setting>
+    <Setting Name="SQL_User" Type="System.String" Scope="User">
+      <Value Profile="(Default)">User=gd;</Value>
+    </Setting>
+    <Setting Name="SQL_Password" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Password=gd2016;</Value>
+    </Setting>
+    <Setting Name="SQL_Name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SQLSERVER2012;</Value>
+    </Setting>
+    <Setting Name="SQL_Security" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Persist Security Info=True;</Value>
+    </Setting>
+    <Setting Name="SQL_Schema" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SELECTIONADOS</Value>
+    </Setting>
+    <Setting Name="Command_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">9000</Value>
+    </Setting>
+    <Setting Name="Fecha_Sistema" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">2016-01-01</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
